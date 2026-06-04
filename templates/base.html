@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block titre %}Données de santé{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')
+}}">
+
+</head>
+<body>
+    <header>
+        <h1>Données de santé libérale</h1>
+        <nav>
+            <a href="{{ url_for('accueil.index') }}">Accueil</a>
+        </nav>
+    </header>
+ 
+ 
+    <main>
+        {% block contenu %}{% endblock %}
+    </main>
+ 
+    <footer>
+        <p>SAE2.01 · BUT Informatique · IUT Créteil-Vitry</p>
+    </footer>
+</body>
+</html>
