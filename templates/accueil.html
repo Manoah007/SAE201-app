@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block titre %}Accueil{% endblock %}
+
+{% block contenu %}
+    <h2>Bienvenue !</h2>
+    <p>La base contient {{ regions|length }} régions et {{ professions|length }} professions.</p>
+
+    <h3>Régions</h3>
+    <ul>
+        {% for region in regions %}
+            <li>{{ region.code }} – {{ region.libelle }}</li>
+        {% endfor %}
+    </ul>
+ 
+    <h3>Professions</h3>   
+    <ul>
+        {% for prof in professions %}
+            <li>{{ prof.libelle }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
