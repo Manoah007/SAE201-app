@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block titre %}Api Ameli{% endblock %}
+
+{% block contenu %}
+
+<section class="api-page">
+
+    <div class="api-header">
+        <div>
+            <h1>Exploration des données</h1>
+            <p>Consultez les statistiques détaillées du système de santé français.</p>
+        </div>
+
+        <button class="export-btn">Exporter (CSV/PDF)</button>
+    </div>
+
+    <section class="filters-box">
+        <span>FILTRES :</span>
+
+        <form action="{{ url_for('effectifs.afficher') }}" method="get" class="api-form">
+
+            <select name="profession_id" id="profession" required>
+                <option value="">Profession</option>
+                {% for p in professions %}
+                    <option value="{{ p.id }}">{{ p.libelle }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="region_id" id="region" required>
+                <option value="">Lieu</option>
+                {% for r in regions %}
+                    <option value="{{ r.id }}">{{ r.libelle }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="departement_id" id="departement" required>
+                <option value="">Département</option>
+            </select>
+
+            <select name="annee" id="annee" required>
+                {% for a in range(2024, 2014, -1) %}
+                    <option value="{{ a }}">{{ a }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Afficher</button>
+
+            <a href="{{ url_for('accueil.api_ameli') }}" class="reset-link">
+                Réinitialiser les filtres
+            </a>
+        </form>
+    </section>
+
+    <section class="api-cards">
+        <div class="api-card">
+            <span>Volume total</span>
+            <strong>100M+</strong>
+            <p>Données disponibles</p>
+        </div>
+
+        <div class="api-card">
+            <span>Professions</span>
+            <strong>{{ professions|length }}</strong>
+            <p>Professionnels de santé</p>
+        </div>
+
+        <div class="api-card">
+            <span>Régions</span>
+            <strong>{{ regions|length }}</strong>
+            <p>Territoires analysables</p>
+        </div>
+
+        <div class="api-card">
+            <span>Données</span>
+            <strong>API</strong>
+            <p>Mise à jour dynamique</p>
+        </div>
+    </section>
+
+    <section class="api-visuals">
+        <div class="visual-box large">
+            <h3>Évolution temporelle des effectifs</h3>
+            <div class="placeholder">GRAPHIQUE</div>
+        </div>
+
+        <div class="visual-box">
+            <h3>Répartition par territoire</h3>
+            <div class="placeholder">CAMEMBERT</div>
+        </div>
+    </section>
+
+    <section class="api-table-preview">
+        <div class="table-header">
+            <h3>Détail des données brutes</h3>
+            <input type="text" placeholder="Rechercher une ligne...">
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Année</th>
+                    <th>Région</th>
+                    <th>Type de donnée</th>
+                    <th>Source</th>
+                    <th>Statut</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>2024</td>
+                    <td>Île-de-France</td>
+                    <td>Effectifs</td>
+                    <td>API Ameli</td>
+                    <td class="positive">Disponible</td>
+                </tr>
+
+                <tr>
+                    <td>2024</td>
+                    <td>Auvergne-Rhône-Alpes</td>
+                    <td>Densités</td>
+                    <td>API Ameli</td>
+                    <td class="positive">Disponible</td>
+                </tr>
+
+                <tr>
+                    <td>2024</td>
+                    <td>PACA</td>
+                    <td>Honoraires</td>
+                    <td>API Ameli</td>
+                    <td class="positive">Disponible</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+</section>
+
+<script>
+    const BASE_URL = "{{ BASE_URL }}";
+</script>
+<script src="{{ url_for('static', filename='js/cascade.js') }}"></script>
+
+{% endblock %}
