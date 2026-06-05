@@ -16,7 +16,7 @@ header{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:20px 40px;
+    padding:12px 30px;
     border-bottom:1px solid #ddd;
 }
 
@@ -76,11 +76,22 @@ nav a.active{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:60px 80px;
+    padding:40px 80px;
+    gap:50px;
 }
 
 .hero-text{
     width:50%;
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.hero-text h1{
+    font-size:42px;
+    line-height:1.15;
+    margin-bottom:20px;
 }
 
 .hero-text h1{
@@ -122,14 +133,16 @@ nav a.active{
 }
 
 .hero-image{
-    width:420px;
-    height:250px;
-    border:1px solid #ccc;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:40px;
-    background:white;
+    width:600px;
+    height:350px;
+    overflow:hidden;
+    border-radius:8px;
+}
+
+.hero-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
 }
 
 /* STATS */
@@ -199,7 +212,8 @@ nav a.active{
 
 .card{
     flex:1;
-    border:1px solid #ccc;
+    background:white;
+    border:1px solid #d9d9d9;
     border-radius:8px;
     padding:20px;
     text-align:center;
