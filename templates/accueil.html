@@ -3,20 +3,102 @@
 {% block titre %}Accueil{% endblock %}
 
 {% block contenu %}
-    <h2>Bienvenue !</h2>
-    <p>La base contient {{ regions|length }} régions et {{ professions|length }} professions.</p>
 
-    <h3>Régions</h3>
-    <ul>
-        {% for region in regions %}
-            <li>{{ region.code }} – {{ region.libelle }}</li>
-        {% endfor %}
-    </ul>
- 
-    <h3>Professions</h3>   
-    <ul>
-        {% for prof in professions %}
-            <li>{{ prof.libelle }}</li>
-        {% endfor %}
-    </ul>
+<section class="hero">
+
+    <div class="hero-text">
+        <h1>
+            Explorez les données du système
+            de <span>santé français</span>
+        </h1>
+
+        <p>
+            La plateforme ouverte de référence pour analyser,
+            visualiser et interpréter les données anonymisées
+            de l'Assurance Maladie.
+        </p>
+
+        <div class="hero-buttons">
+            <a href="#" class="btn-primary">Découvrir les données</a>
+            <a href="#" class="btn-secondary">Documentation API</a>
+        </div>
+
+        <div class="stats">
+            <div>
+                <strong>100M+</strong>
+                <span>Enregistrements</span>
+            </div>
+
+            <div>
+                <strong>Temps Réel</strong>
+                <span>Mise à jour</span>
+            </div>
+
+            <div>
+                <strong>Sécurisé</strong>
+                <span>Conforme RGPD</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="hero-image">
+        IMAGE
+    </div>
+
+</section>
+
+<section class="data-section">
+
+    <h2>Types de données disponibles</h2>
+
+    <div class="tabs">
+        <button class="active">Prescriptions</button>
+        <button>Établissements</button>
+        <button>Remboursements</button>
+        <button>Professionnels</button>
+        <button>Pathologies</button>
+        <button>Statistiques</button>
+    </div>
+
+    <div class="data-card">
+
+        <h3>Données de prescriptions médicales</h3>
+
+        <p>
+            Accédez aux données anonymisées des prescriptions
+            délivrées en France.
+        </p>
+
+        <div class="cards">
+
+            <div class="card">
+                <h4>Médicaments</h4>
+                <p>
+                    Base de données complète des médicaments
+                    prescrits et délivrés
+                </p>
+            </div>
+
+            <div class="card">
+                <h4>Volumes</h4>
+                <p>
+                    Statistiques sur les volumes de
+                    prescription par région et période
+                </p>
+            </div>
+
+            <div class="card">
+                <h4>Tendances</h4>
+                <p>
+                    Analyse des tendances de prescription
+                    sur plusieurs années
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
 {% endblock %}

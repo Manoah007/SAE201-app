@@ -2,33 +2,67 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>{% block titre %}Données de santé{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')
-}}">
-
+    <title>{% block titre %}Santé Data France{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
+
 <body>
+
     <header>
-        <h1>Santé Data France</h1>
+        <div class="logo">
+            <span class="logo-icon">✚</span>
+            <span class="logo-text">Santé Data France</span>
+        </div>
+
         <nav>
-            <a href="{{ url_for('accueil.index') }}">Accueil</a>
-            <a href="{{ url_for('accueil.index') }}">Données</a>
-            <a href="{{ url_for('accueil.index') }}">API Ameli</a>
-            <a href="{{ url_for('accueil.index') }}">Documentation</a>
-            <a href="{{ url_for('accueil.index') }}">A propos</a>
-            <a href="{{ url_for('accueil.index') }}">Connexion</a>
-            <a href="{{ url_for('accueil.index') }}">S'inscrire</a>
-           
+            <a href="{{ url_for('accueil.index') }}" class="active">Accueil</a>
+            <a href="#">Données</a>
+            <a href="#">Api Ameli</a>
+            <a href="#">Documentation</a>
+            <a href="#">À propos</a>
         </nav>
+
+        <div class="auth-buttons">
+            <a href="#" class="connexion">Connexion</a>
+            <a href="#" class="inscription">S'inscrire</a>
+        </div>
     </header>
- 
- 
+
     <main>
         {% block contenu %}{% endblock %}
     </main>
- 
+
     <footer>
-        <p>SAE2.01 · BUT Informatique · IUT Créteil-Vitry</p>
+        <div class="footer-col">
+            <h3>Santé Data France</h3>
+            <p>
+                Plateforme d'accès aux données publiques
+                de santé et aux API de l'Assurance Maladie.
+            </p>
+        </div>
+
+        <div class="footer-col">
+            <h4>Données</h4>
+            <p>Prescriptions</p>
+            <p>Établissements</p>
+            <p>Professionnels</p>
+            <p>Remboursements</p>
+        </div>
+
+        <div class="footer-col">
+            <h4>Ressources</h4>
+            <p>Documentation API</p>
+            <p>Guides</p>
+            <p>FAQ</p>
+        </div>
+
+        <div class="footer-col">
+            <h4>Contact</h4>
+            <p>contact@santedatafrance.fr</p>
+            <p>01 45 17 17 01</p>
+            <p>94000 Créteil</p>
+        </div>
     </footer>
+
 </body>
 </html>
