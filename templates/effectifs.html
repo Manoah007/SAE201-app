@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block titre %}Effectifs{% endblock %}
+
+{% block contenu %}
+
+<section class="results-section">
+    <h2>{{ prof.libelle }} – {{ dept.code }} {{ dept.libelle }} – {{ annee }}</h2>
+
+    {% if resultats %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Année</th>
+                    <th>Effectif</th>
+                    <th>Densité</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for r in resultats %}
+                    <tr>
+                        <td>{{ r.annee }}</td>
+                        <td>{{ r.effectif }}</td>
+                        <td>{{ r.densite }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Aucune donnée disponible pour cette sélection.</p>
+    {% endif %}
+
+    <h3>Évolution sur plusieurs années</h3>
+
+    <div class="chart-box">
+        <canvas id="graphique"></canvas>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const donnees = JSON.parse('{{ evolution|tojson|safe }}');
+
+    new Chart(document.getElementById("graphique"), {
+        type: "line",
+        data: {
+            labels: donnees.map(d => d.annee),
+            datasets: [{
+                label: "Effectif",
+                data: donnees.map(d => d.effectif),
+                borderColor: "#2E74B5",
+                tension: 0.2
+            }]
+        }
+    });
+</script>
+
+{% endblock %}
