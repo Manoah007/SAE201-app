@@ -42,10 +42,10 @@ header {
     gap: 10px;
 }
 
-.logo-icon {
-    color: #41e46a;
-    font-size: 24px;
-    font-weight: bold;
+.logo-img {
+    height: 32px;     
+    width: auto;       
+    object-fit: contain;
 }
 
 .logo-text {
