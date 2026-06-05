@@ -244,3 +244,68 @@ footer{
 .footer-col p{
     margin-bottom:8px;
 }
+
+.form-section,
+.results-section,
+.error-section{
+    background:white;
+    margin:40px auto;
+    padding:35px;
+    width:90%;
+    border-radius:15px;
+}
+
+.search-form{
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    gap:20px;
+    align-items:end;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.form-group label{
+    font-weight:bold;
+}
+
+.form-group select,
+.search-form button{
+    padding:12px;
+    border-radius:20px;
+    border:1px solid #ddd;
+}
+
+.search-form button{
+    background:#41e46a;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:25px;
+}
+
+th,
+td{
+    border:1px solid #ddd;
+    padding:12px;
+    text-align:center;
+}
+
+th{
+    background:#f0f0f0;
+}
+
+.chart-box{
+    margin-top:30px;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+}
