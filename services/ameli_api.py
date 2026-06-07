@@ -62,3 +62,37 @@ class AmeliAPI:
         except requests.RequestException as e:
             print(f"[AmeliAPI] Erreur : {e}")
             return []
+        
+    def get_prescriptions(self, profession, departement_code, annee, poste_prescription):
+        """Récupère les données d'un poste de prescription spécifique pour une année."""
+        where = (
+            f'profession_sante="{profession}" AND '
+            f'departement="{departement_code}" AND '
+            f'year(annee)={annee} AND '
+            f'libelle_poste_prescription="{poste_prescription}"'
+        )
+
+        return self._requete(
+            "prescriptions",
+            {
+                "where": where,
+                "limit": 100
+            }
+        )
+
+    def get_evolution_prescriptions(self, profession, departement_code, poste_prescription):
+        """Récupère l'évolution des prescriptions sur toutes les années disponibles."""
+        where = (
+            f'profession_sante="{profession}" AND '
+            f'departement="{departement_code}" AND '
+            f'libelle_poste_prescription="{poste_prescription}"'
+        )
+
+        return self._requete(
+            "prescriptions",
+            {
+                "where": where,
+                "order_by": "annee",
+                "limit": 100
+            }
+        )
