@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block titre %}Prescriptions{% endblock %}
+
+{% block contenu %}
+<div class="form-section">
+    <h2>Analyse des Prescriptions</h2>
+    <form action="{{ url_for('prescriptions.afficher') }}" method="get">
+        
+        <label for="profession">Profession</label>
+        <select name="profession_id" id="profession" required>
+            <option value="">-- Choisir --</option>
+            {% for p in professions %}
+            <option value="{{ p.id }}" {% if prof and prof.id == p.id %}selected{% endif %}>{{ p.libelle }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="region">Région</label>
+        <select name="region_id" id="region" required>
+            <option value="">-- Choisir --</option>
+            {% for r in regions %}
+            <option value="{{ r.id }}" {% if dept and dept.region_id == r.id %}selected{% endif %}>{{ r.libelle }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="departement">Département</label>
+        <select name="departement_id" id="departement" required>
+            {% if dept %}
+            <option value="{{ dept.id }}" selected>{{ dept.code }} - {{ dept.libelle }}</option>
+            {% else %}
+            <option value="">-- Choisir une région --</option>
+            {% endif %}
+        </select>
+
+        <label for="prescription">Poste de prescription</label>
+        <select name="prescription_id" id="prescription" required>
+            <option value="">-- Choisir --</option>
+            {% for p in postes %}
+            <option value="{{ p.id }}" {% if poste and poste.id == p.id %}selected{% endif %}>{{ p.libelle }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="annee">Année</label>
+        <select name="annee" id="annee" required>
+            {% for a in range(2023, 2014, -1) %}
+            <option value="{{ a }}" {% if annee == a %}selected{% endif %}>{{ a }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit" class="btn-primary">Analyser</button>
+    </form>
+</div>
+
+{% if resultats is not none %}
+<div class="results-section">
+    <h3>Résultats pour : {{ poste.libelle }} ({{ prof.libelle }} en {{ dept.libelle }} - {{ annee }})</h3>
+    
+    {% if resultats|length > 0 %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Année</th>
+                    <th>Poste concerné</th>
+                    <th>Montant des prescriptions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in resultats %}
+                <tr>
+                    <td>{{ r.annee }}</td>
+                    <td>{{ r.libelle_poste_prescription }}</td>
+                    <td class="positive">{{ r.montant | default(r.montant_rembourse, true) }} €</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="chart-box">
+            <canvas id="graphique-prescriptions"></canvas>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const donnees = {{ evolution | tojson }};
+            new Chart(document.getElementById("graphique-prescriptions"), {
+                type: "bar", 
+                data: {
+                    labels: donnees.map(d => d.annee),
+                    datasets: [{
+                        label: "Montant (€)",
+                        data: donnees.map(d => d.montant || d.montant_rembourse || 0),
+                        backgroundColor: "#41e46a",
+                        borderRadius: 6
+                    }]
+                }
+            });
+        </script>
+    {% else %}
+        <p>Aucune donnée disponible pour cette sélection spécifique.</p>
+    {% endif %}
+</div>
+{% endif %}
+
+<script>const BASE_URL = "{{ BASE_URL | default('') }}";</script>
+<script src="{{ url_for('static', filename='js/cascade.js') }}"></script>
+{% endblock %}
