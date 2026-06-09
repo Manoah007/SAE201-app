@@ -62,8 +62,29 @@ nav a {
     text-decoration: none;
     color: #111;
     font-weight: 500;
+    padding-bottom: 4px;
+    position: relative; /* [IMPORTANT] Nécessaire pour positionner la ligne par-dessus */
+    transition: color 0.2s ease;
 }
 
+/* Création de la ligne sous l'onglet, invisible au départ (width: 0) et calée à gauche (left: 0) */
+nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;            /* Épaisseur de la ligne noire */
+    background-color: #111; /* Couleur de la ligne */
+    transition: width 0.3s ease; /* Animation fluide de la largeur */
+}
+
+/* Au survol : la ligne se déploie dynamiquement de la gauche vers la droite */
+nav a:hover::after {
+    width: 100%;
+}
+
+/* Onglet actif (page en cours) : texte en vert */
 nav a.active {
     color: #41e46a;
 }
