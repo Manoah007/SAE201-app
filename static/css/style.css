@@ -1,10 +1,15 @@
-/* RESET */
+/* IMPORTS & RESET */
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
+
+/* LAYOUT GLOBAL */
 
 html,
 body {
@@ -43,8 +48,8 @@ header {
 }
 
 .logo-img {
-    height: 32px;     
-    width: auto;       
+    height: 32px;
+    width: auto;
     object-fit: contain;
 }
 
@@ -63,72 +68,52 @@ nav a {
     color: #111;
     font-weight: 500;
     padding-bottom: 4px;
-    position: relative; /* [IMPORTANT] Nécessaire pour positionner la ligne par-dessus */
+    position: relative;
     transition: color 0.2s ease;
 }
 
-/* Création de la ligne sous l'onglet, invisible au départ (width: 0) et calée à gauche (left: 0) */
 nav a::after {
     content: '';
     position: absolute;
     bottom: 0;
     left: 0;
     width: 0;
-    height: 2px;            /* Épaisseur de la ligne noire */
-    background-color: #111; /* Couleur de la ligne */
-    transition: width 0.3s ease; /* Animation fluide de la largeur */
+    height: 2px;
+    background-color: #111;
+    transition: width 0.3s ease;
 }
 
-/* Au survol : la ligne se déploie dynamiquement de la gauche vers la droite */
 nav a:hover::after {
     width: 100%;
 }
 
-/* Onglet actif (page en cours) : texte en vert */
 nav a.active {
     color: #41e46a;
 }
 
-.auth-buttons {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
 
-.connexion {
-    color: #111;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.inscription {
-    background: #41e46a;
-    color: white;
-    text-decoration: none;
-    padding: 10px 18px;
-    border-radius: 22px;
-    font-weight: bold;
-}
-
-
-/* PAGE ACCUEIL */
+/* ACCUEIL - HERO */
 
 .home-wrapper {
-    background: #eeeeee;
-    padding: 35px 25px 30px;
+    background: #f3f3f3;
+    padding: 22px 24px 20px;
 }
 
 .hero {
     max-width: 1350px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
+    margin: 0 auto 25px;
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
     align-items: center;
     gap: 70px;
+    background: white;
+    border-radius: 20px;
+    padding: 45px 55px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
 }
 
 .hero-text {
-    width: 55%;
+    width: 100%;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -136,10 +121,10 @@ nav a.active {
 }
 
 .hero-text h1 {
-    font-size: 42px;
+    font-size: 44px;
     line-height: 1.15;
-    margin-bottom: 14px;
-    font-weight: bold;
+    margin-bottom: 20px;
+    font-weight: 800;
 }
 
 .hero-text h1 span {
@@ -147,9 +132,10 @@ nav a.active {
 }
 
 .hero-text p {
-    font-size: 18px;
-    max-width: 720px;
-    margin-bottom: 22px;
+    font-size: 19px;
+    max-width: 700px;
+    margin-bottom: 28px;
+    color: #333;
 }
 
 .hero-buttons {
@@ -178,10 +164,10 @@ nav a.active {
 }
 
 .hero-image {
-    width: 520px;
-    height: 300px;
+    width: 100%;
+    height: 380px;
+    border-radius: 12px;
     overflow: hidden;
-    border-radius: 4px;
 }
 
 .hero-image img {
@@ -191,18 +177,40 @@ nav a.active {
 }
 
 
-/* STATS */
+/* ACCUEIL - STATISTIQUES */
 
 .stats {
     display: flex;
+    gap: 35px;
+    margin-top: 20px;
     justify-content: center;
-    gap: 55px;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: transparent;
+    padding: 0;
+}
+
+.stat-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    background: #dfffe8;
+    color: #20c653;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
 }
 
 .stats div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    background: #f7f7f7;
+    padding: 15px 20px;
+    border-radius: 12px;
+    min-width: 140px;
 }
 
 .stats strong {
@@ -215,14 +223,15 @@ nav a.active {
 }
 
 
-/* TYPES DE DONNÉES */
+/* ACCUEIL - TYPES DE DONNÉES */
 
 .data-section {
     max-width: 1350px;
     margin: 0 auto 35px;
     background: white;
-    padding: 25px 28px;
-    border-radius: 0 0 10px 10px;
+    padding: 34px 36px;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
 }
 
 .data-section h2 {
@@ -232,61 +241,62 @@ nav a.active {
 }
 
 .tabs {
-    background: #eeeeee;
-    border-radius: 25px;
+    background: transparent;
     display: flex;
-    justify-content: space-between;
-    padding: 5px;
-    margin-bottom: 20px;
+    justify-content: center;
+    gap: 18px;
+    padding: 0;
+    margin-bottom: 28px;
 }
 
 .tabs button {
-    flex: 1;
+    flex: none;
     border: none;
-    background: transparent;
-    padding: 9px 12px;
-    border-radius: 20px;
+    background: #eeeeee;
+    padding: 13px 24px;
+    border-radius: 24px;
     cursor: pointer;
     font-weight: bold;
 }
 
 .tabs .active {
     background: #dfffe8;
-    color: #41e46a;
+    color: #23b84d;
 }
 
 .data-card {
-    border: 1px solid #ccc;
-    padding: 18px;
-    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    border: 1px solid #d9d9d9;
+    padding: 18px 22px;
+    border-radius: 12px;
+    background: white;
+}
+
+.data-icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 18px;
+    background: #dfffe8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
 }
 
 .data-card h3 {
     margin-bottom: 6px;
 }
 
-.cards {
-    margin-top: 18px;
-    display: flex;
-    gap: 20px;
-}
-
-.card {
-    flex: 1;
-    background: white;
-    border: 1px solid #d9d9d9;
-    border-radius: 6px;
-    padding: 18px;
-    text-align: center;
-}
-
-.card h4 {
-    color: #41e46a;
-    margin-bottom: 8px;
+.arrow {
+    margin-left: auto;
+    font-size: 28px;
+    font-weight: bold;
 }
 
 
-/* PAGE API AMELI */
+/* API AMELI - EN-TÊTE */
 
 .api-page {
     background: #f4f4f4;
@@ -318,6 +328,9 @@ nav a.active {
     font-weight: bold;
     cursor: pointer;
 }
+
+
+/* API AMELI - FILTRES */
 
 .filters-box {
     background: #eeeeee;
@@ -368,7 +381,7 @@ nav a.active {
 }
 
 
-/* BLOCS API */
+/* API AMELI - CARTES */
 
 .api-cards {
     display: grid;
@@ -377,17 +390,12 @@ nav a.active {
     margin-top: 35px;
 }
 
-.api-card,
-.visual-box,
-.api-table-preview {
+.api-card {
     background: white;
     border-radius: 18px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
-}
-
-.api-card {
     padding: 25px;
     text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
 }
 
 .api-card span {
@@ -406,6 +414,9 @@ nav a.active {
     font-weight: bold;
 }
 
+
+/* API AMELI - VISUALISATIONS */
+
 .api-visuals {
     display: grid;
     grid-template-columns: 2fr 1fr;
@@ -414,9 +425,12 @@ nav a.active {
 }
 
 .visual-box {
+    background: white;
+    border-radius: 18px;
     padding: 25px;
     min-height: 230px;
     text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
 }
 
 .visual-box h3 {
@@ -434,9 +448,15 @@ nav a.active {
     color: #333;
 }
 
+
+/* API AMELI - TABLEAU APERÇU */
+
 .api-table-preview {
+    background: white;
+    border-radius: 18px;
     padding: 25px;
     margin-top: 35px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
 }
 
 .table-header {
@@ -453,7 +473,7 @@ nav a.active {
 }
 
 
-/* TABLES */
+/* TABLEAUX */
 
 table {
     width: 100%;
@@ -478,7 +498,7 @@ th {
 }
 
 
-/* RÉSULTATS / ERREURS */
+/* RÉSULTATS & ERREURS */
 
 .form-section,
 .results-section,

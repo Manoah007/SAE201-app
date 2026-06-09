@@ -4,6 +4,7 @@
 
 {% block contenu %}
 
+<div class="home-wrapper"></div>
 <section class="hero">
 
     <div class="hero-text">
@@ -24,19 +25,28 @@
         </div>
 
         <div class="stats">
-            <div>
-                <strong>100M+</strong>
-                <span>Enregistrements</span>
+            <div class="stat-item">
+                <span class="stat-icon">▦</span>
+                <div>
+                    <strong>100M+</strong>
+                    <span>Enregistrements</span>
+                </div>
             </div>
 
-            <div>
-                <strong>Temps Réel</strong>
-                <span>Mise à jour</span>
+            <div class="stat-item">
+                <span class="stat-icon">◷</span>
+                <div>
+                    <strong>Temps Réel</strong>
+                    <span>Mise à jour</span>
+                </div>
             </div>
 
-            <div>
-                <strong>Sécurisé</strong>
-                <span>Conforme RGPD</span>
+            <div class="stat-item">
+                <span class="stat-icon">⌾</span>
+                <div>
+                    <strong>Sécurisé</strong>
+                    <span>Conforme RGPD</span>
+                </div>
             </div>
         </div>
     </div>
@@ -46,57 +56,33 @@
     </div>
 
 </section>
+</div>
 
 <section class="data-section">
 
     <h2>Types de données disponibles</h2>
 
     <div class="tabs">
-        <button class="active">Prescriptions</button>
-        <button>Établissements</button>
-        <button>Remboursements</button>
-        <button>Professionnels</button>
-        <button>Pathologies</button>
-        <button>Statistiques</button>
+        <button class="active">💊 Prescriptions</button>
+        <button>🏥 Établissements</button>
+        <button>€ Remboursements</button>
+        <button>👥 Professionnels</button>
+        <button>♡ Pathologies</button>
+        <button>▥ Statistiques</button>
     </div>
 
     <div class="data-card">
+        <div class="data-icon">💊</div>
 
-        <h3>Données de prescriptions médicales</h3>
-
-        <p>
-            Accédez aux données anonymisées des prescriptions
-            délivrées en France.
-        </p>
-
-        <div class="cards">
-
-            <div class="card">
-                <h4>Médicaments</h4>
-                <p>
-                    Base de données complète des médicaments
-                    prescrits et délivrés
-                </p>
-            </div>
-
-            <div class="card">
-                <h4>Volumes</h4>
-                <p>
-                    Statistiques sur les volumes de
-                    prescription par région et période
-                </p>
-            </div>
-
-            <div class="card">
-                <h4>Tendances</h4>
-                <p>
-                    Analyse des tendances de prescription
-                    sur plusieurs années
-                </p>
-            </div>
-
+        <div>
+            <h3>Données de prescriptions médicales</h3>
+            <p>
+                Accédez aux données anonymisées des prescriptions
+                délivrées en France.
+            </p>
         </div>
 
+        <span class="arrow">⌄</span>
     </div>
 
 </section>
