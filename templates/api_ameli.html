@@ -16,7 +16,7 @@
     </div>
 
     <section class="filters-box">
-        <span>FILTRES :</span>
+        <span class="filter-label">FILTRES :</span>
 
         <form action="{{ url_for('effectifs.afficher') }}" method="get" class="api-form">
 
@@ -47,7 +47,7 @@
             <button type="submit">Afficher</button>
 
             <a href="{{ url_for('accueil.api_ameli') }}" class="reset-link">
-                Réinitialiser les filtres
+                Réinitialiser
             </a>
         </form>
     </section>
@@ -75,18 +75,6 @@
             <span>Données</span>
             <strong>API</strong>
             <p>Mise à jour dynamique</p>
-        </div>
-    </section>
-
-    <section class="api-visuals">
-        <div class="visual-box large">
-            <h3>Évolution temporelle des effectifs</h3>
-            <div class="placeholder">GRAPHIQUE</div>
-        </div>
-
-        <div class="visual-box">
-            <h3>Répartition par territoire</h3>
-            <div class="placeholder">CAMEMBERT</div>
         </div>
     </section>
 

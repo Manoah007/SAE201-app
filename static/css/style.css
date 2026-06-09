@@ -335,31 +335,33 @@ nav a.active {
 .filters-box {
     background: #eeeeee;
     border-radius: 18px;
-    padding: 18px 25px;
+    padding: 18px 22px;
     display: flex;
     align-items: center;
-    gap: 25px;
+    gap: 18px;
 }
 
-.filters-box span {
+.filter-label {
     color: #777;
     font-weight: bold;
+    white-space: nowrap;
 }
 
 .api-form {
-    display: flex;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 0.7fr auto auto;
+    gap: 18px;
     align-items: center;
-    gap: 25px;
     width: 100%;
 }
 
 .api-form select {
+    width: 100%;
     border: none;
     background: white;
-    padding: 13px 35px;
+    padding: 13px 22px;
     border-radius: 20px;
     font-weight: bold;
-    min-width: 160px;
     text-align: center;
 }
 
@@ -367,17 +369,18 @@ nav a.active {
     border: none;
     background: #41e46a;
     color: white;
-    padding: 13px 25px;
+    padding: 13px 28px;
     border-radius: 20px;
     font-weight: bold;
     cursor: pointer;
+    white-space: nowrap;
 }
 
 .reset-link {
     color: #23b84d;
     font-weight: bold;
     text-decoration: none;
-    margin-left: auto;
+    white-space: nowrap;
 }
 
 
@@ -412,40 +415,6 @@ nav a.active {
 .api-card p {
     color: #23b84d;
     font-weight: bold;
-}
-
-
-/* API AMELI - VISUALISATIONS */
-
-.api-visuals {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 30px;
-    margin-top: 35px;
-}
-
-.visual-box {
-    background: white;
-    border-radius: 18px;
-    padding: 25px;
-    min-height: 230px;
-    text-align: center;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
-}
-
-.visual-box h3 {
-    font-size: 24px;
-    margin-bottom: 35px;
-}
-
-.placeholder {
-    height: 120px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    font-weight: bold;
-    color: #333;
 }
 
 
