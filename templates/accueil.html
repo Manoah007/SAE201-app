@@ -4,7 +4,7 @@
 
 {% block contenu %}
 
-<div class="home-wrapper"></div>
+<div class="home-wrapper">
 <section class="hero">
 
     <div class="hero-text">
@@ -25,8 +25,12 @@
         </div>
 
         <div class="stats">
+
             <div class="stat-item">
-                <span class="stat-icon">▦</span>
+                <div class="stat-icon">
+                    <img src="{{ url_for('static', filename='images/courbe.svg') }}" alt="Enregistrements">
+                </div>
+
                 <div>
                     <strong>100M+</strong>
                     <span>Enregistrements</span>
@@ -34,7 +38,10 @@
             </div>
 
             <div class="stat-item">
-                <span class="stat-icon">◷</span>
+                <div class="stat-icon">
+                    <img src="{{ url_for('static', filename='images/timer.svg') }}" alt="Temps réel">
+                </div>
+
                 <div>
                     <strong>Temps Réel</strong>
                     <span>Mise à jour</span>
@@ -42,12 +49,16 @@
             </div>
 
             <div class="stat-item">
-                <span class="stat-icon">⌾</span>
+                <div class="stat-icon">
+                    <img src="{{ url_for('static', filename='images/armure.svg') }}" alt="Sécurité">
+                </div>
+
                 <div>
                     <strong>Sécurisé</strong>
                     <span>Conforme RGPD</span>
                 </div>
             </div>
+
         </div>
     </div>
 
@@ -83,6 +94,8 @@
                 délivrées en France.
             </p>
         </div>
+
+        <span class="arrow">⌄</span>
     </div>
 
 </section>
