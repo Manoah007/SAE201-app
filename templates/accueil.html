@@ -26,7 +26,6 @@
 
         <div class="stats">
             <div class="stat-item">
-                <span class="stat-icon">▦</span>
                 <div>
                     <strong>100M+</strong>
                     <span>Enregistrements</span>
@@ -34,7 +33,6 @@
             </div>
 
             <div class="stat-item">
-                <span class="stat-icon">◷</span>
                 <div>
                     <strong>Temps Réel</strong>
                     <span>Mise à jour</span>
@@ -42,7 +40,6 @@
             </div>
 
             <div class="stat-item">
-                <span class="stat-icon">⌾</span>
                 <div>
                     <strong>Sécurisé</strong>
                     <span>Conforme RGPD</span>
@@ -63,16 +60,18 @@
     <h2>Types de données disponibles</h2>
 
     <div class="tabs">
-        <button class="active">💊 Prescriptions</button>
-        <button>🏥 Établissements</button>
-        <button>€ Remboursements</button>
-        <button>👥 Professionnels</button>
-        <button>♡ Pathologies</button>
-        <button>▥ Statistiques</button>
+        <button class="active">Prescriptions</button>
+        <button>Établissements</button>
+        <button>Remboursements</button>
+        <button>Professionnels</button>
+        <button>Pathologies</button>
+        <button>Statistiques</button>
     </div>
 
     <div class="data-card">
-        <div class="data-icon">💊</div>
+        <div class="data-icon">
+            <img src="{{ url_for('static', filename='images/pill.svg') }}" alt="Médicaments" style="width: 28px; height: 28px;">
+        </div>
 
         <div>
             <h3>Données de prescriptions médicales</h3>
@@ -81,8 +80,6 @@
                 délivrées en France.
             </p>
         </div>
-
-        <span class="arrow">⌄</span>
     </div>
 
 </section>
