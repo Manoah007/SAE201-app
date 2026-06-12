@@ -15,12 +15,17 @@
         </div>
 
         <nav>
-            <a href="{{ url_for('accueil.index') }}" class="{% if request.endpoint == 'accueil.index' %}active{% endif %}">Accueil</a>            
-            <a href="#">Données</a>
-            <a href="{{ url_for('prescriptions.afficher') }}" class="{% if request.endpoint == 'prescriptions.afficher' %}active{% endif %}">Prescriptions</a>
-            <a href="{{ url_for('accueil.api_ameli') }}" class="{% if request.endpoint == 'accueil.api_ameli' %}active{% endif %}">Api Ameli</a>
-            <a href="#">Documentation</a>
-            <a href="#">À propos</a>
+            <div class="nav-center">
+                <a href="{{ url_for('accueil.index') }}" class="{% if request.endpoint == 'accueil.index' %}active{% endif %}">Accueil</a>
+                <a href="#">Données</a>
+                <a href="{{ url_for('prescriptions.afficher') }}" class="{% if request.endpoint == 'prescriptions.afficher' %}active{% endif %}">Prescriptions</a>
+                <a href="{{ url_for('accueil.api_ameli') }}" class="{% if request.endpoint == 'accueil.api_ameli' %}active{% endif %}">Api Ameli</a>
+            </div>
+
+            <div class="nav-right">
+                <a href="#">Documentation</a>
+                <a href="#">À propos</a>
+            </div>
         </nav>
 
     </header>
