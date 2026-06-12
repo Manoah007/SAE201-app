@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block titre %}FAQ - Foire aux Questions{% endblock %}
+
+{% block contenu %}
+<div class="faq-page">
+    
+    <div class="faq-header">
+        <h2>Questions Fréquentes</h2>
+        <p>Trouvez rapidement des réponses aux questions les plus courantes concernant l'application.</p>
+    </div>
+
+    <div class="faq-container">
+
+        <details class="faq-item">
+            <summary>D'où proviennent les données affichées sur l'application ?</summary>
+            <div class="faq-content">
+                <p>Toutes nos données de démographie professionnelle et de dépenses de santé proviennent directement de l'API officielle de l'Assurance Maladie (<strong>data.ameli.fr</strong>).</p>
+                <p>Elles sont interrogées et mises à jour en temps réel lors de vos recherches.</p>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary>Pourquoi certains départements n'affichent pas de résultats ?</summary>
+            <div class="faq-content">
+                <p>Si aucun professionnel de la santé sélectionné n'est enregistré dans le département choisi pour l'année demandée, l'API renvoie un tableau vide. Vérifiez également si les critères de recherche ne sont pas trop restrictifs.</p>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary>Quelle est la différence entre le Secteur 1 et le Secteur 2 ?</summary>
+            <div class="faq-content">
+                <p>Les professionnels en <strong>Secteur 1</strong> appliquent le tarif de l'Assurance Maladie sans dépassement d'honoraires. Les professionnels en <strong>Secteur 2</strong> pratiquent des honoraires libres avec tact et mesure.</p>
+                <p>Ces catégories permettent d'analyser la répartition des types de tarification par territoire.</p>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary>Comment fonctionne le calcul du coût moyen par acte ?</summary>
+            <div class="faq-content">
+                <p>Le coût moyen par acte est calculé automatiquement en divisant le montant total des prescriptions par le volume total des actes prescrits enregistrés pour la catégorie sélectionnée.</p>
+                <p>Formule appliquée : <code>Coût moyen = Montant total / Nombre total d'actes</code>.</p>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary>Les listes déroulantes de recherche sont-elles liées entre elles ?</summary>
+            <div class="faq-content">
+                <p><strong>Oui !</strong> Lorsque vous sélectionnez une région dans le formulaire de l'accueil, la liste déroulante des départements se met automatiquement à jour grâce à un script dynamique pour ne proposer que les départements appartenant à cette région.</p>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary>Comment puis-je exporter les graphiques ou les tableaux ?</summary>
+            <div class="faq-content">
+                <p>Les fonctionnalités d'exportation au format CSV pour les tableaux de données et de téléchargement d'images pour les graphiques sont accessibles directement via les icônes dédiées situées en haut à droite de chaque panneau de visualisation.</p>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary>Que faire en cas d'erreur de connexion avec l'API Ameli ?</summary>
+            <div class="faq-content">
+                <p>Si le serveur de l'Assurance Maladie est temporairement indisponible ou surchargé, l'application affichera une page d'erreur propre. Nous vous conseillons de patienter quelques instants puis de rafraîchir la page.</p>
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary>Puis-je comparer l'évolution des effectifs sur plusieurs années ?</summary>
+            <div class="faq-content">
+                <p>Absolument. En dessous du tableau des résultats principaux, un graphique linéaire retrace automatiquement l'historique complet de la profession choisie dans votre département afin d'observer facilement les tendances de croissance ou de baisse.</p>
+            </div>
+        </details>
+
+    </div>
+</div>
+{% endblock %}
