@@ -40,30 +40,38 @@
 
         <div class="footer-col">
             <h4>Données</h4>
-            <p>Prescriptions</p>
-            <p>Établissements</p>
-            <p>Professionnels</p>
-            <p>Remboursements</p>
-            <p>Pathologies</p>
+            <p><a href="{{ url_for('prescriptions.afficher') }}" class="{% if request.endpoint == 'prescriptions.afficher' %}active{% endif %}">Prescriptions</a></p>
+            <p><a href="#">Établissements</a></p>
+            <p><a href="#">Professionnels</a></p>
+            <p><a href="#">Remboursements</a></p>
+            <p><a href="#">Pathologies</a></p>
         </div>
 
         <div class="footer-col">
             <h4>Ressources</h4>
-            <p>Documentation API</p>
-            <p>Guides</p>
-            <p>FAQ</p>
-            <p>Blog</p>
-            <p>Communauté</p>
+                <p><a href="#">Documentation API</a></p>
+                <p><a href="#">Guides</a></p>
+                <p><a href="#">FAQ</a></p>
+                <p><a href="#">Blog</a></p>
+                <p><a href="#">Communauté</a></p>
+                
         </div>
 
         <div class="footer-col">
             <h4>Contact</h4>
-            <p>contact@santedatafrance.fr</p>
-            <p>01 45 17 17 01</p>
-            <p>122 rue Paul Armangot</p>
-            <p>94400 Vitry-sur-Seine</p>
-            <p>France</p>
+            <p><a href="#">contact@santedatafrance.fr</a></p>
+            <p><a href="#">01 45 17 17 01</a></p>
+            <p>
+                <a href="https://www.google.com/maps/search/?api=1&query=IUT+de+Cr%C3%A9teil-Vitry+122+Rue+Paul+Armangot+94400+Vitry-sur-Seine" 
+                target="_blank" 
+                class="adresse-link">
+                IUT de Créteil-Vitry<br>
+                122 Rue Paul Armangot<br>
+                94400 Vitry-sur-Seine
+                </a>
+            </p>
         </div>
+        
     </footer>
 
 </body>
