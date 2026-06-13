@@ -10,61 +10,43 @@
             <h1>Analyse des prescriptions</h1>
             <p>Consultez les montants de prescriptions selon une profession, un territoire et une année.</p>
         </div>
-
-        <a href="{{ url_for('prescriptions.afficher') }}" class="export-btn">
-            Réinitialiser
-        </a>
+        <button class="export-btn">Exporter (CSV/PDF)</button>
     </div>
 
-    <section class="prescriptions-filter-box">
+    <section class="filters-box">
         <span class="filter-label">FILTRES :</span>
 
-        <form action="{{ url_for('prescriptions.afficher') }}" method="get" class="prescriptions-form">
+        <form action="{{ url_for('effectifs.afficher') }}" method="get" class="api-form">
 
             <select name="profession_id" id="profession" required>
                 <option value="">Profession</option>
                 {% for p in professions %}
-                    <option value="{{ p.id }}" {% if prof and prof.id == p.id %}selected{% endif %}>
-                        {{ p.libelle }}
-                    </option>
+                    <option value="{{ p.id }}">{{ p.libelle }}</option>
                 {% endfor %}
             </select>
 
             <select name="region_id" id="region" required>
                 <option value="">Région</option>
                 {% for r in regions %}
-                    <option value="{{ r.id }}" {% if dept and dept.region_id == r.id %}selected{% endif %}>
-                        {{ r.libelle }}
-                    </option>
+                    <option value="{{ r.id }}">{{ r.libelle }}</option>
                 {% endfor %}
             </select>
 
             <select name="departement_id" id="departement" required>
-                {% if dept %}
-                    <option value="{{ dept.id }}" selected>{{ dept.code }} – {{ dept.libelle }}</option>
-                {% else %}
-                    <option value="">Département</option>
-                {% endif %}
-            </select>
-
-            <select name="prescription_id" id="prescription" required>
-                <option value="">Poste de prescription</option>
-                {% for p in postes %}
-                    <option value="{{ p.id }}" {% if poste and poste.id == p.id %}selected{% endif %}>
-                        {{ p.libelle }}
-                    </option>
-                {% endfor %}
+                <option value="">Département</option>
             </select>
 
             <select name="annee" id="annee" required>
-                {% for a in range(2023, 2014, -1) %}
-                    <option value="{{ a }}" {% if annee == a %}selected{% endif %}>
-                        {{ a }}
-                    </option>
+                {% for a in range(2024, 2014, -1) %}
+                    <option value="{{ a }}">{{ a }}</option>
                 {% endfor %}
             </select>
 
-            <button type="submit">Analyser</button>
+            <button type="submit">Afficher</button>
+
+            <a href="{{ url_for('accueil.api_ameli') }}" class="reset-link">
+                Réinitialiser
+            </a>
         </form>
     </section>
 
