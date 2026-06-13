@@ -4,72 +4,140 @@
 
 {% block contenu %}
 
-<div class="prescriptions-results" style="width: 90%; margin: 40px auto;">
+<section class="prescriptions-page" style="width: 90%; margin: 0 auto; padding: 45px 0;">
 
-    <div class="result-title">
-        <h2>Résultats de l’analyse</h2>
-        <p>{{ prof.libelle }} – {{ dept.code }} {{ dept.libelle }} – {{ annee }}</p>
+    <div class="prescriptions-header">
+        <div>
+            <h1>Analyse des effectifs</h1>
+            <p>Consultez les effectifs et la densité des professionnels de santé selon une profession, un territoire et une année.</p>
+        </div>
+
+        <a href="{{ url_for('effectifs.afficher') }}" class="export-btn">
+            Réinitialiser
+        </a>
     </div>
 
-    {% if resultats %}
-        <div class="chart-box prescription-chart">
-            <h3 style="margin-bottom: 15px;">Évolution sur plusieurs années</h3>
-            <canvas id="graphique"></canvas>
-        </div>
+    <section class="prescriptions-filter-box" style="margin-bottom: 35px;">
+        <span class="filter-label">FILTRES :</span>
 
-        <div class="prescriptions-table-box">
-            <h3 style="margin-bottom: 15px;">Détail des données brutes</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Année</th>
-                        <th>Effectif</th>
-                        <th>Densité</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for r in resultats %}
-                        <tr>
-                            <td>{{ r.annee }}</td>
-                            <td>{{ r.effectif }}</td>
-                            <td>{{ r.densite }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    {% else %}
-        <div class="empty-message">
-            <h3>Aucune donnée disponible</h3>
-            <p>Aucune donnée n’a été trouvée pour cette sélection.</p>
-        </div>
+        <form action="{{ url_for('effectifs.afficher') }}" method="get" class="prescriptions-form" style="grid-template-columns: 1.5fr 1fr 1fr 0.8fr auto;">
+
+            <select name="profession_id" id="profession" required>
+                <option value="">Profession</option>
+                {% for p in professions %}
+                    <option value="{{ p.id }}" {% if prof and prof.id == p.id %}selected{% endif %}>
+                        {{ p.libelle }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <select name="region_id" id="region" required>
+                <option value="">Région</option>
+                {% for r in regions %}
+                    <option value="{{ r.id }}" {% if dept and dept.region_id == r.id %}selected{% endif %}>
+                        {{ r.libelle }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <select name="departement_id" id="departement" required>
+                {% if dept %}
+                    <option value="{{ dept.id }}" selected>{{ dept.code }} – {{ dept.libelle }}</option>
+                {% else %}
+                    <option value="">Département</option>
+                {% endif %}
+            </select>
+
+            <select name="annee" id="annee" required>
+                <option value="">Année</option>
+                {% for a in range(2023, 2014, -1) %}
+                    <option value="{{ a }}" {% if annee == a %}selected{% endif %}>
+                        {{ a }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Analyser</button>
+        </form>
+    </section>
+
+    {% if prof and dept and annee %}
+        <section class="prescriptions-results" style="margin-top: 0;">
+
+            <div class="result-title">
+                <h2>Résultats de l’analyse</h2>
+                <p>{{ prof.libelle }} · {{ dept.code }} – {{ dept.libelle }} · {{ annee }}</p>
+            </div>
+
+            {% if resultats %}
+                <div class="chart-box prescription-chart">
+                    <h3 style="margin-bottom: 15px;">Évolution sur plusieurs années</h3>
+                    <canvas id="graphique"></canvas>
+                </div>
+
+                <div class="prescriptions-table-box">
+                    <h3 style="margin-bottom: 15px;">Détail des données brutes</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Année</th>
+                                <th>Effectif</th>
+                                <th>Densité (pour 100 000 hab.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in resultats %}
+                                <tr>
+                                    <td>{{ r.annee }}</td>
+                                    <td>{{ r.effectif }}</td>
+                                    <td>{{ r.densite }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script>
+                    const donnees = {{ evolution | tojson }};
+
+                    new Chart(document.getElementById("graphique"), {
+                        type: "line",
+                        data: {
+                            labels: donnees.map(d => d.annee),
+                            datasets: [{
+                                label: "Effectif",
+                                data: donnees.map(d => d.effectif),
+                                borderColor: "#2E74B5",
+                                tension: 0.2,
+                                fill: false
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                </script>
+            {% else %}
+                <div class="empty-message">
+                    <h3>Aucune donnée disponible</h3>
+                    <p>Aucune donnée n’a été trouvée pour cette sélection.</p>
+                </div>
+            {% endif %}
+
+        </section>
     {% endif %}
 
-</div>
+</section>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const donnees = JSON.parse('{{ evolution|tojson|safe }}');
-
-    new Chart(document.getElementById("graphique"), {
-        type: "line",
-        data: {
-            labels: donnees.map(d => d.annee),
-            datasets: [{
-                label: "Effectif",
-                data: donnees.map(d => d.effectif),
-                borderColor: "#2E74B5",
-                tension: 0.2
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true // Garde l'axe à 0 comme demandé précédemment 
-                }
-            }
-        }
-    });
+    const BASE_URL = "{{ BASE_URL | default('') }}";
 </script>
+<script src="{{ url_for('static', filename='js/cascade.js') }}"></script>
 
 {% endblock %}

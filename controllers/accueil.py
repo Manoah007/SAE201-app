@@ -3,8 +3,8 @@ from models.db import Session
 from models.dimensions import Region, ProfessionSante
 
 bp_accueil = Blueprint("accueil", __name__)
-@bp_accueil.route("/")
 
+@bp_accueil.route("/accueil")
 def index():
     """Page d'accueil : affiche les régions et professions."""
     session = Session()

@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request
 from models.db import Session
-from models.dimensions import ProfessionSante, Departement
+from models.dimensions import ProfessionSante, Region ,Departement
 from services.ameli_api import AmeliAPI
 
 bp_effectifs = Blueprint("effectifs", __name__)
@@ -18,10 +18,26 @@ def afficher():
     session = Session()
 
     try:
+        
+        professions = session.query(ProfessionSante).all()
+        regions = session.query(Region).all()
+
+        if not profession_id or not departement_id or not annee:
+            return render_template(
+                "effectifs.html",
+                professions=professions,
+                regions=regions,
+                prof=None,
+                dept=None,
+                annee=None,
+                resultats=None,
+                evolution=None
+            )
+
         prof = session.get(ProfessionSante, profession_id)
         dept = session.get(Departement, departement_id)
 
-        if not prof or not dept or not annee:
+        if not prof or not dept:
             return render_template(
                 "erreur.html",
                 message="Paramètres manquants."
@@ -32,6 +48,8 @@ def afficher():
 
         return render_template(
             "effectifs.html",
+            professions=professions,
+            regions=regions,
             prof=prof,
             dept=dept,
             annee=annee,
