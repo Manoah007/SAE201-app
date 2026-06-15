@@ -6,6 +6,7 @@ header {
     padding: 12px 30px;
     border-bottom: 1px solid #ddd;
     
+    
     /* --- LIGNES AJOUTÉES POUR LE HEADER FIXE --- */
     position: sticky;
     top: 0;
