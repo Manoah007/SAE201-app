@@ -27,6 +27,7 @@
                         <a href="{{ url_for('effectifs.afficher') }}" class="{% if request.endpoint == 'effectifs.afficher' %}active{% endif %}">Effectifs</a>
                         <!-- Ajout du lien Honoraires de ton collègue dans le menu -->
                         <a href="{{ url_for('honoraires.afficher') }}" class="{% if request.endpoint == 'honoraires.afficher' %}active{% endif %}">Honoraires</a>
+                        <a href="{{ url_for('comparaison.afficher') }}" class="{% if request.endpoint == 'comparaison.afficher' %}active{% endif %}">Comparaison</a>
                     </div>
                 </div>
 
