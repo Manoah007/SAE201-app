@@ -39,7 +39,7 @@ def afficher():
                 evolution = api.get_evolution_prescriptions(prof.libelle, dept.code, poste.libelle)
         
         return render_template(
-            "prescriptions/prescriptions.html",
+            "prescriptions/prescriptions_maquette.html",
             professions=professions,
             regions=regions,
             postes=postes,
@@ -52,3 +52,15 @@ def afficher():
         )
     finally:
         session.close()
+
+@bp_prescriptions.route("/prescriptions/poste")
+def page_postes():
+    return render_template("prescriptions/poste_prescription.html")
+
+@bp_prescriptions.route("/prescriptions/finance")
+def page_finances():
+    return render_template("prescriptions/finance_prescription.html")
+
+@bp_prescriptions.route("/prescriptions/volume")
+def page_volumes():
+    return render_template("prescriptions/volume_prescription.html")
