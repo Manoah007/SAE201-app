@@ -1,0 +1,137 @@
+/* API AMELI - PAGE */
+.api-page {
+    background: #f4f4f4;
+    padding: 45px 50px;
+}
+
+.api-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+}
+
+.api-header h1 {
+    font-size: 42px;
+    margin-bottom: 6px;
+}
+
+.api-header p {
+    font-size: 20px;
+    color: #555;
+}
+
+.export-btn {
+    background: white;
+    border: none;
+    padding: 15px 25px;
+    border-radius: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* API AMELI - FILTRES */
+.filters-box {
+    background: #eeeeee;
+    border-radius: 18px;
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.filter-label {
+    color: #777;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.api-form {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 0.7fr auto auto;
+    gap: 18px;
+    align-items: center;
+    width: 100%;
+}
+
+.api-form select {
+    width: 100%;
+    border: none;
+    background: white;
+    padding: 13px 22px;
+    border-radius: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.api-form button {
+    border: none;
+    background: #41e46a;
+    color: white;
+    padding: 13px 28px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.reset-link {
+    color: #23b84d;
+    font-weight: bold;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+/* API AMELI - CARTES */
+.api-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+    margin-top: 35px;
+}
+
+.api-card {
+    background: white;
+    border-radius: 18px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+}
+
+.api-card span {
+    color: #777;
+    font-size: 15px;
+}
+
+.api-card strong {
+    display: block;
+    font-size: 30px;
+    margin: 8px 0;
+}
+
+.api-card p {
+    color: #23b84d;
+    font-weight: bold;
+}
+
+/* API AMELI - TABLEAU APERÇU */
+.api-table-preview {
+    background: white;
+    border-radius: 18px;
+    padding: 25px;
+    margin-top: 35px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.table-header input {
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+}
