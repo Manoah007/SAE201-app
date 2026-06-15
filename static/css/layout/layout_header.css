@@ -2,15 +2,15 @@
 header {
     background: white;
     display: flex;
+    justify-content: space-between; 
     align-items: center;
     padding: 12px 30px;
     border-bottom: 1px solid #ddd;
     
-    
-    /* --- LIGNES AJOUTÉES POUR LE HEADER FIXE --- */
+    /* Garde la barre fixe ET sert de repère pour le centrage */
     position: sticky;
     top: 0;
-    z-index: 2000; /* S'assure que le header passe toujours au-dessus du reste de la page */
+    z-index: 2000;
 }
 
 .logo {
@@ -30,27 +30,34 @@ header {
     font-size: 22px;
 }
 
+/* --- LE CONTENEUR GLOBAL DES MENUS --- */
 nav {
     flex: 1;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end; /* Pousse "Documentation" et "À propos" tout à droite */
     align-items: center;
-    position: relative;
 }
 
+/* --- LE MENU CENTRAL (Accueil, Données...) --- */
 .nav-center {
+    position: absolute;
+    left: 50%;
+    top: 50%; /* Centre verticalement */
+    transform: translate(-50%, -50%); /* Ajuste le point d'ancrage au milieu exact */
+    
+    display: flex;
+    align-items: center;
+    gap: 35px;
+}
+
+/* --- LE MENU DE DROITE (Documentation...) --- */
+.nav-right {
     display: flex;
     gap: 35px;
     align-items: center;
 }
 
-.nav-right {
-    position: absolute;
-    right: 0;
-    display: flex;
-    gap: 35px;
-}
-
+/* --- LES LIENS --- */
 nav a {
     text-decoration: none;
     color: #111;
@@ -119,7 +126,7 @@ nav .dropdown-content a::after {
 .dropdown-content a:hover,
 .dropdown-content a.active {
     background-color: #f1f5f9;
-    color: #41e46a; /* Adapté à ton vert principal */
+    color: #41e46a;
 }
 
 .nav-center .dropdown:hover .dropdown-content {
