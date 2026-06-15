@@ -17,6 +17,7 @@
         <nav>
             <div class="nav-center">
                 <a href="{{ url_for('accueil.index') }}" class="{% if request.endpoint == 'accueil.index' %}active{% endif %}">Accueil</a>
+<<<<<<< HEAD
                 
                 <div class="dropdown">
                     <a href="#" class="dropbtn">Données &#9662;</a>
@@ -27,6 +28,12 @@
                 </div>
 
                 <a href="{{ url_for('accueil.api_ameli') }}" class="{% if request.endpoint == 'accueil.api_ameli' %}active{% endif %}">Api Ameli</a>
+=======
+                <a href="{{ url_for('accueil.api_ameli') }}" class="{% if request.endpoint == 'accueil.api_ameli' %}active{% endif %}">Api Ameli</a>
+                <a href="{{ url_for('prescriptions.afficher') }}" class="{% if request.endpoint == 'prescriptions.afficher' %}active{% endif %}">Prescriptions</a>
+                <a href="{{ url_for('effectifs.afficher') }}" class="{% if request.endpoint == 'effectifs.afficher' %}active{% endif %}">Effectifs</a>
+                <a href="{{ url_for('honoraires.afficher') }}" class="{% if request.endpoint == 'honoraires.afficher' %}active{% endif %}">Honoraires</a>
+
             </div>
 
             <div class="nav-right">

@@ -1,5 +1,6 @@
 /* =========================================
    FICHIER PRINCIPAL : style.css
+   Ce fichier importe tous les modules CSS.
    ========================================= */
 
 /* 1. Base */
@@ -18,3 +19,4 @@
 @import url('pages_api-ameli.css');
 @import url('pages_prescriptions.css');
 @import url('pages_faq.css');
+@import url('pages_honoraires.css');
