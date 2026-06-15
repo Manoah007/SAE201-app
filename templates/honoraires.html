@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+
+{% block titre %}Honoraires{% endblock %}
+
+{% block contenu %}
+
+<section class="honoraires-page">
+
+    <div class="honoraires-header">
+        <div>
+            <h1>Analyse des honoraires</h1>
+            <p>Consultez les honoraires des professionnels de santé selon une profession, un territoire et une année.</p>
+        </div>
+    </div>
+
+    <section class="filters-box">
+        <span class="filter-label">FILTRES :</span>
+
+        <form action="{{ url_for('honoraires.afficher') }}" method="get" class="honoraires-form">
+
+            <select name="profession_id" id="profession" required>
+                <option value="">Profession</option>
+                {% for p in professions %}
+                    <option value="{{ p.id }}">{{ p.libelle }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="region_id" id="region" required>
+                <option value="">Région</option>
+                {% for r in regions %}
+                    <option value="{{ r.id }}">{{ r.libelle }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="departement_id" id="departement" required>
+                <option value="">Département</option>
+            </select>
+
+            <select name="annee" id="annee" required>
+                {% for a in range(2024, 2014, -1) %}
+                    <option value="{{ a }}">{{ a }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Afficher</button>
+
+            <a href="{{ url_for('accueil.api_ameli') }}" class="reset-link">
+                Réinitialiser
+            </a>
+        </form>
+    </section>
+
+    <section class="honoraires-cards">
+        <div class="honoraire-card">
+            <span>Source</span>
+            <strong>API</strong>
+            <p>Assurance Maladie</p>
+        </div>
+
+        <div class="honoraire-card">
+            <span>Professions</span>
+            <strong>{{ professions|length }}</strong>
+            <p>Disponibles</p>
+        </div>
+
+        <div class="honoraire-card">
+            <span>Période</span>
+            <strong>2015-2024</strong>
+            <p>Données analysables</p>
+        </div>
+
+        <div class="honoraire-card">
+            <span>Type</span>
+            <strong>€</strong>
+            <p>Honoraires médicaux</p>
+        </div>
+    </section>
+
+    {% if resultats is not none %}
+        <section class="honoraires-results">
+
+            <div class="result-title">
+                <h2>Résultats de l’analyse</h2>
+
+                {% if prof and dept %}
+                    <p>
+                        {{ prof.libelle }} · {{ dept.libelle }} · {{ annee }}
+                    </p>
+                {% endif %}
+            </div>
+
+            {% if resultats|length > 0 %}
+
+                <div class="honoraires-summary">
+                    {% set ligne = resultats[0] %}
+
+                    <div class="summary-box">
+                        <span>Honoraires sans dépassement</span>
+                        <strong>{{ ligne.hono_sans_depassement_totaux }}</strong>
+                        <p>Montant total</p>
+                    </div>
+
+                    <div class="summary-box">
+                        <span>Dépassements</span>
+                        <strong>{{ ligne.depassements_totaux }}</strong>
+                        <p>Montant total</p>
+                    </div>
+
+                    <div class="summary-box">
+                        <span>Total</span>
+                        <strong>{{ ligne.totaux_integer }}</strong>
+                        <p>Honoraires globaux</p>
+                    </div>
+                </div>
+
+                <div class="chart-box honoraire-chart">
+                    <canvas id="graphique-honoraires"></canvas>
+                </div>
+
+                <div class="honoraires-table-box">
+                    <h3>Détail des données brutes</h3>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Année</th>
+                                <th>Honoraires sans dépassement</th>
+                                <th>Dépassements</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for r in resultats %}
+                                <tr>
+                                    <td>{{ r.annee }}</td>
+                                    <td>{{ r.hono_sans_depassement_totaux }}</td>
+                                    <td>{{ r.depassements_totaux }}</td>
+                                    <td class="positive">{{ r.totaux_integer }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script>
+                    const donneesHonoraires = JSON.parse('{{ resultats | tojson | safe }}');
+
+                    new Chart(document.getElementById("graphique-honoraires"), {
+                        type: "bar",
+                        data: {
+                            labels: donneesHonoraires.map(d => d.annee),
+                            datasets: [
+                                {
+                                    label: "Honoraires sans dépassement",
+                                    data: donneesHonoraires.map(d => Number(d.hono_sans_depassement_totaux) || 0),
+                                    backgroundColor: "#41e46a",
+                                    borderRadius: 6
+                                },
+                                {
+                                    label: "Dépassements",
+                                    data: donneesHonoraires.map(d => Number(d.depassements_totaux) || 0),
+                                    backgroundColor: "#111111",
+                                    borderRadius: 6
+                                }
+                            ]
+                        }
+                    });
+                </script>
+
+            {% else %}
+                <div class="empty-message">
+                    <h3>Aucune donnée disponible</h3>
+                    <p>Aucune donnée n’a été trouvée pour cette sélection.</p>
+                </div>
+            {% endif %}
+
+        </section>
+    {% endif %}
+
+</section>
+
+<script>
+    const BASE_URL = "{{ BASE_URL | default('') }}";
+</script>
+<script src="{{ url_for('static', filename='js/cascade.js') }}"></script>
+
+{% endblock %}
