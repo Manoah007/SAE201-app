@@ -14,109 +14,97 @@
     </div>
 
     <section class="comparaison-filter-box">
-        <span class="filter-label">COMPARER :</span>
+    <span class="filter-label">COMPARER :</span>
 
-        <form action="{{ url_for('comparaison.afficher') }}" method="get" class="comparaison-form">
+    <form action="{{ url_for('comparaison.afficher') }}" method="get" class="comparaison-form">
 
-            <select name="pathologie_a" required>
-                <option value="">Sélectionner Pathologie A</option>
-                {% for p in pathologies %}
-                    <option value="{{ p.id }}">{{ p.libelle }}</option>
-                {% endfor %}
-            </select>
-            
-            <select name="annee_a" required>
-                <option value="">Année A</option>
-                {% for a in range(2024, 2014, -1) %}
-                    <option value="{{ a }}">{{ a }}</option>
-                {% endfor %}
-            </select>
+        <select name="prof_a" required>
+            <option value="">Sélectionner Profession A</option>
+            {% for p in professions %}
+                <option value="{{ p.id }}">{{ p.libelle }}</option>
+            {% endfor %}
+        </select>
+        
+        <select name="annee_a" required>
+            <option value="">Année A</option>
+            {% for a in range(2024, 2014, -1) %}
+                <option value="{{ a }}">{{ a }}</option>
+            {% endfor %}
+        </select>
 
-            <span class="vs-badge">VS</span>
+        <span class="vs-badge">VS</span>
 
-            <select name="pathologie_b" required>
-                <option value="">Sélectionner Pathologie B</option>
-                {% for p in pathologies %}
-                    <option value="{{ p.id }}">{{ p.libelle }}</option>
-                {% endfor %}
-            </select>
-            
-            <select name="annee_b" required>
-                <option value="">Année B</option>
-                {% for a in range(2024, 2014, -1) %}
-                    <option value="{{ a }}">{{ a }}</option>
-                {% endfor %}
-            </select>
+        <select name="prof_b" required>
+            <option value="">Sélectionner Profession B</option>
+            {% for p in professions %}
+                <option value="{{ p.id }}">{{ p.libelle }}</option>
+            {% endfor %}
+        </select>
+        
+        <select name="annee_b" required>
+            <option value="">Année B</option>
+            {% for a in range(2024, 2014, -1) %}
+                <option value="{{ a }}">{{ a }}</option>
+            {% endfor %}
+        </select>
 
-            <button type="submit">Comparer</button>
-            <a href="#" class="reset-link">Réinitialiser</a>
-        </form>
-    </section>
-
-    {% if resultats is not none %}
-        <section class="comparaison-results">
-            
-            {% if resultats|length > 0 %}
-                <div class="result-title">
-                    <h2>Résultats de la comparaison</h2>
-                </div>
-
-                <div class="chart-box comparaison-chart">
-                    <canvas id="graphique-comparaison"></canvas>
-                </div>
-
-                <div class="comparaison-table-box">
-                    <h3>Détail des données brutes</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Pathologie</th>
-                                <th>Année</th>
-                                <th>Cas recensés (ou montants)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for r in resultats %}
-                                <tr>
-                                    <td>{{ r.libelle_pathologie }}</td>
-                                    <td>{{ r.annee }}</td>
-                                    <td class="positive">{{ r.valeur }}</td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-
-                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                <script>
-                    const donnees = {{ resultats | tojson }};
-                    
-                    new Chart(document.getElementById("graphique-comparaison"), {
-                        type: "bar",
-                        data: {
-                            // Affiche "Nom pathologie (Année)" en bas du graphique
-                            labels: donnees.map(d => d.libelle_pathologie + ' (' + d.annee + ')'),
-                            datasets: [{
-                                label: "Valeur comparée",
-                                data: donnees.map(d => d.valeur),
-                                // Deux couleurs différentes pour bien distinguer A et B
-                                backgroundColor: ["#41e46a", "#111111"], 
-                                borderRadius: 6
-                            }]
-                        }
-                    });
-                </script>
-
-            {% else %}
-                <div class="empty-message">
-                    <h3>Aucune donnée disponible</h3>
-                    <p>Nous n'avons pas trouvé de données pour cette comparaison.</p>
-                </div>
-            {% endif %}
-
-        </section>
-    {% endif %}
-
+        <button type="submit">Comparer</button>
+        <a href="{{ url_for('comparaison.afficher') }}" class="reset-link">Réinitialiser</a>
+    </form>
 </section>
 
-{% endblock %}
+{% if resultats is not none %}
+    <section class="comparaison-results">
+        
+        {% if resultats|length > 0 %}
+            <div class="result-title">
+                <h2>Évolution des effectifs</h2>
+            </div>
+
+            <div class="chart-box comparaison-chart">
+                <canvas id="graphique-comparaison"></canvas>
+            </div>
+
+            <div class="comparaison-table-box">
+                <h3>Détail des données brutes</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Profession de santé</th>
+                            <th>Année</th>
+                            <th>Effectifs recensés</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in resultats %}
+                            <tr>
+                                <td>{{ r.libelle }}</td>
+                                <td>{{ r.annee }}</td>
+                                <td class="positive">{{ r.valeur }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                const donnees = {{ resultats | tojson }};
+                
+                new Chart(document.getElementById("graphique-comparaison"), {
+                    type: "bar",
+                    data: {
+                        labels: donnees.map(d => d.libelle + ' (' + d.annee + ')'),
+                        datasets: [{
+                            label: "Nombre de professionnels",
+                            data: donnees.map(d => d.valeur),
+                            backgroundColor: ["#41e46a", "#111111"], 
+                            borderRadius: 6
+                        }]
+                    }
+                });
+            </script>
+        {% else %}
+            {% endif %}
+    </section>
+{% endif %}

@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, request
 from models.db import Session
-from services.ameli_api import AmeliAPI
+from models.dimensions import ProfessionSante
 
-# ATTENTION: Remplace "Pathologie" par le vrai nom de ta classe dans models.dimensions
-from models.dimensions import Pathologie 
+# N'oublie pas d'importer ton API !
+from services.ameli_api import AmeliAPI 
 
 bp_comparaison = Blueprint("comparaison", __name__)
 api = AmeliAPI()
@@ -12,48 +12,46 @@ api = AmeliAPI()
 def afficher():
     session = Session()
     try:
-        # 1. Chargement de toutes les pathologies pour remplir les 2 menus déroulants
-        pathologies = session.query(Pathologie).order_by(Pathologie.libelle).all()
+        professions = session.query(ProfessionSante).order_by(ProfessionSante.libelle).all()
         
-        # 2. Récupération des choix du formulaire (identifiants et années A et B)
-        pathologie_a_id = request.args.get("pathologie_a", type=int)
+        # On récupère les choix (nouveaux noms de variables du HTML)
+        prof_a_id = request.args.get("prof_a", type=int)
         annee_a = request.args.get("annee_a", type=int)
         
-        pathologie_b_id = request.args.get("pathologie_b", type=int)
+        prof_b_id = request.args.get("prof_b", type=int)
         annee_b = request.args.get("annee_b", type=int)
         
         resultats = None
 
-        # 3. Si l'utilisateur a rempli les 4 champs et cliqué sur "Comparer"
-        if pathologie_a_id and annee_a and pathologie_b_id and annee_b:
-            # On récupère les vrais objets en base de données pour avoir leurs libellés
-            patho_a = session.get(Pathologie, pathologie_a_id)
-            patho_b = session.get(Pathologie, pathologie_b_id)
+        if prof_a_id and annee_a and prof_b_id and annee_b:
+            prof_a = session.get(ProfessionSante, prof_a_id)
+            prof_b = session.get(ProfessionSante, prof_b_id)
             
-            if patho_a and patho_b:
-                # --- APPEL À L'API AMELI ---
-                # ATTENTION: Remplace "get_pathologie_data" par la vraie méthode de ton AmeliAPI !
-                data_a = api.get_pathologie_data(patho_a.libelle, annee_a)
-                data_b = api.get_pathologie_data(patho_b.libelle, annee_b)
+            if prof_a and prof_b:
+                # 🚀 L'APPEL À TON API (À vérifier selon ton fichier ameli_api.py)
+                # On suppose que get_effectifs a besoin du libellé et de l'année. 
+                # (Si tu dois aussi lui passer un code département ou région, adapte-le !)
+                data_a = api.get_effectifs(prof_a.libelle, annee_a)
+                data_b = api.get_effectifs(prof_b.libelle, annee_b)
                 
-                # 4. Formatage des résultats pour qu'ils soient lus par le tableau HTML et le graphique JS
+                # Formatage du résultat pour le tableau et le graphique
                 resultats = [
                     {
-                        "libelle_pathologie": patho_a.libelle,
+                        "libelle": prof_a.libelle,
                         "annee": annee_a,
-                        "valeur": data_a.get("montant", 0) if data_a else 0 # Adapte la clé selon l'API
+                        # Adapte ".get('effectif_total', 0)" en fonction de ce que te renvoie ton API (dictionnaire ou chiffre brut)
+                        "valeur": data_a.get("effectif_total", 0) if isinstance(data_a, dict) else (data_a or 0)
                     },
                     {
-                        "libelle_pathologie": patho_b.libelle,
+                        "libelle": prof_b.libelle,
                         "annee": annee_b,
-                        "valeur": data_b.get("montant", 0) if data_b else 0 # Adapte la clé selon l'API
+                        "valeur": data_b.get("effectif_total", 0) if isinstance(data_b, dict) else (data_b or 0)
                     }
                 ]
         
-        # 5. On renvoie tout à notre fichier HTML
         return render_template(
-            "comparaison.html", # Ou le nom de ton dossier : "comparaison/comparaison.html"
-            pathologies=pathologies,
+            "comparaison.html", 
+            professions=professions,
             resultats=resultats
         )
         
