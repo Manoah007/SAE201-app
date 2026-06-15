@@ -1,5 +1,7 @@
 /* IMPORTS & RESET */
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -15,10 +17,7 @@ body {
     display: flex;
     flex-direction: column;
     background: #f4f4f4;
-    
-    /* --- ICI : La police native d'Apple (iPhone/Mac) avec alternatives --- */
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    
+    font-family: "Inter", sans-serif;
     color: #111;
 }
 
