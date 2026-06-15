@@ -97,3 +97,12 @@
     padding: 25px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
 }
+
+.comparaison-form {
+    display: grid;
+    /* On a ajouté '1.2fr' tout au début pour le menu Département */
+    grid-template-columns: 1.2fr 1.5fr 1fr auto 1.5fr 1fr auto auto; 
+    gap: 12px;
+    align-items: center;
+    width: 100%;
+}

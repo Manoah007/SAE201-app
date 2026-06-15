@@ -18,33 +18,42 @@
 
     <form action="{{ url_for('comparaison.afficher') }}" method="get" class="comparaison-form">
 
+        <select name="dept_code" required class="dept-select">
+            <option value="">Département</option>
+            {% for d in departements %}
+                <option value="{{ d.code }}" {% if request.args.get('dept_code') == d.code %}selected{% endif %}>
+                    {{ d.code }} - {{ d.libelle }}
+                </option>
+            {% endfor %}
+        </select>
+
         <select name="prof_a" required>
-            <option value="">Sélectionner Profession A</option>
+            <option value="">Profession A</option>
             {% for p in professions %}
-                <option value="{{ p.id }}">{{ p.libelle }}</option>
+                <option value="{{ p.id }}" {% if request.args.get('prof_a')|int == p.id %}selected{% endif %}>{{ p.libelle }}</option>
             {% endfor %}
         </select>
         
         <select name="annee_a" required>
             <option value="">Année A</option>
             {% for a in range(2024, 2014, -1) %}
-                <option value="{{ a }}">{{ a }}</option>
+                <option value="{{ a }}" {% if request.args.get('annee_a')|int == a %}selected{% endif %}>{{ a }}</option>
             {% endfor %}
         </select>
 
         <span class="vs-badge">VS</span>
 
         <select name="prof_b" required>
-            <option value="">Sélectionner Profession B</option>
+            <option value="">Profession B</option>
             {% for p in professions %}
-                <option value="{{ p.id }}">{{ p.libelle }}</option>
+                <option value="{{ p.id }}" {% if request.args.get('prof_b')|int == p.id %}selected{% endif %}>{{ p.libelle }}</option>
             {% endfor %}
         </select>
         
         <select name="annee_b" required>
             <option value="">Année B</option>
             {% for a in range(2024, 2014, -1) %}
-                <option value="{{ a }}">{{ a }}</option>
+                <option value="{{ a }}" {% if request.args.get('annee_b')|int == a %}selected{% endif %}>{{ a }}</option>
             {% endfor %}
         </select>
 
@@ -89,7 +98,7 @@
 
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
             <script>
-                const donnees = {{ resultats | tojson }};
+                const donnees = {{ resultats | tojson | safe }};
                 
                 new Chart(document.getElementById("graphique-comparaison"), {
                     type: "bar",
@@ -108,3 +117,4 @@
             {% endif %}
     </section>
 {% endif %}
+{% endblock %}
