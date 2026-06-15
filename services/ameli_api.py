@@ -1,5 +1,6 @@
 import requests
 
+
 class AmeliAPI:
     """Service d'accès à l'API data.ameli.fr."""
 
@@ -49,22 +50,30 @@ class AmeliAPI:
             }
         )
 
-    def _requete(self, dataset, params):
-        """Effectue une requête GET vers l'API."""
+    def get_honoraires(self, profession, departement_code, annee):
+        """Récupère les honoraires pour une profession, un département et une année."""
 
-        url = f"{self.BASE_URL}/{dataset}/records"
+        print("Profession envoyée :", profession)
+        print("Département envoyé :", departement_code)
+        print("Année envoyée :", annee)
 
-        try:
-            resp = self._session.get(url, params=params, timeout=self._timeout)
-            resp.raise_for_status()
-            return resp.json().get("results", [])
+        where = (
+            f'profession_sante="{profession}" AND '
+            f'departement="{departement_code}" AND '
+            f'annee="{annee}"'
+        )
 
-        except requests.RequestException as e:
-            print(f"[AmeliAPI] Erreur : {e}")
-            return []
-        
+        return self._requete(
+            "honoraires",
+            {
+                "where": where,
+                "limit": 100
+            }
+        )
+
     def get_prescriptions(self, profession, departement_code, annee, poste_prescription):
-        """Récupère les données d'un poste de prescription spécifique pour une année."""
+        """Récupère les prescriptions pour une profession, un département, une année et un poste."""
+
         where = (
             f'profession_sante="{profession}" AND '
             f'departement="{departement_code}" AND '
@@ -75,6 +84,7 @@ class AmeliAPI:
         return self._requete(
             "prescriptions",
             {
+                "select": "annee,prescriptions",
                 "where": where,
                 "limit": 100
             }
@@ -82,6 +92,7 @@ class AmeliAPI:
 
     def get_evolution_prescriptions(self, profession, departement_code, poste_prescription):
         """Récupère l'évolution des prescriptions sur toutes les années disponibles."""
+
         where = (
             f'profession_sante="{profession}" AND '
             f'departement="{departement_code}" AND '
@@ -96,3 +107,42 @@ class AmeliAPI:
                 "limit": 100
             }
         )
+
+    def get_patientele(self, profession, departement_code, annee):
+        """Récupère les données de patientèle pour une profession, un département et une année."""
+
+        where = (
+            f'profession_sante="{profession}" AND '
+            f'departement="{departement_code}" AND '
+            f'year(annee)={annee}'
+        )
+
+        return self._requete(
+            "patientele",
+            {
+                "select": "annee,patientele",
+                "where": where,
+                "limit": 100
+            }
+        )
+
+    def _requete(self, dataset, params):
+        """Effectue une requête GET vers l'API."""
+
+        url = f"{self.BASE_URL}/{dataset}/records"
+
+        try:
+            resp = self._session.get(url, params=params, timeout=self._timeout)
+
+            print("URL appelée :", resp.url)
+            print("Statut API :", resp.status_code)
+
+            if resp.status_code != 200:
+                print("Erreur API :", resp.text)
+
+            resp.raise_for_status()
+            return resp.json().get("results", [])
+
+        except requests.RequestException as e:
+            print(f"[AmeliAPI] Erreur : {e}")
+            return []
