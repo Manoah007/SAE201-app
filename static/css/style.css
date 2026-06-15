@@ -1,22 +1,22 @@
 /* =========================================
    FICHIER PRINCIPAL : style.css
-   Ce fichier importe tous les modules CSS.
    ========================================= */
 
 /* 1. Base */
-@import url('base_reset.css');
+@import url('base/base_reset.css');
 
 /* 2. Layouts (Structure) */
-@import url('layout_header.css');
-@import url('layout_footer.css');
+@import url('layout/layout_header.css');
+@import url('layout/layout_footer.css');
 
 /* 3. Composants globaux */
-@import url('components_tables.css');
-@import url('components_forms-results.css');
+@import url('components/components_tables.css');
+@import url('components/components_forms-results.css');
 
 /* 4. Pages spécifiques */
-@import url('pages_accueil.css');
-@import url('pages_api-ameli.css');
-@import url('pages_prescriptions.css');
-@import url('pages_faq.css');
-@import url('pages_honoraires.css');
+@import url('pages/pages_accueil.css');
+@import url('pages/pages_api-ameli.css');
+@import url('pages/pages_prescriptions.css');
+@import url('pages/pages_faq.css');
+@import url('pages/pages_honoraires.css');
+@import url('pages/pages_effectifs.css');

@@ -1,0 +1,65 @@
+/* ==========================================
+   EFFECTIFS - PAGE
+   ========================================== */
+
+.effectifs-page {
+    background: #f4f4f4;
+    padding: 45px 50px;
+    width: 100%;
+}
+
+.effectifs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+}
+
+.effectifs-header h1 {
+    font-size: 42px;
+    margin-bottom: 6px;
+}
+
+.effectifs-header p {
+    font-size: 20px;
+    color: #555;
+}
+
+/* EFFECTIFS - FILTRES */
+.effectifs-filter-box {
+    background: #eeeeee;
+    border-radius: 18px;
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    width: 100%;
+}
+
+.effectifs-form {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    width: 100%;
+}
+
+.effectifs-form select {
+    flex: 1;
+    border: none;
+    background: white;
+    padding: 13px 22px;
+    border-radius: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.effectifs-form button {
+    border: none;
+    background: #41e46a;
+    color: white;
+    padding: 13px 28px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+}

@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>{% block titre %}Santé Data France{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/activity.svg') }}">
 </head>
 
 <body>
@@ -13,27 +15,22 @@
             <img src="{{ url_for('static', filename='images/activity.svg') }}" alt="Logo" class="logo-img">
             <span class="logo-text">Santé Data France</span>
         </div>
-
         <nav>
             <div class="nav-center">
                 <a href="{{ url_for('accueil.index') }}" class="{% if request.endpoint == 'accueil.index' %}active{% endif %}">Accueil</a>
-<<<<<<< HEAD
                 
+                <!-- Le menu déroulant -->
                 <div class="dropdown">
                     <a href="#" class="dropbtn">Données &#9662;</a>
                     <div class="dropdown-content">
                         <a href="{{ url_for('prescriptions.afficher') }}" class="{% if request.endpoint == 'prescriptions.afficher' %}active{% endif %}">Prescriptions</a>
                         <a href="{{ url_for('effectifs.afficher') }}" class="{% if request.endpoint == 'effectifs.afficher' %}active{% endif %}">Effectifs</a>
+                        <!-- Ajout du lien Honoraires de ton collègue dans le menu -->
+                        <a href="{{ url_for('honoraires.afficher') }}" class="{% if request.endpoint == 'honoraires.afficher' %}active{% endif %}">Honoraires</a>
                     </div>
                 </div>
 
                 <a href="{{ url_for('accueil.api_ameli') }}" class="{% if request.endpoint == 'accueil.api_ameli' %}active{% endif %}">Api Ameli</a>
-=======
-                <a href="{{ url_for('accueil.api_ameli') }}" class="{% if request.endpoint == 'accueil.api_ameli' %}active{% endif %}">Api Ameli</a>
-                <a href="{{ url_for('prescriptions.afficher') }}" class="{% if request.endpoint == 'prescriptions.afficher' %}active{% endif %}">Prescriptions</a>
-                <a href="{{ url_for('effectifs.afficher') }}" class="{% if request.endpoint == 'effectifs.afficher' %}active{% endif %}">Effectifs</a>
-                <a href="{{ url_for('honoraires.afficher') }}" class="{% if request.endpoint == 'honoraires.afficher' %}active{% endif %}">Honoraires</a>
-
             </div>
 
             <div class="nav-right">

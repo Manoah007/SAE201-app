@@ -1,0 +1,27 @@
+/* IMPORTS & RESET */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #f4f4f4;
+    
+    /* --- ICI : La police native d'Apple (iPhone/Mac) avec alternatives --- */
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    
+    color: #111;
+}
+
+main {
+    flex: 1;
+}
