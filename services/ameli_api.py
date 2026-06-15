@@ -53,14 +53,14 @@ class AmeliAPI:
     def get_honoraires(self, profession, departement_code, annee):
         """Récupère les honoraires pour une profession, un département et une année."""
 
-        print("Profession envoyée :", profession)
-        print("Département envoyé :", departement_code)
-        print("Année envoyée :", annee)
+        print("Profession envoyée :", profession, flush=True)
+        print("Département envoyé :", departement_code, flush=True)
+        print("Année envoyée :", annee, flush=True)
 
         where = (
             f'profession_sante="{profession}" AND '
             f'departement="{departement_code}" AND '
-            f'annee="{annee}"'
+            f'year(annee)={annee}'
         )
 
         return self._requete(
@@ -134,15 +134,19 @@ class AmeliAPI:
         try:
             resp = self._session.get(url, params=params, timeout=self._timeout)
 
-            print("URL appelée :", resp.url)
-            print("Statut API :", resp.status_code)
+            print("URL appelée :", resp.url, flush=True)
+            print("Statut API :", resp.status_code, flush=True)
 
             if resp.status_code != 200:
-                print("Erreur API :", resp.text)
+                print("Erreur API :", resp.text, flush=True)
 
             resp.raise_for_status()
-            return resp.json().get("results", [])
+
+            data = resp.json().get("results", [])
+            print("Nombre de résultats :", len(data), flush=True)
+
+            return data
 
         except requests.RequestException as e:
-            print(f"[AmeliAPI] Erreur : {e}")
+            print(f"[AmeliAPI] Erreur : {e}", flush=True)
             return []

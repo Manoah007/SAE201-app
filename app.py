@@ -5,8 +5,8 @@ from controllers.accueil import bp_accueil
 from controllers.api import bp_api
 from controllers.effectifs import bp_effectifs
 from controllers.prescriptions import bp_prescriptions
-from flask import Flask, render_template
 from controllers.honoraires import bp_honoraires
+from flask import Flask, render_template
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -45,4 +45,5 @@ def faq():
     return render_template('faq.html')
 
 if __name__ == "__main__":
- app.run(debug=True)
+    print(app.url_map)
+    app.run(debug=True, use_reloader=False)
