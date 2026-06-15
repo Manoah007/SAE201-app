@@ -1,0 +1,126 @@
+/* HEADER & NAVIGATION */
+header {
+    background: white;
+    display: flex;
+    align-items: center;
+    padding: 12px 30px;
+    border-bottom: 1px solid #ddd;
+    
+    /* --- LIGNES AJOUTÉES POUR LE HEADER FIXE --- */
+    position: sticky;
+    top: 0;
+    z-index: 2000; /* S'assure que le header passe toujours au-dessus du reste de la page */
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-img {
+    height: 32px;
+    width: auto;
+    object-fit: contain;
+}
+
+.logo-text {
+    font-weight: bold;
+    font-size: 22px;
+}
+
+nav {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.nav-center {
+    display: flex;
+    gap: 35px;
+    align-items: center;
+}
+
+.nav-right {
+    position: absolute;
+    right: 0;
+    display: flex;
+    gap: 35px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #111;
+    font-weight: 500;
+    padding-bottom: 4px;
+    position: relative;
+    transition: color 0.2s ease;
+}
+
+/* Ligne de soulignement au survol */
+nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #111;
+    transition: width 0.3s ease;
+}
+
+nav a:hover::after {
+    width: 100%;
+}
+
+nav a.active {
+    color: #41e46a;
+}
+
+/* --- MENU DÉROULANT (DROPDOWN) --- */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown .dropbtn {
+    cursor: pointer;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    min-width: 180px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.15);
+    z-index: 1000;
+    border-radius: 5px;
+    top: 100%;
+    left: 0;
+    overflow: hidden;
+}
+
+.dropdown-content a {
+    color: #333333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.2s ease;
+}
+
+/* On désactive la ligne de soulignement pour les sous-menus */
+nav .dropdown-content a::after {
+    display: none; 
+}
+
+.dropdown-content a:hover,
+.dropdown-content a.active {
+    background-color: #f1f5f9;
+    color: #41e46a; /* Adapté à ton vert principal */
+}
+
+.nav-center .dropdown:hover .dropdown-content {
+    display: block;
+}
