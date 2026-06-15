@@ -1,8 +1,6 @@
 from flask import Blueprint, render_template, request
 from models.db import Session
 from models.dimensions import ProfessionSante
-
-# N'oublie pas d'importer ton API !
 from services.ameli_api import AmeliAPI 
 
 bp_comparaison = Blueprint("comparaison", __name__)
@@ -12,9 +10,10 @@ api = AmeliAPI()
 def afficher():
     session = Session()
     try:
+        # 1. On charge les professions de santé pour les menus déroulants
         professions = session.query(ProfessionSante).order_by(ProfessionSante.libelle).all()
         
-        # On récupère les choix (nouveaux noms de variables du HTML)
+        # 2. Récupération des choix de l'utilisateur
         prof_a_id = request.args.get("prof_a", type=int)
         annee_a = request.args.get("annee_a", type=int)
         
@@ -23,29 +22,36 @@ def afficher():
         
         resultats = None
 
+        # 3. Si le formulaire est validé
         if prof_a_id and annee_a and prof_b_id and annee_b:
             prof_a = session.get(ProfessionSante, prof_a_id)
             prof_b = session.get(ProfessionSante, prof_b_id)
             
             if prof_a and prof_b:
-                # 🚀 L'APPEL À TON API (À vérifier selon ton fichier ameli_api.py)
-                # On suppose que get_effectifs a besoin du libellé et de l'année. 
-                # (Si tu dois aussi lui passer un code département ou région, adapte-le !)
-                data_a = api.get_effectifs(prof_a.libelle, annee_a)
-                data_b = api.get_effectifs(prof_b.libelle, annee_b)
+                # Code département par défaut (ex: "94" pour Créteil / Val-de-Marne)
+                # Tu pourras ajouter un champ département dans le HTML plus tard si tu veux
+                dept_code = "94" 
                 
-                # Formatage du résultat pour le tableau et le graphique
+                # 🚀 APPEL À TON VRAI SERVICE AMELI
+                data_a = api.get_effectifs(prof_a.libelle, dept_code, annee_a)
+                data_b = api.get_effectifs(prof_b.libelle, dept_code, annee_b)
+                
+                # L'API renvoie une liste de résultats [ {annee, effectif, densite} ]
+                # On extrait la valeur de la clé 'effectif' du premier élément s'il existe
+                valeur_a = data_a[0].get("effectif", 0) if (data_a and len(data_a) > 0) else 0
+                valeur_b = data_b[0].get("effectif", 0) if (data_b and len(data_b) > 0) else 0
+                
+                # Formatage propre pour ton tableau HTML et Chart.js
                 resultats = [
                     {
                         "libelle": prof_a.libelle,
                         "annee": annee_a,
-                        # Adapte ".get('effectif_total', 0)" en fonction de ce que te renvoie ton API (dictionnaire ou chiffre brut)
-                        "valeur": data_a.get("effectif_total", 0) if isinstance(data_a, dict) else (data_a or 0)
+                        "valeur": valeur_a
                     },
                     {
                         "libelle": prof_b.libelle,
                         "annee": annee_b,
-                        "valeur": data_b.get("effectif_total", 0) if isinstance(data_b, dict) else (data_b or 0)
+                        "valeur": valeur_b
                     }
                 ]
         
