@@ -39,7 +39,7 @@ def afficher():
                 evolution = api.get_evolution_prescriptions(prof.libelle, dept.code, poste.libelle)
         
         return render_template(
-            "prescriptions.html",
+            "prescriptions/prescriptions.html",
             professions=professions,
             regions=regions,
             postes=postes,
