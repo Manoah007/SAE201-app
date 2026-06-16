@@ -2,8 +2,18 @@
 {% block titre %}Prescriptions selon le poste{% endblock %}
 
 {% block contenu %}
-<button class="export-btn">Exporter (CSV/PDF)</button>
-<section class="filters-box">
+
+    <section class="prescriptions-header">
+        <h1>Analyse des prescriptions selon le poste</h1>
+        <p>
+            Analyse des ordonnances et des soins prescrits par les professionnels de santé, 
+            croisant les catégories de soins (postes), les coûts (€) et les quantités (volumes) pour cartographier
+            les habitudes médicales et les dépenses de l'Assurance Maladie
+        </p>
+    </section>
+
+    <section class="filters-box">
+
         <span class="filter-label">FILTRES :</span>
 
         <form action="{{ url_for('prescriptions.afficher') }}" method="get" class="api-form">
@@ -15,11 +25,11 @@
                 {% endfor %}
             </select>
 
-            <select name="region_id" id="region" required>
+            <select name="region_id" id="region_id" required>
                 <option value="">Région</option>
-                {% for r in regions %}
-                    <option value="{{ r.id }}">{{ r.libelle }}</option>
-                {% endfor %}
+                    {% for region in regions %}
+                        <option value="{{ region.id }}">{{ region.libelle }}</option>
+                    {% endfor %}
             </select>
 
             <select name="departement_id" id="departement" required>
@@ -38,10 +48,19 @@
                 Réinitialiser
             </a>
         </form>
+
+        <div class="filters-info">
+            <button class="export-btn">Exporter (CSV/PDF)</button>
+        </div>
+
     </section>
+
+
+
     <!-- Affichage des résultats -->
     <!--
     {% if resultats is not none %}
+
         <section class="prescriptions-results">
 
             <div class="result-title">
