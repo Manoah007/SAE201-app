@@ -67,6 +67,148 @@
     </div>
 
 </section>
+
+<section class="dashboard-section">
+
+    <div class="dashboard-header">
+        <h2>Tableau de bord <span>Ameli</span></h2>
+        <p>Aperçu des données ouvertes de l'Assurance Maladie sur les professionnels de santé.</p>
+    </div>
+
+    <div class="dashboard-grid">
+
+        <!-- Répartition par région -->
+        <div class="dash-card dash-card--wide">
+            <div class="dash-card-head">
+                <h3>Répartition par région</h3>
+                <span class="dash-tag">Effectifs</span>
+            </div>
+            <canvas id="chartRegions" height="220"></canvas>
+        </div>
+
+        <!-- Répartition par sexe -->
+        <div class="dash-card">
+            <div class="dash-card-head">
+                <h3>Répartition par sexe</h3>
+            </div>
+            <div class="dash-donut-wrap">
+                <canvas id="chartSexe" height="180"></canvas>
+            </div>
+            <ul class="dash-legend" id="legendSexe"></ul>
+        </div>
+
+        <!-- Top professions de santé -->
+        <div class="dash-card">
+            <div class="dash-card-head">
+                <h3>Top professions de santé</h3>
+            </div>
+            <ol class="dash-rank-list">
+                {% for prof in top_professions %}
+                <li>
+                    <span class="rank-pos">{{ loop.index }}</span>
+                    <span class="rank-name">{{ prof.libelle }}</span>
+                    <span class="rank-value">{{ prof.valeur }}</span>
+                </li>
+                {% endfor %}
+            </ol>
+        </div>
+
+        <!-- Répartition par tranche d'âge -->
+        <div class="dash-card dash-card--wide">
+            <div class="dash-card-head">
+                <h3>Répartition par tranche d'âge</h3>
+            </div>
+            <canvas id="chartAge" height="220"></canvas>
+        </div>
+
+    </div>
+
+</section>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+    const dashGreenStrong = '#41e46a';
+    const dashGreenDark   = '#0c8d35';
+    const dashGreenSoft   = '#dfffe8';
+    const dashGray        = '#d9d9d9';
+
+    Chart.defaults.font.family = "inherit";
+
+    /* ---- Répartition par région ---- */
+    new Chart(document.getElementById('chartRegions'), {
+        type: 'bar',
+        data: {
+            labels: {{ region_labels|tojson }},
+            datasets: [{
+                data: {{ region_values|tojson }},
+                backgroundColor: dashGreenStrong,
+                borderRadius: 6,
+                barThickness: 14
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { grid: { display: false } },
+                y: { grid: { display: false } }
+            }
+        }
+    });
+
+    /* ---- Répartition par sexe ---- */
+    const sexeLabels = {{ sexe_labels|tojson }};
+    const sexeValues = {{ sexe_values|tojson }};
+    const sexeColors = [dashGreenStrong, dashGreenDark, dashGray, '#a3e9b8'];
+
+    new Chart(document.getElementById('chartSexe'), {
+        type: 'doughnut',
+        data: {
+            labels: sexeLabels,
+            datasets: [{
+                data: sexeValues,
+                backgroundColor: sexeColors,
+                borderWidth: 0
+            }]
+        },
+        options: {
+            cutout: '68%',
+            plugins: { legend: { display: false } }
+        }
+    });
+
+    const legendSexe = document.getElementById('legendSexe');
+    sexeLabels.forEach((label, i) => {
+        const li = document.createElement('li');
+        const dot = document.createElement('span');
+        dot.className = 'dot';
+        dot.style.background = sexeColors[i % sexeColors.length];
+        li.appendChild(dot);
+        li.appendChild(document.createTextNode(label));
+        legendSexe.appendChild(li);
+    });
+
+    /* ---- Répartition par tranche d'âge ---- */
+    new Chart(document.getElementById('chartAge'), {
+        type: 'bar',
+        data: {
+            labels: {{ age_labels|tojson }},
+            datasets: [{
+                data: {{ age_values|tojson }},
+                backgroundColor: dashGreenSoft,
+                hoverBackgroundColor: dashGreenStrong,
+                borderRadius: 6
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { grid: { display: false } },
+                y: { grid: { color: '#eee' } }
+            }
+        }
+    });
+</script>
 
 {% endblock %}

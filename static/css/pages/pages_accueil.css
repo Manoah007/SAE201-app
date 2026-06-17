@@ -195,3 +195,150 @@
 .data-card h3 {
     margin-bottom: 6px;
 }
+
+/* ACCUEIL - DASHBOARD AMELI */
+.dashboard-section {
+    max-width: 1350px;
+    margin: 0 auto 35px;
+}
+
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.dashboard-header h2 {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.dashboard-header h2 span {
+    color: #41e46a;
+}
+
+.dashboard-header p {
+    color: #555;
+    font-size: 16px;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+.dash-card {
+    background: white;
+    border-radius: 18px;
+    padding: 24px 26px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+}
+
+.dash-card--wide {
+    grid-column: span 2;
+}
+
+.dash-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.dash-card-head h3 {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.dash-tag {
+    background: #dfffe8;
+    color: #0c8d35;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 4px 12px;
+    border-radius: 12px;
+}
+
+.dash-donut-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.dash-donut-wrap canvas {
+    max-height: 180px;
+}
+
+.dash-legend {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dash-legend li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #333;
+}
+
+.dash-legend .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dash-rank-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.dash-rank-list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.rank-pos {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #dfffe8;
+    color: #0c8d35;
+    font-weight: bold;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.rank-name {
+    flex: 1;
+    font-size: 14px;
+    color: #333;
+}
+
+.rank-value {
+    font-weight: 700;
+    font-size: 14px;
+}
+
+@media (max-width: 900px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    .dash-card--wide {
+        grid-column: span 1;
+    }
+}
