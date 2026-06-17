@@ -126,6 +126,117 @@ class AmeliAPI:
             }
         )
 
+    def get_repartition_departements(self, profession, annee, libelle_sexe="tout sexe", libelle_classe_age="Tout âge"):
+        """Effectifs agrégés par département (sum), pour une profession et une année données.
+
+        On filtre sur `departement is not null` pour ne garder que les lignes
+        de granularité "département" et éviter de compter en double les lignes
+        de granularité région/France entière qui pourraient exister dans le jeu de données.
+        """
+
+        where = (
+            f'profession_sante="{profession}" AND '
+            f'year(annee)={annee} AND '
+            f'libelle_sexe="{libelle_sexe}" AND '
+            f'libelle_classe_age="{libelle_classe_age}" AND '
+            f'departement is not null'
+        )
+
+        return self._requete_paginee(
+            "demographie-effectifs-et-les-densites",
+            {
+                "select": "departement, sum(effectif) as effectif",
+                "where": where,
+                "group_by": "departement",
+                "limit": 100
+            }
+        )
+
+    def get_repartition_sexe(self, profession, annee, libelle_classe_age="Tout âge"):
+        """Effectifs agrégés par sexe (hors la ligne récapitulative 'tout sexe'), France entière."""
+
+        where = (
+            f'profession_sante="{profession}" AND '
+            f'year(annee)={annee} AND '
+            f'libelle_classe_age="{libelle_classe_age}" AND '
+            f'libelle_sexe!="tout sexe" AND '
+            f'departement is not null'
+        )
+
+        return self._requete(
+            "demographie-effectifs-et-les-densites",
+            {
+                "select": "libelle_sexe, sum(effectif) as effectif",
+                "where": where,
+                "group_by": "libelle_sexe",
+                "limit": 10
+            }
+        )
+
+    def get_repartition_age(self, profession, annee, libelle_sexe="tout sexe"):
+        """Effectifs agrégés par tranche d'âge (hors la ligne récapitulative 'Tout âge'), France entière."""
+
+        where = (
+            f'profession_sante="{profession}" AND '
+            f'year(annee)={annee} AND '
+            f'libelle_sexe="{libelle_sexe}" AND '
+            f'libelle_classe_age!="Tout âge" AND '
+            f'departement is not null'
+        )
+
+        return self._requete(
+            "demographie-effectifs-et-les-densites",
+            {
+                "select": "libelle_classe_age, sum(effectif) as effectif",
+                "where": where,
+                "group_by": "libelle_classe_age",
+                "limit": 20
+            }
+        )
+
+    def get_repartition_professions(self, annee, libelle_sexe="tout sexe", libelle_classe_age="Tout âge"):
+        """Effectifs agrégés par profession de santé, France entière."""
+
+        where = (
+            f'year(annee)={annee} AND '
+            f'libelle_sexe="{libelle_sexe}" AND '
+            f'libelle_classe_age="{libelle_classe_age}" AND '
+            f'departement is not null'
+        )
+
+        return self._requete(
+            "demographie-effectifs-et-les-densites",
+            {
+                "select": "profession_sante, sum(effectif) as effectif",
+                "where": where,
+                "group_by": "profession_sante",
+                "limit": 100
+            }
+        )
+
+    def _requete_paginee(self, dataset, params, limite_max=1000):
+        """Enchaîne les appels avec offset pour récupérer tous les résultats
+        quand on s'attend à plus de `limit` lignes (ex : ~100 départements)."""
+
+        resultats = []
+        offset = 0
+        taille_page = params.get("limit", 100)
+
+        while True:
+            page_params = dict(params)
+            page_params["limit"] = taille_page
+            page_params["offset"] = offset
+
+            lot = self._requete(dataset, page_params)
+            resultats.extend(lot)
+
+            if len(lot) < taille_page or len(resultats) >= limite_max:
+                break
+
+            offset += taille_page
+
+        return resultats
+
     def _requete(self, dataset, params):
         """Effectue une requête GET vers l'API."""
 
