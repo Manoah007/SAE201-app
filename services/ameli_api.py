@@ -153,7 +153,14 @@ class AmeliAPI:
         )
 
     def get_repartition_sexe(self, profession, annee, libelle_classe_age="Tout âge"):
-        """Effectifs agrégés par sexe (hors la ligne récapitulative 'tout sexe'), France entière."""
+        """Effectifs par (département, sexe), hors la ligne récapitulative 'tout sexe'.
+
+        On groupe aussi par département (comme get_repartition_departements) car
+        filtrer uniquement sur 'departement is not null' ne suffit pas à exclure les
+        lignes de niveau régional/national : elles ont aussi une valeur dans ce champ,
+        ce qui provoquait un triple comptage (national + régions + départements).
+        Le tri par département connu se fait ensuite côté Python (dashboard_service.py).
+        """
 
         where = (
             f'profession_sante="{profession}" AND '
@@ -163,18 +170,22 @@ class AmeliAPI:
             f'departement is not null'
         )
 
-        return self._requete(
+        return self._requete_paginee(
             "demographie-effectifs-et-les-densites",
             {
-                "select": "libelle_sexe, sum(effectif) as effectif",
+                "select": "departement, libelle_sexe, sum(effectif) as effectif",
                 "where": where,
-                "group_by": "libelle_sexe",
-                "limit": 10
+                "group_by": "departement, libelle_sexe",
+                "limit": 100
             }
         )
 
     def get_repartition_age(self, profession, annee, libelle_sexe="tout sexe"):
-        """Effectifs agrégés par tranche d'âge (hors la ligne récapitulative 'Tout âge'), France entière."""
+        """Effectifs par (département, tranche d'âge), hors la ligne récapitulative 'Tout âge'.
+
+        Même logique que get_repartition_sexe : on groupe par département pour pouvoir
+        ne garder, côté Python, que les vraies lignes départementales.
+        """
 
         where = (
             f'profession_sante="{profession}" AND '
@@ -184,18 +195,22 @@ class AmeliAPI:
             f'departement is not null'
         )
 
-        return self._requete(
+        return self._requete_paginee(
             "demographie-effectifs-et-les-densites",
             {
-                "select": "libelle_classe_age, sum(effectif) as effectif",
+                "select": "departement, libelle_classe_age, sum(effectif) as effectif",
                 "where": where,
-                "group_by": "libelle_classe_age",
-                "limit": 20
+                "group_by": "departement, libelle_classe_age",
+                "limit": 100
             }
         )
 
     def get_repartition_professions(self, annee, libelle_sexe="tout sexe", libelle_classe_age="Tout âge"):
-        """Effectifs agrégés par profession de santé, France entière."""
+        """Effectifs par (département, profession de santé).
+
+        Même logique : on groupe par département pour exclure le bruit régional/national,
+        le tri par code connu se fait ensuite côté Python.
+        """
 
         where = (
             f'year(annee)={annee} AND '
@@ -204,19 +219,20 @@ class AmeliAPI:
             f'departement is not null'
         )
 
-        return self._requete(
+        return self._requete_paginee(
             "demographie-effectifs-et-les-densites",
             {
-                "select": "profession_sante, sum(effectif) as effectif",
+                "select": "departement, profession_sante, sum(effectif) as effectif",
                 "where": where,
-                "group_by": "profession_sante",
+                "group_by": "departement, profession_sante",
                 "limit": 100
             }
         )
 
-    def _requete_paginee(self, dataset, params, limite_max=1000):
+    def _requete_paginee(self, dataset, params, limite_max=5000):
         """Enchaîne les appels avec offset pour récupérer tous les résultats
-        quand on s'attend à plus de `limit` lignes (ex : ~100 départements)."""
+        quand on s'attend à plus de `limit` lignes (ex : département x profession
+        peut monter jusqu'à ~3800 combinaisons)."""
 
         resultats = []
         offset = 0

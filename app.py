@@ -46,6 +46,7 @@ def erreur_serveur(e):
 def faq():
     return render_template('faq.html')
 
+
 if __name__ == "__main__":
     print(app.url_map)
     app.run(debug=True, use_reloader=False)
