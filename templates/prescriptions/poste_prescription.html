@@ -16,19 +16,23 @@
 
         <span class="filter-label">FILTRES :</span>
 
-        <form action="{{ url_for('prescriptions.afficher') }}" method="get" class="api-form">
+        <form action="{{ url_for('prescriptions.page_postes') }}" method="get" class="api-form">
 
-            <select name="profession_id" id="profession" required>
+            <select name="profession_id" id="profession_id" required>
                 <option value="">Profession</option>
-                {% for p in professions %}
-                    <option value="{{ p.id }}">{{ p.libelle }}</option>
+                {% for poste in professions %}
+                    <option value="{{ poste.id }}"{% if poste.id == profession_id %}selected{% endif %}>
+                        {{ poste.libelle }}
+                    </option>
                 {% endfor %}
             </select>
 
             <select name="region_id" id="region_id" required>
                 <option value="">Région</option>
                     {% for region in regions %}
-                        <option value="{{ region.id }}">{{ region.libelle }}</option>
+                        <option value="{{ region.id }}" {% if region.id == region_id %}selected{% endif %}>
+                            {{ region.libelle }}
+                        </option>
                     {% endfor %}
             </select>
 
@@ -44,7 +48,7 @@
 
             <button type="submit">Afficher</button>
 
-            <a href="{{ url_for('prescriptions.afficher') }}" class="reset-link">
+            <a href="{{ url_for('prescriptions.page_postes') }}" class="reset-link">
                 Réinitialiser
             </a>
         </form>

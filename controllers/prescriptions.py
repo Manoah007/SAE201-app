@@ -5,9 +5,17 @@ from services.ameli_api import AmeliAPI
 
 bp_prescriptions = Blueprint("prescriptions", __name__)
 api = AmeliAPI()
+    
+
 
 @bp_prescriptions.route("/prescriptions")
-def afficher():
+def page_prescriptions():
+    """Cette fonction ne sert qu'à rediriger vers la page des postes de prescription et les cartes des sous thème disponibles"""
+    return render_template("prescriptions/prescriptions_maquette.html")
+
+
+@bp_prescriptions.route("/prescriptions/poste")
+def page_postes():
     session = Session()
     try:
         # 1. Chargement des données pour alimenter les listes déroulantes
@@ -15,7 +23,7 @@ def afficher():
         regions = session.query(Region).order_by(Region.libelle).all()
         postes = session.query(TypePrescription).order_by(TypePrescription.libelle).all()
         
-        # 2. Récupération des choix de l'utilisateur (via l'URL en GET)
+        # Récupération des choix de l'utilisateur (via l'URL en GET)
         profession_id = request.args.get("profession_id", type=int)
         departement_id = request.args.get("departement_id", type=int)
         annee = request.args.get("annee", type=int)
@@ -39,7 +47,7 @@ def afficher():
                 evolution = api.get_evolution_prescriptions(prof.libelle, dept.code, poste.libelle)
         
         return render_template(
-            "prescriptions/prescriptions_maquette.html",
+            "prescriptions/poste_prescription.html",
             professions=professions,
             regions=regions,
             postes=postes,
@@ -53,13 +61,11 @@ def afficher():
     finally:
         session.close()
 
-@bp_prescriptions.route("/prescriptions/poste")
-def page_postes():
-    return render_template("prescriptions/poste_prescription.html")
 
 @bp_prescriptions.route("/prescriptions/finance")
 def page_finances():
     return render_template("prescriptions/finance_prescription.html")
+
 
 @bp_prescriptions.route("/prescriptions/volume")
 def page_volumes():
