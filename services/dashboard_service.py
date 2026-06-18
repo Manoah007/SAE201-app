@@ -162,7 +162,7 @@ def _repartition_age(codes_valides):
     return labels, valeurs
 
 
-def _top_professions(codes_valides, limite=5):
+def _top_professions(codes_valides, limite=6):
     lignes = ameli.get_repartition_professions(ANNEE_REFERENCE)
 
     totaux = {}

@@ -71,7 +71,7 @@
 <section class="dashboard-section">
 
     <div class="dashboard-header">
-        <h2>Tableau de bord <span>Ameli</span></h2>
+        <h1>Tableau de bord <span>Ameli</span></h1>
         <p>Aperçu des données ouvertes de l'Assurance Maladie sur les professionnels de santé.</p>
     </div>
 
@@ -80,43 +80,48 @@
         <!-- Répartition par région -->
         <div class="dash-card dash-card--wide">
             <div class="dash-card-head">
-                <h3>Répartition par région</h3>
+                <h2>Répartition par région</h2>
                 <span class="dash-tag">Effectifs</span>
             </div>
             <canvas id="chartRegions" height="220"></canvas>
         </div>
 
-        <!-- Répartition par sexe -->
-        <div class="dash-card">
-            <div class="dash-card-head">
-                <h3>Répartition par sexe</h3>
+        <!-- Colonne de droite : sexe + top professions, empilés indépendamment -->
+        <div class="dash-col-stack">
+
+            <!-- Répartition par sexe -->
+            <div class="dash-card">
+                <div class="dash-card-head">
+                    <h2>Répartition par sexe</h2>
+                </div>
+                <div class="dash-donut-wrap">
+                    <canvas id="chartSexe" height="150"></canvas>
+                </div>
+                <ul class="dash-legend" id="legendSexe"></ul>
             </div>
-            <div class="dash-donut-wrap">
-                <canvas id="chartSexe" height="180"></canvas>
+
+            <!-- Top professions de santé -->
+            <div class="dash-card dash-card--grow">
+                <div class="dash-card-head">
+                    <h2>Top professions de santé</h2>
+                </div>
+                <ol class="dash-rank-list">
+                    {% for prof in top_professions %}
+                    <li>
+                        <span class="rank-pos">{{ loop.index }}</span>
+                        <span class="rank-name">{{ prof.libelle }}</span>
+                        <span class="rank-value">{{ prof.valeur }}</span>
+                    </li>
+                    {% endfor %}
+                </ol>
             </div>
-            <ul class="dash-legend" id="legendSexe"></ul>
+
         </div>
 
-        <!-- Top professions de santé -->
-        <div class="dash-card">
+        <!-- Répartition par tranche d'âge : pleine largeur -->
+        <div class="dash-card dash-card--full">
             <div class="dash-card-head">
-                <h3>Top professions de santé</h3>
-            </div>
-            <ol class="dash-rank-list">
-                {% for prof in top_professions %}
-                <li>
-                    <span class="rank-pos">{{ loop.index }}</span>
-                    <span class="rank-name">{{ prof.libelle }}</span>
-                    <span class="rank-value">{{ prof.valeur }}</span>
-                </li>
-                {% endfor %}
-            </ol>
-        </div>
-
-        <!-- Répartition par tranche d'âge -->
-        <div class="dash-card dash-card--wide">
-            <div class="dash-card-head">
-                <h3>Répartition par tranche d'âge</h3>
+                <h2>Répartition par tranche d'âge</h2>
             </div>
             <canvas id="chartAge" height="220"></canvas>
         </div>
