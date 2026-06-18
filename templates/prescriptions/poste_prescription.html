@@ -3,6 +3,8 @@
 
 {% block contenu %}
 
+    <!-- En-tête de la page -->
+    <!-- Titre et description de la page -->
     <section class="prescriptions-header">
         <h1>Analyse des prescriptions selon le poste</h1>
         <p>
@@ -13,70 +15,59 @@
     </section>
 
     <section class="filters-box">
+        <section class="form-section"> 
+            <h2 class="filter-label">FILTRES</h2>
 
-        <span class="filter-label">FILTRES :</span>
+            <form action="{{ url_for('prescriptions.page_postes') }}" method="get" class="api-form" id="form-filtres">
+                <select name="profession_id" id="profession" required>
+                    <option value="">Profession</option>
+                    {% for poste in professions %}
+                        <option value="{{ poste.id }}"{% if poste.id == profession_id %}selected{% endif %}>
+                            {{ poste.libelle }}
+                        </option>
+                    {% endfor %}
+                </select>
 
-        <form action="{{ url_for('prescriptions.page_postes') }}" method="get" class="api-form">
-
-            <select name="profession_id" id="profession_id" required>
-                <option value="">Profession</option>
-                {% for poste in professions %}
-                    <option value="{{ poste.id }}"{% if poste.id == profession_id %}selected{% endif %}>
-                        {{ poste.libelle }}
-                    </option>
-                {% endfor %}
-            </select>
-
-            <select name="region_id" id="region_id" required>
-                <option value="">Région</option>
+                <select name="region_id" id="region_select" required>
+                    <option value="">Zone géographique</option>
                     {% for region in regions %}
                         <option value="{{ region.id }}" {% if region.id == region_id %}selected{% endif %}>
                             {{ region.libelle }}
                         </option>
                     {% endfor %}
-            </select>
+                </select>
 
-            <select name="departement_id" id="departement" required>
-                <option value="">Département</option>
-            </select>
+                <select name="annee" id="annee" required>
+                    {% for a in range(2024, 2014, -1) %}
+                        <option value="{{ a }}">{{ a }}</option>
+                    {% endfor %}
+                </select>
+            </form>
 
-            <select name="annee" id="annee" required>
-                {% for a in range(2024, 2014, -1) %}
-                    <option value="{{ a }}">{{ a }}</option>
-                {% endfor %}
-            </select>
+        </section>
 
-            <button type="submit">Afficher</button>
-
+        <nav id="filtres-button"> 
+            <button type="submit" form="form-filtres" class="submit-btn">Afficher</button>
             <a href="{{ url_for('prescriptions.page_postes') }}" class="reset-link">
                 Réinitialiser
             </a>
-        </form>
-
-        <div class="filters-info">
             <button class="export-btn">Exporter (CSV/PDF)</button>
-        </div>
+        </nav>
 
     </section>
+
+    
 
 
 
     <!-- Affichage des résultats -->
-    <!--
+    <!-- 
     {% if resultats is not none %}
-
+        
         <section class="prescriptions-results">
 
-            <div class="result-title">
-                <h2>Résultats de l’analyse</h2>
-
-                {% if poste and prof and dept %}
-                    <p>
-                        {{ poste.libelle }} · {{ prof.libelle }} · {{ dept.libelle }} · {{ annee }}
-                    </p>
-                {% endif %}
-            </div>
-
+            <a href ="{{ url_for('prescriptions.page_postes') }}" class="back-link"> Graphiques </a>
+            
             {% if resultats|length > 0 %}
 
                 <div class="chart-box prescription-chart">
@@ -84,13 +75,15 @@
                 </div>
 
                 <div class="prescriptions-table-box">
-                    <h3>Détail des données brutes</h3>
-
+                    <h3>Tableau des données brutes</h3>
+                    
                     <table>
                         <thead>
                             <tr>
-                                <th>Année</th>
-                                <th>Poste concerné</th>
+                                <th>Professions</th>
+                                <th>Région</th>
+                                <th>Département</th>
+                                <th>Type de prescription</th>
                                 <th>Montant des prescriptions</th>
                             </tr>
                         </thead>
@@ -111,7 +104,7 @@
 
                 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                 <script>
-                    const donnees = {{ evolution | tojson }};
+                    // const donnees = {{ evolution | tojson }};
 
                     new Chart(document.getElementById("graphique-prescriptions"), {
                         type: "bar",
@@ -136,6 +129,6 @@
 
         </section>
     {% endif %}
-    -->
+        -->
 
 {% endblock %}

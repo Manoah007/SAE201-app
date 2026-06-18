@@ -1,0 +1,124 @@
+/* ==========================================
+   LE GRAND RECTANGLE BLANC (Extérieur)
+   ========================================== */
+.filters-box {
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 0px 30px 50px 30px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    margin-bottom: 1.5rem;
+    
+    /* ⭐ CORRECTION MAJEURE : On force un alignement vertical */
+    display: flex;
+    flex-direction: column; 
+    gap: 0.5rem; /* Crée automatiquement l'espace parfait entre la zone grise et les boutons */
+}
+
+/* ==========================================
+   LE PETIT BLOC GRIS (Intérieur - Relief)
+   ========================================== */
+.form-section {
+    background-color: #f8fafc;
+    border-radius: 14px;
+    padding: 1rem;
+    border: 1px solid #e2e8f0;
+    width: 100%; /* S'assure que le bloc prend toute la largeur disponible */
+    box-sizing: border-box;
+}
+
+/* Le titre "FILTRES" à l'intérieur du bloc gris */
+.filter-label {
+    color: #475569;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin: 0 0 1rem 0.25rem;  /* Marge sous le titre */
+}
+
+/* Alignement des 3 menus déroulants */
+.api-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.api-form select {
+    flex: 1;
+    min-width: 220px;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.95rem;
+    color: #334155;
+    background-color: #ffffff; /* Les selects restent blancs pour ressortir sur le gris */
+    border: 1px solid #cbd5e1;
+    border-radius: 30px;       /* Hyper arrondi */
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.api-form select:focus {
+    border-color: #10b981;     
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+}
+
+/* ==========================================
+   LA ZONE DES BOUTONS (Sur le fond blanc du grand bloc)
+   ========================================== */
+#filtres-button {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* ⭐ Centre parfaitement tes 3 boutons */
+    gap: 1.25rem;            /* Espace horizontal entre les boutons */
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 0; /* On remet à zéro car le 'gap' de la .filters-box gère l'espacement du dessus */
+}
+
+/* Style de base des boutons et liens */
+#filtres-button button, 
+.reset-link {
+    padding: 0.75rem 2rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 30px;       /* Boutons pilules */
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 🟢 Bouton "Afficher" */
+.submit-btn {
+    background-color: #10b981;
+    color: #ffffff;
+}
+
+.submit-btn:hover {
+    background-color: #059669;
+    transform: translateY(-1px);
+}
+
+/* ⚪ Bouton "Réinitialiser" */
+.reset-link {
+    background-color: #e2e8f0;
+    color: #475569;
+}
+
+.reset-link:hover {
+    background-color: #cbd5e1;
+    color: #1e293b;
+}
+
+/* 🔵 Bouton "Exporter" */
+.export-btn {
+    background-color: #2563eb;
+    color: #ffffff;
+}
+
+.export-btn:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-1px);
+}

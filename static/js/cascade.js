@@ -1,21 +1,32 @@
-document.getElementById("region").addEventListener("change", async (e) => {
-    const regionId = e.target.value;
-    const selectDept = document.getElementById("departement");
+/* 
+    Script Json pour le fichier poste_prescription.html 
+    Gère la mise à jour dynamique de la liste déroulante 
+    des départements en fonction de la région sélectionnée.
+*/
 
-    // Vider la liste
-    selectDept.innerHTML = '<option value="">-- Choisir --</option>';
-
-    if (!regionId) return;
-
-    // Appel AJAX (BASE_URL gère le préfixe en déploiement sous-dossier ; vide en local)
-    const response = await fetch(`${BASE_URL}/api/departements/${regionId}`);
-    const depts = await response.json();
-
-    // Remplir la liste
-    for (const dept of depts) {
-        const opt = document.createElement("option");
-        opt.value = dept.id;
-        opt.textContent = `${dept.code} – ${dept.libelle}`;
-        selectDept.appendChild(opt);
+document.getElementById('region_select').addEventListener('change', function() {
+    const regionId = this.value;
+    const deptSelect = document.getElementById('departement_select');
+    
+    // On vide la deuxième liste
+    deptSelect.innerHTML = '<option value="">Sélectionnez un département</option>';
+    
+    if (!regionId) {
+        deptSelect.disabled = true;
+        return;
     }
+
+    // Appel en arrière-plan à notre route Flask
+    fetch(`/api/departements/${regionId}`)
+        .then(response => response.json())
+        .then(data => {
+            // On réactive la liste et on injecte les nouvelles options
+            deptSelect.disabled = false;
+            data.forEach(dept => {
+                const option = document.createElement('option');
+                option.value = dept.id;
+                option.textContent = dept.libelle;
+                deptSelect.appendChild(option);
+            });
+        });
 });
