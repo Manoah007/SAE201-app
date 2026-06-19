@@ -42,6 +42,8 @@
                         <option value="{{ a }}">{{ a }}</option>
                     {% endfor %}
                 </select>
+
+                
             </form>
 
         </section>
@@ -58,57 +60,71 @@
     </section>
 
 
-    <!-- Affichage des résultats -->
     {% if resultats is not none %}
-        
         <section class="prescriptions-results">
-
-            <a href ="{{ url_for('prescriptions.page_postes') }}" class="back-link"> Graphiques </a>
             
             {% if resultats|length > 0 %}
-                <!-- -->
-                <div class="chart-box prescription-chart">
-                    <canvas id="graphique-prescriptions"></canvas>
+                <div class="tabs-menu">
+                    <button class="tab-btn active" onclick="switchTab(event, 'tab-graphique')">Graphique</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'tab-tableau')">Tableau des données</button>
                 </div>
 
-                <div class="prescriptions-table-box">
-                    <h3>Tableau des données brutes</h3>
-                    
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Professions</th>
-                                <th>Région</th>
-                                <th>Année</th>
-                            </tr>
-                        </thead>
+                <div id="tab-graphique" class="tab-content active">
+                    <div class="chart-box prescription-chart">
+                        <canvas id="graphique-prescriptions"></canvas>
+                    </div>
+                </div>
 
-                        <tbody>
-                            {% for r in resultats %}
+                <div id="tab-tableau" class="tab-content">
+                    <div class="prescriptions-table-box">
+                        <h3>Tableau des données brutes</h3>
+
+                        <table>
+                            <thead>
                                 <tr>
-                                    <td>{{ r.profession_sante }}</td>
-                                    <td>{{ r.region }}</td>
-                                    <td>{{ r.annee }}</td>
-                                    <!-- 
-                                    <td class="positive">
-                                        {{ r.montant | default(r.montant_rembourse, true) }} €
-                                    </td>
-                                    -->
+                                    <th>Professions</th>
+                                    <th>Région</th>
+                                    <th>Prescription</th>
+                                    <th>Année</th>
                                 </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {% for r in resultats %}
+                                    <tr>
+                                        <td>{{ r.profession_sante }}</td>
+                                        <td>{{ r.region }}</td>
+                                        <td>{{ r.libelle_poste_prescription}}</td>
+                                        <td>{{ r.annee }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 
+                <script>
+                    function switchTab(event, tabId) {
+                        // Masquer tous les contenus d'onglets
+                        const contents = document.querySelectorAll('.tab-content');
+                        contents.forEach(content => content.classList.remove('active'));
+
+                        // Désactiver tous les boutons d'onglets
+                        const buttons = document.querySelectorAll('.tab-btn');
+                        buttons.forEach(btn => btn.classList.remove('active'));
+
+                        // Activer l'onglet actuel
+                        document.getElementById(tabId).classList.add('active');
+                        event.currentTarget.classList.add('active');
+                    }
+                </script>
+
             {% else %}
                 <div class="empty-message">
                     <h3>Aucune donnée disponible</h3>
                     <p>Aucune donnée n’a été trouvée pour cette sélection.</p>
                 </div>
             {% endif %}
-
         </section>
-
     {% endif %}
 
 {% endblock %}

@@ -126,3 +126,142 @@
 /* ==============================================================================
    STYLE CSS DU TABLEAU
    ============================================================================== */
+
+/* --- SECTION DES RÉSULTATS --- */
+.prescriptions-results {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    color: #1a5c2d;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.back-link:hover {
+    color: #41e46a;
+}
+
+/* --- SYSTÈME D'ONGLETS --- */
+.tabs-menu {
+    display: flex;
+    gap: 0.5rem;
+    border-bottom: 2px solid #f0f0f0;
+    margin-bottom: 1.5rem;
+}
+
+.tab-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    background: none;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #666666;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s ease;
+    margin-bottom: -2px; /* S'aligne parfaitement sur la bordure du menu */
+}
+
+.tab-btn:hover {
+    color: #1a5c2d;
+}
+
+.tab-btn.active {
+    color: #1a5c2d;
+    border-bottom-color: #41e46a; /* Couleur verte signature */
+}
+
+/* Gestion de l'affichage du contenu des onglets */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- COMMONS GRAPH & CONTAINERS --- */
+.chart-box {
+    padding: 1rem;
+    background: #fafafa;
+    border-radius: 8px;
+    border: 1px solid #eeeeee;
+    max-height: 450px;
+}
+
+/* --- STRUCTURE DU TABLEAU --- */
+.prescriptions-table-box h3 {
+    margin-top: 0;
+    color: #333333;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.prescriptions-table-box {
+    overflow-x: auto; /* Sécurité si l'écran est petit */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #eeeeee;
+}
+
+th {
+    background-color: #f7f9fa;
+    color: #4a5568;
+    font-weight: 700;
+    padding: 1rem;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+td {
+    padding: 1rem;
+    color: #2d3748;
+    border-bottom: 1px solid #edf2f7;
+    transition: background-color 0.15s ease;
+}
+
+/* Lignes alternées (Zebra striping) */
+tbody tr:nth-child(even) {
+    background-color: #fcfdfd;
+}
+
+/* Effet au survol d'une ligne */
+tbody tr:hover {
+    background-color: #f0fdf4; /* Teinte verte très subtile */
+}
+
+/* --- MESSAGE VIDE --- */
+.empty-message {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #718096;
+}
+
+.empty-message h3 {
+    color: #4a5568;
+    margin-bottom: 0.5rem;
+}

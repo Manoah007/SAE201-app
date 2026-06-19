@@ -73,14 +73,17 @@ class AmeliAPI:
 
 # REQUËTES DE DONNÉES POUR LES PRESCRIPTIONS
 
-    def get_prescript_test(self):
+    def get_prescript_test(self, annee='2024', limite_ligne=50):
         """Récupère uniquement les professions selon la régions et l'année dans l'API"""
+
+        where = f'year(annee)={annee}'
 
         return self._requete(
             "prescriptions",
             { 
-                "select" : "profession_sante,region,annee",
-                "limite" : 10
+                "select" : "profession_sante,region,libelle_poste_prescription,annee",
+                "where" : where,
+                "limit" : limite_ligne
             }
         )
 

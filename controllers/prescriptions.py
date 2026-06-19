@@ -22,15 +22,14 @@ def page_postes():
         # Chargement des données depuis la BD pour alimenter les listes déroualntes
         professions = session.query(ProfessionSante).order_by(ProfessionSante.libelle).all()
         regions = session.query(Region).order_by(Region.libelle).all()
-
+        prescription = session.query(TypePrescription).order_by(TypePrescription.libelle).all()
+        
         # Récupération des choix de l'utilisateur (via l'URL en GET)
-        # Renvoie l'ID (depuis la BD) de chaque choix pour les identifiés 
+        # Renvoie l'ID de chaque choix pour les identifiés 
         profession_id = request.args.get("profession_id", type=int)
         region_id = request.args.get("region_id", type=int)
         annee = request.args.get("annee", type=int)
 
-
-        resultats = None
         resultats = api.get_prescript_test()
 
         # Envoi de TOUTES les variables nécessaires au template Jinja2
