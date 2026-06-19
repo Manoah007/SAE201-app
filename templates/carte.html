@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block titre %}Carte des densités{% endblock %}
+
+{% block contenu %}
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages_carte.css') }}">
+
+<section class="carte-page">
+
+    <div class="carte-header">
+        <div>
+            <h1>Carte des densités</h1>
+            <p>Visualisez la répartition des professionnels de santé par département.</p>
+        </div>
+    </div>
+
+    <section class="filters-box">
+        <span class="filter-label">FILTRES :</span>
+
+        <form action="{{ url_for('carte.afficher') }}" method="get" class="api-form">
+
+            <select name="profession_id" id="profession">
+                <option value="">Profession</option>
+                {% for p in professions %}
+                    <option value="{{ p.id }}" {% if profession_id == p.id %}selected{% endif %}>
+                        {{ p.libelle }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <select name="annee" id="annee">
+                {% for a in range(2024, 2014, -1) %}
+                    <option value="{{ a }}" {% if annee == a %}selected{% endif %}>{{ a }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Afficher</button>
+
+            <a href="{{ url_for('carte.afficher') }}" class="reset-link">Réinitialiser</a>
+
+        </form>
+    </section>
+
+    <div class="carte-wrapper">
+
+        <div class="carte-container">
+            <div class="carte-titre-overlay">{{ titre_carte }}</div>
+            <div id="map"></div>
+        </div>
+
+        <div class="carte-legende" id="legende">
+            <h4>Effectifs</h4>
+            <div class="legende-items" id="legendeItems"></div>
+            <p class="legende-note">Survolez un département pour voir le détail.</p>
+        </div>
+
+    </div>
+
+</section>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const donneesParDept = {{ donnees_carte | tojson }};
+
+// ── Palette verte alignée sur la charte graphique du site ───────────────────
+const PALETTE = [
+    { seuil: 0,    couleur: '#f0fdf4' },
+    { seuil: 0.05, couleur: '#dfffe8' },
+    { seuil: 0.12, couleur: '#b5f5cc' },
+    { seuil: 0.25, couleur: '#7eeea0' },
+    { seuil: 0.40, couleur: '#41e46a' },
+    { seuil: 0.60, couleur: '#23b84d' },
+    { seuil: 0.80, couleur: '#0c8d35' },
+];
+
+const valeurs = Object.values(donneesParDept).filter(v => v > 0);
+const MAX_VAL = valeurs.length ? Math.max(...valeurs) : 1;
+
+function getCouleur(effectif) {
+    if (!effectif || effectif === 0) return '#e5e5e5';
+    const ratio = effectif / MAX_VAL;
+    let couleur = PALETTE[0].couleur;
+    for (const p of PALETTE) {
+        if (ratio >= p.seuil) couleur = p.couleur;
+    }
+    return couleur;
+}
+
+// ── Carte Leaflet ────────────────────────────────────────────────────────────
+const map = L.map('map', {
+    center: [46.5, 2.5],
+    zoom: 6,
+    zoomControl: true,
+    scrollWheelZoom: true,
+});
+
+// Fond de carte sobre (OpenStreetMap)
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 10
+}).addTo(map);
+
+// ── Chargement du GeoJSON des départements français ─────────────────────────
+const GEOJSON_URL = 'https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/departements.geojson';
+
+let infoBox = L.control({ position: 'topright' });
+
+infoBox.onAdd = function () {
+    this._div = L.DomUtil.create('div', 'leaflet-info-box');
+    this.update();
+    return this._div;
+};
+
+infoBox.update = function (props, effectif) {
+    if (props) {
+        this._div.innerHTML =
+            `<strong>${props.nom}</strong><br>` +
+            `Code : ${props.code}<br>` +
+            `Effectif : <strong>${effectif ? effectif.toLocaleString('fr-FR') : 'N/D'}</strong>`;
+    } else {
+        this._div.innerHTML = 'Survolez un département';
+    }
+};
+
+infoBox.addTo(map);
+
+fetch(GEOJSON_URL)
+    .then(r => r.json())
+    .then(geojson => {
+        const layer = L.geoJSON(geojson, {
+            style: feature => {
+                const code = feature.properties.code;
+                const effectif = donneesParDept[code] || 0;
+                return {
+                    fillColor: getCouleur(effectif),
+                    fillOpacity: 0.85,
+                    color: '#ffffff',
+                    weight: 1.2,
+                };
+            },
+            onEachFeature: (feature, layer) => {
+                const code = feature.properties.code;
+                const effectif = donneesParDept[code] || 0;
+
+                layer.on({
+                    mouseover(e) {
+                        e.target.setStyle({ weight: 2.5, color: '#0c8d35', fillOpacity: 1 });
+                        infoBox.update(feature.properties, effectif);
+                    },
+                    mouseout(e) {
+                        layer.resetStyle(e.target);
+                        infoBox.update();
+                    },
+                    click(e) {
+                        map.fitBounds(e.target.getBounds(), { padding: [40, 40] });
+                    }
+                });
+
+                layer.bindTooltip(
+                    `<strong>${feature.properties.nom}</strong><br>` +
+                    `Effectif : ${effectif ? effectif.toLocaleString('fr-FR') : 'N/D'}`,
+                    { sticky: true, className: 'leaflet-tooltip-custom' }
+                );
+            }
+        }).addTo(map);
+
+        // Centrer la carte sur les données
+        map.fitBounds(layer.getBounds(), { padding: [10, 10] });
+
+        // ── Légende dynamique ────────────────────────────────────────────────
+        const items = document.getElementById('legendeItems');
+        const step = MAX_VAL / 6;
+        const tranches = [
+            { label: 'Aucune donnée', couleur: '#e5e5e5' },
+            { label: `1 – ${Math.round(step).toLocaleString('fr-FR')}`, couleur: PALETTE[1].couleur },
+            { label: `${Math.round(step).toLocaleString('fr-FR')} – ${Math.round(step*2).toLocaleString('fr-FR')}`, couleur: PALETTE[2].couleur },
+            { label: `${Math.round(step*2).toLocaleString('fr-FR')} – ${Math.round(step*3).toLocaleString('fr-FR')}`, couleur: PALETTE[3].couleur },
+            { label: `${Math.round(step*3).toLocaleString('fr-FR')} – ${Math.round(step*4).toLocaleString('fr-FR')}`, couleur: PALETTE[4].couleur },
+            { label: `${Math.round(step*4).toLocaleString('fr-FR')} – ${Math.round(step*5).toLocaleString('fr-FR')}`, couleur: PALETTE[5].couleur },
+            { label: `> ${Math.round(step*5).toLocaleString('fr-FR')}`, couleur: PALETTE[6].couleur },
+        ];
+        tranches.forEach(t => {
+            const li = document.createElement('div');
+            li.className = 'legende-item';
+            li.innerHTML = `<span class="legende-couleur" style="background:${t.couleur}"></span>${t.label}`;
+            items.appendChild(li);
+        });
+    })
+    .catch(() => {
+        document.getElementById('map').innerHTML =
+            '<p style="padding:20px;color:#555">Impossible de charger les données géographiques. Vérifiez votre connexion internet.</p>';
+    });
+</script>
+
+{% endblock %}
