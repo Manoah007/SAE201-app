@@ -71,22 +71,35 @@ class AmeliAPI:
             }
         )
 
-    def get_prescriptions(self, profession, departement_code, annee, poste_prescription):
-        """Récupère les prescriptions pour une profession, un département, une année et un poste."""
+# REQUËTES DE DONNÉES POUR LES PRESCRIPTIONS
 
-        where = (
-            f'profession_sante="{profession}" AND '
-            f'departement="{departement_code}" AND '
-            f'year(annee)={annee} AND '
-            f'libelle_poste_prescription="{poste_prescription}"'
-        )
+    def get_prescript_test(self):
+        """Récupère uniquement les professions selon la régions et l'année dans l'API"""
 
         return self._requete(
             "prescriptions",
+            { 
+                "select" : "profession_sante,region,annee",
+                "limite" : 10
+            }
+        )
+
+    def get_prescriptions(self, profession_name, departement_code, annee, type_prescription):
+        """Récupère les prescriptions pour une profession, un département, une année et un poste."""
+
+        where = (
+            f'profession_sante="{profession_name}" AND '
+            f'departement="{departement_code}" AND '
+            f'year(annee)={annee} AND '
+            f'libelle_poste_prescription="{type_prescription}"'
+        )
+
+        return self._requete(
+            "prescriptions", # nom de la table
             {
-                "select": "annee,prescriptions",
-                "where": where,
-                "limit": 100
+                "select": "annee,prescriptions",    # colonne que l'on veut récupéré
+                "where": where,                     # filtre
+                "limit": 100                        # limite de lignes que l'on souhaite
             }
         )
 

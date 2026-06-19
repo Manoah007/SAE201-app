@@ -46,6 +46,7 @@
 
         </section>
 
+        <!-- Zone d'actions : BOUTON d'affichage, de réinitialisation et d'export -->
         <nav id="filtres-button"> 
             <button type="submit" form="form-filtres" class="submit-btn">Afficher</button>
             <a href="{{ url_for('prescriptions.page_postes') }}" class="reset-link">
@@ -56,12 +57,8 @@
 
     </section>
 
-    
-
-
 
     <!-- Affichage des résultats -->
-    <!-- 
     {% if resultats is not none %}
         
         <section class="prescriptions-results">
@@ -69,7 +66,7 @@
             <a href ="{{ url_for('prescriptions.page_postes') }}" class="back-link"> Graphiques </a>
             
             {% if resultats|length > 0 %}
-
+                <!-- -->
                 <div class="chart-box prescription-chart">
                     <canvas id="graphique-prescriptions"></canvas>
                 </div>
@@ -82,44 +79,27 @@
                             <tr>
                                 <th>Professions</th>
                                 <th>Région</th>
-                                <th>Département</th>
-                                <th>Type de prescription</th>
-                                <th>Montant des prescriptions</th>
+                                <th>Année</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             {% for r in resultats %}
                                 <tr>
+                                    <td>{{ r.profession_sante }}</td>
+                                    <td>{{ r.region }}</td>
                                     <td>{{ r.annee }}</td>
-                                    <td>{{ r.libelle_poste_prescription }}</td>
+                                    <!-- 
                                     <td class="positive">
                                         {{ r.montant | default(r.montant_rembourse, true) }} €
                                     </td>
+                                    -->
                                 </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
-
-                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                <script>
-                    // const donnees = {{ evolution | tojson }};
-
-                    new Chart(document.getElementById("graphique-prescriptions"), {
-                        type: "bar",
-                        data: {
-                            labels: donnees.map(d => d.annee),
-                            datasets: [{
-                                label: "Montant (€)",
-                                data: donnees.map(d => d.montant || d.montant_rembourse || 0),
-                                backgroundColor: "#41e46a",
-                                borderRadius: 6
-                            }]
-                        }
-                    });
-                </script>
-
+                
             {% else %}
                 <div class="empty-message">
                     <h3>Aucune donnée disponible</h3>
@@ -128,7 +108,7 @@
             {% endif %}
 
         </section>
+
     {% endif %}
-        -->
 
 {% endblock %}

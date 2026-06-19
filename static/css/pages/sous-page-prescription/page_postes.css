@@ -1,6 +1,6 @@
-/* ==========================================
-   LE GRAND RECTANGLE BLANC (Extérieur)
-   ========================================== */
+/* ==============================================================================
+   STYLE CSS DU FILTRES
+   ============================================================================== */
 .filters-box {
     background-color: #ffffff;
     border-radius: 20px;
@@ -80,7 +80,7 @@
     padding: 0.75rem 2rem;
     font-size: 0.95rem;
     font-weight: 600;
-    border-radius: 30px;       /* Boutons pilules */
+    border-radius: 30px;
     border: none;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -92,12 +92,12 @@
 
 /* 🟢 Bouton "Afficher" */
 .submit-btn {
-    background-color: #10b981;
+    background-color: #2ecc71;
     color: #ffffff;
 }
 
 .submit-btn:hover {
-    background-color: #059669;
+    background-color: #0b4e38;
     transform: translateY(-1px);
 }
 
@@ -114,11 +114,15 @@
 
 /* 🔵 Bouton "Exporter" */
 .export-btn {
-    background-color: #2563eb;
+    background-color: #2ecc71;
     color: #ffffff;
 }
 
 .export-btn:hover {
-    background-color: #1d4ed8;
+    background-color: #025224;
     transform: translateY(-1px);
 }
+
+/* ==============================================================================
+   STYLE CSS DU TABLEAU
+   ============================================================================== */
