@@ -259,7 +259,7 @@
     flex: 1;
 }
 
-.dash-card-head h2 {
+.dash-card-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
