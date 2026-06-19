@@ -37,15 +37,14 @@
 }
 
 .honoraires-form {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr 0.7fr auto;
+    display: flex;
     gap: 18px;
     align-items: center;
     width: 100%;
 }
 
 .honoraires-form select {
-    width: 100%;
+    flex: 1;
     border: none;
     background: white;
     padding: 13px 22px;
