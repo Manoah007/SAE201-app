@@ -53,6 +53,6 @@ def page_correlation():
     return render_template("prescriptions/page_correlation.html")
 
 
-@bp_prescriptions.route("/prescriptions/volume")
-def page_volumes():
-    return render_template("prescriptions/volume_prescription.html")
+@bp_prescriptions.route("/prescriptions/prescriptions_majeurs")
+def page_prescript_majeur():
+    return render_template("prescriptions/page_prescript_majeur.html")
