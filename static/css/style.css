@@ -16,8 +16,11 @@
 /* 4. Pages spécifiques */
 @import url('pages/pages_accueil.css');
 @import url('pages/pages_api-ameli.css');
-@import url('pages/pages_prescriptions.css');
-   @import url('pages/sous-page-prescription/page_postes.css');
+
+/*DANS LE DOSSIER STYLE PRESCRIPTIONS - STYLE DES PAGES PRSCRIPTIONS */
+@import url('pages/style_prescription/accueil_prescription.css');
+@import url('pages/style_prescription/page_disparite.css');
+
 @import url('pages/pages_faq.css');
 @import url('pages/pages_honoraires.css');
 @import url('pages/pages_effectifs.css');

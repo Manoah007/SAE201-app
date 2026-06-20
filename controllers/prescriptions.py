@@ -15,7 +15,7 @@ def accueil_prescription():
 
 
 @bp_prescriptions.route("/prescriptions/disparite")
-def page_postes():
+def page_disparite():
     session = Session()
 
     try:
@@ -34,7 +34,7 @@ def page_postes():
 
         # Envoi de TOUTES les variables nécessaires au template Jinja2
         return render_template(
-            "prescriptions/disparite_geo.html",
+            "prescriptions/page_disparite.html",
             # Pour charger les listes
             professions=professions,
             regions=regions,
