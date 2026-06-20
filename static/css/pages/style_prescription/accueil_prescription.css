@@ -1,138 +1,148 @@
-/* ==========================================
-   1. LE GROS TITRE (Posé sur le fond global)
-   ========================================== */
+/* ==========================================================================
+   PAGE DES THÈMES D'ANALYSE (PRESCRIPTIONS)
+   ========================================================================== */
+
+/* --- 1. EN-TÊTE GLOBAL (Centré) --- */
 .prescriptions-header {
-    max-width: 1200px;
-    margin: 40px auto 40px auto; /* Centré avec de l'espace en bas avant le bloc blanc */
-    padding: 0 20px; /* Aligné sur les grilles de la page d'accueil image_f931e9.png */
-    font-family: 'Inter', sans-serif;
+    text-align: center; 
+    max-width: 850px;
+    margin: 0 auto 3rem auto; 
+    padding: 0 1rem;
 }
 
 .prescriptions-header h1 {
     font-size: 2.5rem;
-    color: #111827;
     font-weight: 800;
-    margin-bottom: 12px;
+    color: #111827; 
+    margin-bottom: 1rem;
 }
 
 .prescriptions-header p {
     font-size: 1.1rem;
-    color: #4b5563;
     line-height: 1.6;
-    max-width: 1100px; /* Aligne le paragraphe de description de manière lisible */
-    margin: 0;
+    color: #4b5563; 
 }
 
-/* ==========================================
-   2. LE BLOC CONTENEUR BLANC (Thèmes uniquement)
-   ========================================== */
+/* --- 2. CONTENEUR BLANC PRINCIPAL --- */
 .prescriptions-page {
-    max-width: 1200px;
-    margin: 0 auto 50px auto;
-    padding: 40px;
-    background-color: #ffffff;
-    border-radius: 24px; /* Grand arrondi calqué sur image_f931e9.png */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    font-family: 'Inter', sans-serif;
+    padding: 0 1rem 3rem 1rem;
 }
 
-/* Alignement du titre "Thèmes associés" et de la petite image */
+.prescriptions-cards {
+    background-color: #ffffff;
+    border-radius: 16px; 
+    padding: 2.5rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    /* Ombre du grand conteneur blanc (très légère pour contraster avec les cartes) */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03); 
+}
+
+/* --- 3. EN-TÊTE DU BLOC BLANC (Titre + Image) --- */
 .prescriptions-cards-top {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; 
     align-items: center;
-    border-bottom: 1px solid #e5e7eb; /* Fine ligne de séparation moderne */
-    padding-bottom: 16px;
-    margin-bottom: 30px;
+    border-bottom: 1px solid #f3f4f6; 
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
 }
 
-.prescriptions-cards h2 {
+.prescriptions-cards-top h2 {
     font-size: 1.5rem;
     color: #111827;
-    font-weight: 700;
     margin: 0;
-    position: relative;
-    padding-left: 15px;
+    display: flex;
+    align-items: center;
 }
 
-/* Reprise de la ligne verte de repère présente sur l'UI */
-.prescriptions-cards h2::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 20%;
-    height: 60%;
-    width: 4px;
-    background-color: #22c55e; /* Vert Santé Data France */
-    border-radius: 2px;
+.prescriptions-cards-top h2::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 24px;
+    background-color: #41e46a; 
+    border-radius: 4px;
+    margin-right: 12px;
 }
 
-/* La petite image discrète au bout de la ligne */
 .prescriptions-header-image {
-    width: 100px;
-    height: 65px;
-    object-fit: contain; /* L'image est redimensionnée pour être vue entièrement */
-    border-radius: 12px;
+    width: 60px; 
+    height: auto;
 }
 
-/* ==========================================
-   3. LES CARTES DE NAVIGATION INTERNALISÉES
-   ========================================== */
+/* --- 4. CARTES D'ANALYSE (Avec relief par défaut) --- */
 .prescription-card-link {
-    text-decoration: none;
+    text-decoration: none; 
     display: block;
-    margin-bottom: 20px;
+    margin-bottom: 1.5rem; /* Un peu plus d'espace pour laisser respirer l'ombre */
+}
+
+.prescription-card-link:last-child {
+    margin-bottom: 0; 
 }
 
 .prescription-card {
-    background-color: #f9fafb; /* Fond gris clair calqué sur les badges du bas de l'accueil */
-    border: 1px solid #e5e7eb;
-    border-radius: 16px;
-    padding: 24px;
-    transition: all 0.25s ease-in-out;
-}
-
-/* Effets dynamiques d'accessibilité au survol */
-.prescription-card-link:hover .prescription-card {
     background-color: #ffffff;
-    border-color: #22c55e;
-    box-shadow: 0 10px 15px -3px rgba(34, 197, 94, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    transform: translateY(-2px);
+    border: 1px solid #f3f4f6; /* Bordure très douce pour souligner la forme */
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    
+    /* 🌟 LE RELIEF PAR DÉFAUT EST ICI */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+    
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+    position: relative;
+    overflow: hidden;
 }
 
 .prescription-card h3 {
     font-size: 1.25rem;
-    color: #111827;
-    margin: 0 0 10px 0;
+    color: #1f2937;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
     font-weight: 700;
-    transition: color 0.2s ease;
-}
-
-.prescription-card-link:hover h3 {
-    color: #22c55e;
+    transition: color 0.3s ease;
 }
 
 .prescription-card p {
-    font-size: 0.95rem;
-    color: #4b5563;
-    line-height: 1.5;
     margin: 0;
+    color: #6b7280;
+    font-size: 0.95rem;
+    line-height: 1.5;
 }
 
-/* Adaptation Mobile */
-@media (max-width: 768px) {
-    .prescriptions-header {
-        margin: 20px auto;
-    }
-    .prescriptions-header h1 {
-        font-size: 2rem;
-    }
-    .prescriptions-page {
-        padding: 24px;
-        margin: 0 15px;
-    }
-    .prescriptions-header-image {
-        width: 70px;
-        height: 50px;
-    }
+/* --- 5. EFFETS AU SURVOL (Lévitation & Nuances de vert) --- */
+.prescription-card-link:hover .prescription-card {
+    transform: translateY(-5px); 
+    border-color: #86efac; 
+    
+    /* 🌟 L'ombre s'agrandit et se teinte de vert au survol */
+    box-shadow: 
+        0 15px 25px -5px rgba(65, 228, 106, 0.2), 
+        0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        
+    background-color: #f2fcf5; 
+}
+
+.prescription-card-link:hover .prescription-card h3 {
+    color: #1a5c2d; 
+}
+
+/* Liseré vert dynamique sur le bord gauche au survol */
+.prescription-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: #41e46a; 
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+    transform-origin: center;
+}
+
+.prescription-card-link:hover .prescription-card::before {
+    transform: scaleY(1);
 }
