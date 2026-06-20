@@ -7,9 +7,11 @@
 <section class="prescriptions-header">
     <h1>Analyse des prescriptions</h1>
     <p>
-        Analyse globale des ordonnances et des soins prescrits par les professionnels de santé, 
-        croisant les catégories de soins (postes), les coûts (€) et les quantités (volumes) pour cartographier
-        les habitudes médicales et les dépenses de l'Assurance Maladie
+        Tableau de bord décisionnel dédié à l'étude des dépenses de la médecine libérale. 
+        En croisant les dimensions de notre base de données avec les indicateurs financiers de l'API Ameli, 
+        cet outil cartographie la structure des coûts (montants globaux et moyens) par catégorie de soins. 
+        Il met en relief les disparités territoriales, l'impact des déserts médicaux et les profils de prescription
+        grâce à des indicateurs clés et des graphiques interactifs.
     </p>
 </section>
 
@@ -18,28 +20,25 @@
 
     <section class="prescriptions-cards">
         <div class="prescriptions-cards-top">
-            <h2>Thèmes associés</h2>
+            <h2>Thèmes d'analyse associés</h2>
             <img src="{{ url_for('static', filename='images/antibiotique.png') }}" alt="Antibiotiques" class="prescriptions-header-image">
         </div>
 
         <a href="{{ url_for('prescriptions.page_disparite') }}" class="prescription-card-link"> 
             <div class="prescription-card">
-                <h3>Poste de prescription</h3>
+                <h3>Disparités géographiques</h3>
                 <p>
-                    Catégories majeures de soins et de produits remboursés par l’Assurance Maladie 
-                    (médicaments, transports, biologie, dispositifs médicaux), 
-                    permettant d'analyser la nature des dépenses des professionnels de santé.
+                    Outil d'analyse comparative territoriale conçu pour mesurer l'impact des déserts médicaux sur les dépenses de santé.
                 </p>
             </div>
         </a>
 
         <a href="{{ url_for('prescriptions.page_correlation') }}" class="prescription-card-link">
             <div class="prescription-card">
-                <h3>Indicateurs des finances</h3>
+                <h3>Corrélations démographiques des professionnels</h3>
                 <p>
-                    Données chiffrées exprimées en euros (montants présentés et remboursés par l’Assurance Maladie) 
-                    permettant de mesurer le coût économique des prescriptions et d'analyser les dépenses de santé 
-                    par profession ou par territoire.
+                    Module d'analyse sociologique conçu pour identifier l'impact de l'âge
+                    et du sexe des praticiens sur leurs habitudes de prescription.
                 </p>
             </div>
         </a>
@@ -48,8 +47,9 @@
             <div class="prescription-card">
                 <h3>Indicateurs de volumes</h3>
                 <p>
-                    Données quantitatives (nombre de bénéficiaires uniques, volumes d'actes ou quantités de produits prescrits)
-                    permettant de mesurer l'impact et la fréquence du recours aux soins, indépendamment de leur coût financier.
+                    Module d'analyse macroéconomique conçu pour isoler et identifier la nature des soins 
+                    (médicaments, kinésithérapie, biologie, transports) dont la charge financière
+                    est la plus lourde pour la collectivité. 
                 </p>
             </div>
         </a>
