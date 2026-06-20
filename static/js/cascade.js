@@ -1,5 +1,5 @@
 /* 
-    Script Json pour le fichier poste_prescription.html 
+    Script Json pour le fichier disparite_geo.html 
     Gère la mise à jour dynamique de la liste déroulante 
     des départements en fonction de la région sélectionnée.
 */

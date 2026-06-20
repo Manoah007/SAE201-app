@@ -14,7 +14,7 @@ def accueil_prescription():
     return render_template("prescriptions/accueil_prescription.html")
 
 
-@bp_prescriptions.route("/prescriptions/poste")
+@bp_prescriptions.route("/prescriptions/disparite")
 def page_postes():
     session = Session()
 
@@ -34,7 +34,7 @@ def page_postes():
 
         # Envoi de TOUTES les variables nécessaires au template Jinja2
         return render_template(
-            "prescriptions/poste_prescription.html",
+            "prescriptions/disparite_geo.html",
             # Pour charger les listes
             professions=professions,
             regions=regions,
