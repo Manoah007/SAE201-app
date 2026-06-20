@@ -2,7 +2,7 @@
 
 from flask import Blueprint, render_template, request
 from models.db import Session
-from models.dimensions import ProfessionSante
+from models.dimensions import ProfessionSante, Departement
 from services.ameli_api import AmeliAPI
 
 bp_carte = Blueprint("carte", __name__)
@@ -19,12 +19,13 @@ def afficher():
     try:
         professions = session.query(ProfessionSante).order_by(ProfessionSante.libelle).all()
 
+        # Codes des vrais départements (filtre identique à dashboard_service.py)
+        # pour exclure les lignes de niveau région/national renvoyées par l'API.
+        codes_valides = {d.code for d in session.query(Departement).all()}
+
         profession_id = request.args.get("profession_id", type=int)
         annee = request.args.get("annee", ANNEE_DEFAUT, type=int)
 
-        # Si une profession est choisie dans le formulaire, on l'utilise ;
-        # sinon on affiche d'emblée "Ensemble des médecins" pour que la carte
-        # soit visible dès le premier chargement, sans avoir à valider un filtre.
         prof = None
         prof_libelle = PROFESSION_DEFAUT
 
@@ -35,12 +36,12 @@ def afficher():
 
         lignes = ameli.get_repartition_departements(prof_libelle, annee)
 
-        # On construit un dict { code_dept: effectif } passé en JSON au template.
+        # Seuls les codes présents dans notre table `departement` sont conservés.
         donnees_carte = {}
         for ligne in lignes:
             code = ligne.get("departement")
             effectif = ligne.get("effectif") or 0
-            if code:
+            if code and code in codes_valides:
                 donnees_carte[code] = effectif
 
         return render_template(

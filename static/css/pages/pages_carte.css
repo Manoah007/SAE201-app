@@ -8,6 +8,8 @@
     width: 100%;
 }
 
+/* ── En-tête ──────────────────────────────── */
+
 .carte-header {
     margin-bottom: 28px;
 }
@@ -22,13 +24,57 @@
     color: #555;
 }
 
-/* CARTE - CONTENEUR PRINCIPAL */
+/* ── Barre de filtres ─────────────────────── */
+
+.carte-form {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    width: 100%;
+}
+
+.carte-form select {
+    border: none;
+    background: white;
+    padding: 13px 22px;
+    border-radius: 20px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+}
+
+/* Profession prend 4x plus de place que l'année */
+.carte-form #profession { flex: 4; }
+.carte-form #annee      { flex: 1; }
+
+.carte-form button {
+    border: none;
+    background: #41e46a;
+    color: white;
+    padding: 13px 28px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.carte-form .reset-link {
+    color: #23b84d;
+    font-weight: bold;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+/* ── Conteneur principal ──────────────────── */
+
 .carte-wrapper {
     display: flex;
     gap: 24px;
     margin-top: 28px;
     align-items: flex-start;
 }
+
+/* ── Carte ────────────────────────────────── */
 
 .carte-container {
     flex: 1;
@@ -49,16 +95,16 @@
     padding: 8px 14px;
     font-weight: 700;
     font-size: 15px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 #map {
     height: 620px;
     width: 100%;
-    border-radius: 18px;
 }
 
-/* CARTE - LÉGENDE */
+/* ── Légende ──────────────────────────────── */
+
 .carte-legende {
     width: 220px;
     flex-shrink: 0;
@@ -72,7 +118,6 @@
     font-size: 16px;
     font-weight: 700;
     margin-bottom: 16px;
-    color: #111;
 }
 
 .legende-items {
@@ -95,7 +140,9 @@
     height: 18px;
     border-radius: 4px;
     flex-shrink: 0;
-    border: 1px solid rgba(0,0,0,0.08);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    display: inline-block;
+    /* La couleur de fond est définie dynamiquement en JS (style="background:...") */
 }
 
 .legende-note {
@@ -107,26 +154,25 @@
     margin-top: 4px;
 }
 
-/* CARTE - LEAFLET OVERRIDES */
+/* ── Message d'erreur ─────────────────────── */
+
+.carte-erreur {
+    padding: 20px;
+    color: #555;
+}
+
+/* ── Overrides Leaflet ────────────────────── */
+
+.leaflet-container {
+    background: #f7f7f7 !important;
+}
+
 .leaflet-info-box {
     background: white;
     border-radius: 12px;
     padding: 12px 16px;
     font-size: 14px;
     line-height: 1.6;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
     min-width: 160px;
-}
-
-.leaflet-tooltip-custom {
-    background: white;
-    border: none;
-    border-radius: 10px;
-    padding: 8px 12px;
-    font-size: 13px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.12);
-}
-
-.leaflet-tooltip-custom::before {
-    display: none;
 }
