@@ -18,7 +18,7 @@
         <section class="form-section"> 
             <h2 class="filter-label">FILTRES</h2>
 
-            <form action="{{ url_for('prescriptions.page_postes') }}" method="get" class="api-form" id="form-filtres">
+            <form action="{{ url_for('prescriptions.page_disparite') }}" method="get" class="api-form" id="form-filtres">
                 <select name="profession_id" id="profession" required>
                     <option value="">Profession</option>
                     {% for poste in professions %}
@@ -51,7 +51,7 @@
         <!-- Zone d'actions : BOUTON d'affichage, de réinitialisation et d'export -->
         <nav id="filtres-button"> 
             <button type="submit" form="form-filtres" class="submit-btn">Afficher</button>
-            <a href="{{ url_for('prescriptions.page_postes') }}" class="reset-link">
+            <a href="{{ url_for('prescriptions.page_disparite') }}" class="reset-link">
                 Réinitialiser
             </a>
             <button class="export-btn">Exporter (CSV/PDF)</button>
