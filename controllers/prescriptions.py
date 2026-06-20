@@ -9,9 +9,9 @@ api = AmeliAPI()
 
 
 @bp_prescriptions.route("/prescriptions")
-def page_prescriptions():
+def accueil_prescription():
     """Cette fonction ne sert qu'à rediriger vers la page des postes de prescription et les cartes des sous thème disponibles"""
-    return render_template("prescriptions/prescriptions_maquette.html")
+    return render_template("prescriptions/accueil_prescription.html")
 
 
 @bp_prescriptions.route("/prescriptions/poste")
