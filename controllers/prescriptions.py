@@ -48,9 +48,9 @@ def page_disparite():
         session.close() 
         
 
-@bp_prescriptions.route("/prescriptions/finance")
-def page_finances():
-    return render_template("prescriptions/finance_prescription.html")
+@bp_prescriptions.route("/prescriptions/correlation_demographique")
+def page_correlation():
+    return render_template("prescriptions/page_correlation.html")
 
 
 @bp_prescriptions.route("/prescriptions/volume")
