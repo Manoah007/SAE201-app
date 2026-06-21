@@ -74,7 +74,7 @@ class AmeliAPI:
 # REQUËTES SQL DE RÉCUPÉRATION DE DONNÉES RELATIVES AUX PRESCRIPTIONS #
 #=====================================================================#
 
-    def get_prescription_default(self, region_id, annee='2024', limite_ligne=25):
+    def get_prescription_default(self, annee="2024", limite_ligne=25):
         """Retourne les données par défaut quand rien n'est sélectionner par l"utilisateur"""
 
         where = f'annee={annee}'
