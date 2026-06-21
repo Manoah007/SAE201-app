@@ -86,10 +86,27 @@ class AmeliAPI:
                              }
                             )
 
-    def get_region_prescription(self,  annee='2024', limite_ligne=25):
+    def get_region_prescription(self, region_list_id=None, annee='2024', limite_ligne=25):
         "Ne filtre que par les régions et récupère les données nécessaire"
 
-        where = f'annee={annee}'
+        # Condition de filtres de base sur l'année
+        conditions_de_filtres = [f"annee={annee}"]
+
+        # 2. Ajout dynamique du filtre sur la liste des régions (si fournie et non vide)
+        if region_list_id:
+            # On s'assure que tous les IDs sont des chaînes ou des entiers propres
+            # pour éviter les injections si c'est du SQL brut
+            ids_formates = ",".join([str(r_id) for r_id in region_list_id])
+            
+            # Utilisation de l'opérateur IN pour gérer la liste
+            conditions_de_filtres.append(f"region_id IN ({ids_formates})")
+
+        # 3. Assemblage de la clause WHERE
+        where = " AND ".join(conditions_de_filtres)
+
+    # 4. Construction de votre requête ou appel API
+    # (Exemple d'illustration, à adapter selon le fonctionnement de votre objet 'api')
+    print(f"Clause générée : WHERE {where}")
 
     def get_prescriptions(self, profession_name, departement_code, annee, type_prescription):
         """Récupère les prescriptions pour une profession, un département, une année et un poste."""
