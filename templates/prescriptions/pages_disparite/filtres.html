@@ -8,16 +8,16 @@
         <form action="{{ url_for('prescriptions.page_disparite') }}" method="get" class="api-form" id="form-filtres">
 
             <select name="region_id" id="region_select" multiple>
-                <option value="ALL" {% if 'ALL' in region_ids or not region_ids %}selected{% endif %}>-- Toutes régions --</option>
+                <option {% if not region_id %}selected{% endif %}>-- Toutes régions --</option>
                 {% for region in regions %}
-                    <option value="{{ region.id }}" {% if region_ids and region.id|string in region_ids %}selected{% endif %}>
+                    <option value="{{ region.id }}" {% if region_id and region.id|string in region_id %}selected{% endif %}>
                         {{ region.libelle }}
                     </option>
                 {% endfor %}
             </select>
 
             <select name="departement_id" id="departement_select" multiple>
-                <option value="ALL" {% if 'ALL' in departement_id or not departement_id %}selected{% endif %}>-- Tous départements --</option>
+                <option  {% if not departement_id %}selected{% endif %}>-- Tous départements --</option>
                 {% for depart in departements %}
                     <option value="{{ depart.id }}" {% if departement_id and depart.id|string in departement_id %}selected{% endif %}>
                         {{ depart.libelle }}
@@ -26,7 +26,7 @@
             </select>
 
             <select name="annee" id="annee_select">
-                {% for a in range(2024, 2014, -1) %}
+                {% for a in range(2024, 2014, -1)%}
                     <option value="{{ a }}" {% if a == annee %}selected{% endif %}>{{ a }}</option>
                 {% endfor %}
             </select>

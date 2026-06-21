@@ -12,7 +12,7 @@
         </p>
     </section>
 
-    {% include "prescriptions/page_disparite/filtres.html" %}
+    {% include "prescriptions/pages_disparite/filtres.html" %}
     
     {% if resultats is not none %}
         <section class="prescriptions-results">
@@ -24,9 +24,9 @@
                     <button class="tab-btn" onclick="switchTab(event, 'tab-tableau')">Tableau des données</button>
                 </div>
 
-                {% include "prescriptions/page_disparite/Graphiques.html" %}
+                {% include "prescriptions/page_disparite/graphiques.html" %}
 
-                {% include "prescriptions/page_disparite/indicateur.html" %}
+                {% include "prescriptions/page_disparite/indicateurs.html" %}
 
                 {% include "prescriptions/page_disparite/tableau.html" %}
 
