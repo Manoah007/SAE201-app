@@ -13,7 +13,7 @@
     background: #f5f5f5;
     color: #333;
     cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    transition: background 0.5s ease, color 0.5s ease, transform 0.5s ease;
     flex-shrink: 0;
 }
 
@@ -21,7 +21,7 @@
     background: #41e46a;
     color: white;
     border-color: #41e46a;
-    transform: rotate(20deg);
+    transform: rotate(30deg);
 }
 
 /* ==========================================
