@@ -19,20 +19,21 @@
             <h2 class="filter-label">FILTRES</h2>
 
             <form action="{{ url_for('prescriptions.page_disparite') }}" method="get" class="api-form" id="form-filtres">
-                <select name="profession_id" id="profession" required>
-                    <option value="">Profession</option>
-                    {% for poste in professions %}
-                        <option value="{{ poste.id }}"{% if poste.id == profession_id %}selected{% endif %}>
-                            {{ poste.libelle }}
+
+                <select name="region_id" id="region_select" required>
+                    <option value="">Régions</option>
+                    {% for region in regions %}
+                        <option value="{{ region.id }}" {% if region.id == region_id %}selected{% endif %}>
+                            {{ region.libelle }}
                         </option>
                     {% endfor %}
                 </select>
 
-                <select name="region_id" id="region_select" required>
-                    <option value="">Zone géographique</option>
-                    {% for region in regions %}
-                        <option value="{{ region.id }}" {% if region.id == region_id %}selected{% endif %}>
-                            {{ region.libelle }}
+                <select name="département_id" id="département" required>
+                    <option value="">Départements</option>
+                    {% for depart in departement %}
+                        <option value="{{ poste.id }}"{% if poste.id == département_id %}selected{% endif %}>
+                            {{ departement.libelle }}
                         </option>
                     {% endfor %}
                 </select>
@@ -43,7 +44,6 @@
                     {% endfor %}
                 </select>
 
-                
             </form>
 
         </section>
@@ -54,7 +54,7 @@
             <a href="{{ url_for('prescriptions.page_disparite') }}" class="reset-link">
                 Réinitialiser
             </a>
-            <button class="export-btn">Exporter (CSV/PDF)</button>
+            <button class="export-btn">Exporter (CSV)</button>
         </nav>
 
     </section>
@@ -66,6 +66,7 @@
             {% if resultats|length > 0 %}
                 <div class="tabs-menu">
                     <button class="tab-btn active" onclick="switchTab(event, 'tab-graphique')">Graphique</button>
+                    <button class="tab-btn active" onclick="switchTab(event, 'tab-indicateur')">Indicateur</button>
                     <button class="tab-btn" onclick="switchTab(event, 'tab-tableau')">Tableau des données</button>
                 </div>
 
@@ -75,6 +76,11 @@
                     </div>
                 </div>
 
+                <div id="tab-indicateur" class="tab-content active">
+                    <div class="indicator prescription-chart">
+                        <canvas id="Indicateur"></canvas>
+                    </div>
+                </div>
                 <div id="tab-tableau" class="tab-content">
                     <div class="prescriptions-table-box">
                         <h3>Tableau des données brutes</h3>
@@ -82,17 +88,24 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Professions</th>
-                                    <th>Région</th>
-                                    <th>Prescription</th>
+                                    {% if zone_geo == region_name %}
+                                        <th>region_name</th>
+                                    {% else %}
+                                        <th>depart_name</th>
+                                    {% endif %}
+                                    <th>Montant Total</th>
+                                    <th>Montant Moyen</th>
                                     <th>Année</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for r in resultats %}
                                     <tr>
-                                        <td>{{ r.profession_sante }}</td>
-                                        <td>{{ r.region }}</td>
+                                        {% if region %}
+                                            <td>{{ r.region }}</td>
+                                        {% elif departement %}
+                                            <td>{{ r.department }}</td>
+                                        {% endif %}
                                         <td>{{ r.libelle_poste_prescription}}</td>
                                         <td>{{ r.annee }}</td>
                                     </tr>
