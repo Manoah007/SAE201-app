@@ -70,8 +70,9 @@ class AmeliAPI:
                 "limit": 100
             }
         )
-
-# REQUËTES DE DONNÉES POUR LES PRESCRIPTIONS
+#=====================================================================#
+# REQUËTES SQL DE RÉCUPÉRATION DE DONNÉES RELATIVES AUX PRESCRIPTIONS #
+#=====================================================================#
 
     def get_prescription_default(self, region_id, annee='2024', limite_ligne=25):
         """Retourne les données par défaut quand rien n'est sélectionner par l"utilisateur"""
@@ -86,13 +87,14 @@ class AmeliAPI:
                              }
                             )
 
+
     def get_region_prescription(self, region_list_id=None, annee='2024', limite_ligne=25):
         "Ne filtre que par les régions et récupère les données nécessaire"
 
         # Condition de filtres de base sur l'année
         conditions_de_filtres = [f"annee={annee}"]
 
-        # 2. Ajout dynamique du filtre sur la liste des régions (si fournie et non vide)
+        # Ajout dynamique du filtre sur la liste des régions (si fournie et non vide)
         if region_list_id:
             # On s'assure que tous les IDs sont des chaînes ou des entiers propres
             # pour éviter les injections si c'est du SQL brut
@@ -104,9 +106,19 @@ class AmeliAPI:
         # 3. Assemblage de la clause WHERE
         where = " AND ".join(conditions_de_filtres)
 
-    # 4. Construction de votre requête ou appel API
-    # (Exemple d'illustration, à adapter selon le fonctionnement de votre objet 'api')
-    print(f"Clause générée : WHERE {where}")
+        # Construction de votre requête ou appel API
+        # (Exemple d'illustration, à adapter selon le fonctionnement de votre objet 'api')
+        print(f"Création du filtre SQL : WHERE {where}")
+
+        return self._requete(
+            "prescription",
+            {
+                "select" : "region,montant_total_prescription_integer,montant_moyen_prescription_integer,annee",
+                "where" : where,
+                "limit" : limite_ligne
+            }
+        )
+
 
     def get_prescriptions(self, profession_name, departement_code, annee, type_prescription):
         """Récupère les prescriptions pour une profession, un département, une année et un poste."""
