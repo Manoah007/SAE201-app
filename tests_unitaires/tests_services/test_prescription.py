@@ -1,7 +1,6 @@
 import unittest
 from unittest.mock import MagicMock
-# Remplacez 'votre_module' par le nom du fichier Python contenant votre classe
-from ameli_api import AmeliAPI 
+from services.ameli_api import AmeliAPI
 
 class TestGetRegionPrescription(unittest.TestCase):
 
