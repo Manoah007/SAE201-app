@@ -74,40 +74,32 @@ class AmeliAPI:
 # REQUËTES SQL DE RÉCUPÉRATION DE DONNÉES RELATIVES AUX PRESCRIPTIONS #
 #=====================================================================#
 
-    def get_prescription_default(self, annee="2024", limite_ligne=25):
+    def get_prescription_default(self, annee="2024", limite_ligne=30):
         """Retourne les données par défaut quand rien n'est sélectionner par l"utilisateur"""
-
-        where = f'annee={annee}'
 
         return self._requete("prescriptions",
                              {
                               "select" : "region,montant_total_prescription_integer,montant_moyen_prescription_integer,annee",
-                              "where" : where,
+                              "where" : f'annee={annee}',
                               "limit" : limite_ligne
                              }
                             )
 
 
     def get_region_prescription(self, region_list_id=None, annee='2024', limite_ligne=25):
-        "Ne filtre que par les régions et récupère les données nécessaire"
+        """
+        Filtre les montants totales et moyens selon la (ou les) région(s) pour une année
+        On affiche toutes les régions si 'region_list_id=None'
+        """
 
-        # Condition de filtres de base sur l'année
         conditions_de_filtres = [f"annee={annee}"]
 
-        # Ajout dynamique du filtre sur la liste des régions (si fournie et non vide)
         if region_list_id:
-            # On s'assure que tous les IDs sont des chaînes ou des entiers propres
-            # pour éviter les injections si c'est du SQL brut
-            ids_formates = ",".join([str(r_id) for r_id in region_list_id])
-            
-            # Utilisation de l'opérateur IN pour gérer la liste
-            conditions_de_filtres.append(f"region_id IN ({ids_formates})")
+            ids_formates = ",".join([str(r_id) for r_id in region_list_id]) # On s'assure que tous les IDs sont des chaînes ou des entiers propres
+            conditions_de_filtres.append(f"region_id IN ({ids_formates})") # Utilisation de l'opérateur IN pour gérer la liste
 
-        # 3. Assemblage de la clause WHERE
         where = " AND ".join(conditions_de_filtres)
 
-        # Construction de votre requête ou appel API
-        # (Exemple d'illustration, à adapter selon le fonctionnement de votre objet 'api')
         print(f"Création du filtre SQL : WHERE {where}")
 
         return self._requete(
@@ -120,46 +112,50 @@ class AmeliAPI:
         )
 
 
-    def get_departement_prescription(self, departement_list_id=None, annee='2024', limite_ligne=25):
+    def get_prescriptions_cross_filter(self, region_list_id=None, departement_list_id=None, annee='2024', limite_ligne=100):
         """
-        Ne filtre que par les départements et récupère les données nécessaires.
+        Croise les filtres du montant (total et moyen) selon la région et le département sur une annéee
+        Cas 1 : TOUT est séléctionner (régions et départements)
+        Cas 2 : Un (ou plusieurs) régions sont séléctionnées, on filtre selon les départements associés
+        Cas 3 : Un (ou plusieurs) régions séléctionnées, on filtres selon TOUT les départements associés
         """
+
+        where_clauses = [f"annee={annee}"]
+
+
+        # Si TOUTES les régions et TOUS les départements sont sélectionnés
+        if not region_list_id and not departement_list_id:
+            print(f"Toutes les options ont été séléctionnées | select_fields : {select_fields}")
+            select_fields = "region,montant_total_prescription_integer,montant_moyen_prescription_integer,annee"
+ 
+
+        # Si l'utilisateur a coché une (ou plusieurs) région(s) et des départements (min 2)
+        elif departement_list_id:
+            ids_dep = ",".join([str(d_id) for d_id in departement_list_id])
+            where_clauses.append(f"departement_id IN ({ids_dep})")
+            
+            select_fields = "departement,montant_total_prescription_integer,montant_moyen_prescription_integer,annee"
+            print(f"Sélections de (ou plusieurs) région(s) et min=2 départements | select_fields : {select_fields}")
         
-        conditions_de_filtres = [f"annee={annee}"]
+        # Si l'utilisateur a sélectionné une (ou plusieurs) région(s) mais veut TOUS ses départements (Sélection rapide)
+        elif region_list_id:
+            ids_reg = ",".join([str(r_id) for r_id in region_list_id])
+            where_clauses.append(f"region_id IN ({ids_reg})")
 
-        # Ajout dynamique du filtre sur la liste des départements (si fournie et non vide)
-        if departement_list_id:
-            ids_formates = ",".join([str(d_id) for d_id in departement_list_id])
-            conditions_de_filtres.append(f"departement_id IN ({ids_formates})")
+            select_fields = "departement,montant_total_prescription_integer,montant_moyen_prescription_integer,annee"
+            print(f"Sélections de (ou plusieurs) région(s) et TOUS les départements | select_fields : {select_fields}")
 
-        where = " AND ".join(conditions_de_filtres)
 
-        print(f"Création du filtre SQL (Départements) : WHERE {where}")
+        where_final = " AND ".join(where_clauses)
+        print(f"Filtre WHERE : {where_final}")
+
 
         return self._requete(
             "prescriptions",
             {
-                "select": "departement,montant_total_prescription_integer,montant_moyen_prescription_integer,annee",
-                "where": where,
+                "select": select_fields,
+                "where": where_final,
                 "limit": limite_ligne
-            }
-        )
-
-    def get_evolution_prescriptions(self, profession, departement_code, poste_prescription):
-        """Récupère l'évolution des prescriptions sur toutes les années disponibles."""
-
-        where = (
-            f'profession_sante="{profession}" AND '
-            f'departement="{departement_code}" AND '
-            f'libelle_poste_prescription="{poste_prescription}"'
-        )
-
-        return self._requete(
-            "prescriptions",
-            {
-                "where": where,
-                "order_by": "annee",
-                "limit": 100
             }
         )
 
