@@ -17,32 +17,40 @@ def accueil_prescription():
 @bp_prescriptions.route("/prescriptions/disparite")
 def page_disparite():
     session = Session()
+    resultats = None
 
     try:
         # Chargement des données depuis la BD pour alimenter les listes déroualntes
-        professions = session.query(ProfessionSante).order_by(ProfessionSante.libelle).all()
         regions = session.query(Region).order_by(Region.libelle).all()
-        prescription = session.query(TypePrescription).order_by(TypePrescription.libelle).all()
+        departements = session.query(Departement).order_by(Departement.libelle).all()
+
         
         # Récupération des choix de l'utilisateur (via l'URL en GET)
         # Renvoie l'ID de chaque choix pour les identifiés 
-        profession_id = request.args.get("profession_id", type=int)
-        region_id = request.args.get("region_id", type=int)
+        region_ids = request.args.getlist("region_id") # On récupère une liste d'ID pour des choix mutliple
+        departement_id = request.args.get("departement_id", type=int)
         annee = request.args.get("annee", type=int)
 
-        resultats = api.get_prescript_test()
+
+        if not region_ids and not departement_id and not annee:
+            resultats = api.get_prescription_default()
 
         # Envoi de TOUTES les variables nécessaires au template Jinja2
         return render_template(
             "prescriptions/page_disparite.html",
             # Pour charger les listes
-            professions=professions,
             regions=regions,
+            departements=departements,
+            #Pour filtrer les données
             annee=annee,
-            profession_id=profession_id, # Ajouté pour garder les options "selected"
-            region_id=region_id,         # Ajouté pour garder les options "selected"
+            region_ids=region_ids,
+            departement_id=departement_id,
             resultats=resultats,
         )
+    
+    except Exception as e:
+        print(f"Erreur lors de la génération de la page disparité : {e}")
+        return "Une erreur serveur est survenue.", 500
     
     finally:
         session.close() 

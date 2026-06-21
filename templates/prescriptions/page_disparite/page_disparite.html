@@ -14,31 +14,28 @@
         </p>
     </section>
 
+    {% include ""}
     <section class="filters-box">
         <section class="form-section"> 
             <h2 class="filter-label">FILTRES</h2>
 
             <form action="{{ url_for('prescriptions.page_disparite') }}" method="get" class="api-form" id="form-filtres">
 
-                <select name="region_id" id="region_select" required>
-                    <option value="">Régions</option>
+                <select name="region_id" id="region_select" multiple>
+                    <option value="">-- Toutes régions--</option>
                     {% for region in regions %}
-                        <option value="{{ region.id }}" {% if region.id == region_id %}selected{% endif %}>
-                            {{ region.libelle }}
-                        </option>
+                        <option value="{{ region.id }}">{{ region.libelle }}</option>
                     {% endfor %}
                 </select>
 
-                <select name="département_id" id="département" required>
-                    <option value="">Départements</option>
-                    {% for depart in departement %}
-                        <option value="{{ poste.id }}"{% if poste.id == département_id %}selected{% endif %}>
-                            {{ departement.libelle }}
-                        </option>
+                <select name="departement_id" id="departement_select" multiple>
+                    <option value="">-- Tous départements --</option>
+                    {% for depart in departements %}
+                        <option value="{{ depart.id }}">{{ depart.libelle }}</option>
                     {% endfor %}
                 </select>
 
-                <select name="annee" id="annee" required>
+                <select name="annee" id="annee_select">
                     {% for a in range(2024, 2014, -1) %}
                         <option value="{{ a }}">{{ a }}</option>
                     {% endfor %}
@@ -49,7 +46,7 @@
         </section>
 
         <!-- Zone d'actions : BOUTON d'affichage, de réinitialisation et d'export -->
-        <nav id="filtres-button"> 
+        <nav id="filtre-button"> 
             <button type="submit" form="form-filtres" class="submit-btn">Afficher</button>
             <a href="{{ url_for('prescriptions.page_disparite') }}" class="reset-link">
                 Réinitialiser
