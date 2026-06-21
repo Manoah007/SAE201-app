@@ -17,8 +17,7 @@ def accueil_prescription():
 @bp_prescriptions.route("/prescriptions/disparite")
 def page_disparite():
     session = Session()
-    resultats = None
-
+ 
     try:
         # Récupère les tables pour charger listes déroulantes
         regions = session.query(Region).order_by(Region.libelle).all()
@@ -31,9 +30,17 @@ def page_disparite():
         departement_list_id = request.args.getlist("departement_id")
         annee = request.args.get("annee", type=int)
 
+        resultats = None
 
         if not region_list_id and not departement_list_id and not annee:
+            # Cas où aucun filtre n'a été saisie
             resultats = api.get_prescription_default()
+
+        elif not departement_list_id:
+            # Cas où l'on filtre selon la région et/ou l'année uniquement
+            resultats = api.get_region_prescription()
+        
+        
 
         # Envoi de TOUTES les variables nécessaires au template Jinja2
         return render_template(

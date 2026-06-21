@@ -73,7 +73,7 @@ class AmeliAPI:
 
 # REQUËTES DE DONNÉES POUR LES PRESCRIPTIONS
 
-    def get_prescription_default(self, annee='2024', limite_ligne=25):
+    def get_prescription_default(self, region_id, annee='2024', limite_ligne=25):
         """Retourne les données par défaut quand rien n'est sélectionner par l"utilisateur"""
 
         where = f'annee={annee}'
@@ -85,6 +85,11 @@ class AmeliAPI:
                               "limit" : limite_ligne
                              }
                             )
+
+    def get_region_prescription(self,  annee='2024', limite_ligne=25):
+        "Ne filtre que par les régions et récupère les données nécessaire"
+
+        where = f'annee={annee}'
 
     def get_prescriptions(self, profession_name, departement_code, annee, type_prescription):
         """Récupère les prescriptions pour une profession, un département, une année et un poste."""
