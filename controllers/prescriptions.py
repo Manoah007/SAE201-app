@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, render_template, request
 from models.db import Session
-from models.dimensions import ProfessionSante, Region, Departement, TypePrescription, TrancheAge
+from models.dimensions import Region, Departement
 from services.ameli_api import AmeliAPI
 
 bp_prescriptions = Blueprint("prescriptions", __name__)
@@ -28,23 +28,23 @@ def page_disparite():
         # Récupération des choix de l'utilisateur (via l'URL en GET)
         # Renvoie l'ID de chaque choix pour les identifiés 
         region_ids = request.args.getlist("region_id") # On récupère une liste d'ID pour des choix mutliple
-        departement_id = request.args.get("departement_id", type=int)
+        departement_ids = request.args.getlist("departement_id")
         annee = request.args.get("annee", type=int)
 
 
-        if not region_ids and not departement_id and not annee:
+        if not region_ids and not departement_ids and not annee:
             resultats = api.get_prescription_default()
 
         # Envoi de TOUTES les variables nécessaires au template Jinja2
         return render_template(
-            "prescriptions/page_disparite.html",
+            "prescriptions/pages_disparite/page_disparite.html",
             # Pour charger les listes
             regions=regions,
             departements=departements,
             #Pour filtrer les données
             annee=annee,
             region_ids=region_ids,
-            departement_id=departement_id,
+            departement_ids=departement_ids,
             resultats=resultats,
         )
     
