@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <title>{% block titre %}Santé Data France{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base/theme.css') }}">
+
+    <script>
+        (function(){
+            var t = localStorage.getItem('sdf-theme');
+            if (t) document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
     
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/activity.svg') }}">
 </head>
@@ -37,6 +45,10 @@
             <div class="nav-right">
                 <a href="#">Documentation</a>
                 <a href="#">À propos</a>
+
+                <button id="theme-toggle" class="theme-toggle" aria-label="Passer au thème sombre" title="Thème sombre">
+                    <span id="theme-icon"></span>
+                </button>
             </div>
         </nav>
     </header>
@@ -99,5 +111,6 @@
             <p>© 2026 Santé Data France. Tous droits réservés.</p>
         </div>
 
+        <script src="{{ url_for('static', filename='js/theme.js')}}"></script>
 </body>
 </html>

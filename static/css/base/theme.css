@@ -1,0 +1,237 @@
+/* ==========================================
+   BOUTON TOGGLE THÈME (mode clair par défaut)
+   ========================================== */
+
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    background: #f5f5f5;
+    color: #333;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+    background: #41e46a;
+    color: white;
+    border-color: #41e46a;
+    transform: rotate(20deg);
+}
+
+/* ==========================================
+   THÈME SOMBRE — OVERRIDES GLOBAUX
+   S'applique quand <html data-theme="dark">
+   ========================================== */
+
+[data-theme="dark"] {
+
+    /* ── Couleurs de fond globales ── */
+    color-scheme: dark;
+
+    /* ── Body & fond général ── */
+    body,
+    main {
+        background: #121212;
+        color: #e0e0e0;
+    }
+
+    /* ── Header ── */
+    header {
+        background: #1a1a1a;
+        border-bottom: 1px solid #2a2a2a;
+    }
+
+    .logo-text,
+    .nav-center a,
+    .nav-right a,
+    .dropbtn {
+        color: #e0e0e0;
+    }
+
+    .nav-center a:hover,
+    .nav-right a:hover {
+        color: #41e46a;
+    }
+
+    .nav-center a.active {
+        color: #41e46a;
+    }
+
+    .dropdown-content {
+        background: #1e1e1e;
+        border: 1px solid #2a2a2a;
+    }
+
+    .dropdown-content a {
+        color: #e0e0e0;
+    }
+
+    .dropdown-content a:hover {
+        background: #2a2a2a;
+        color: #41e46a;
+    }
+
+    /* ── Bouton toggle thème ── */
+    .theme-toggle {
+        background: #2a2a2a;
+        color: #e0e0e0;
+        border-color: #444;
+    }
+
+    .theme-toggle:hover {
+        background: #41e46a;
+        color: #000;
+    }
+
+    /* ── Wrappers de page ── */
+    .home-wrapper,
+    .effectifs-page,
+    .honoraires-page,
+    .prescriptions-page,
+    .comparaison-page,
+    .carte-page,
+    .faq-page {
+        background: #121212;
+    }
+
+    /* ── Cartes blanches → sombres ── */
+    .hero,
+    .data-section,
+    .dashboard-section,
+    .honoraire-card,
+    .summary-box,
+    .honoraire-chart,
+    .honoraires-table-box,
+    .chart-box,
+    .prescriptions-table-box,
+    .prescriptions-results,
+    .result-title,
+    .carte-container,
+    .carte-legende {
+        background: #1e1e1e;
+        color: #e0e0e0;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    /* ── Cartes dashboard ── */
+    .dash-card {
+        background: #2a2a2a;
+        color: #e0e0e0;
+    }
+
+    /* ── Stat items ── */
+    .stat-item {
+        background: #2a2a2a;
+    }
+
+    .stat-icon {
+        background: #1e3a2a;
+    }
+
+    /* ── Filtres ── */
+    .filters-box,
+    .effectifs-filter-box,
+    .honoraires-filter-box {
+        background: #2a2a2a;
+    }
+
+    .effectifs-form select,
+    .honoraires-form select,
+    .api-form select,
+    .carte-form select {
+        background: #3a3a3a;
+        color: #e0e0e0;
+    }
+
+    /* ── Textes secondaires ── */
+    .hero-text p,
+    .effectifs-header p,
+    .honoraires-header p,
+    .carte-header p,
+    p {
+        color: #aaa;
+    }
+
+    h1, h2, h3, h4, h5 {
+        color: #f0f0f0;
+    }
+
+    /* ── Tableaux ── */
+    table {
+        color: #e0e0e0;
+    }
+
+    thead {
+        background: #2a2a2a;
+    }
+
+    tbody tr:nth-child(even) {
+        background: #222;
+    }
+
+    tbody tr:hover {
+        background: #2a2a2a;
+    }
+
+    td, th {
+        border-color: #3a3a3a;
+    }
+
+    /* ── Badges et tags ── */
+    .dash-tag {
+        background: #1e3a2a;
+        color: #41e46a;
+    }
+
+    .btn-secondary {
+        background: #1e3a2a;
+        color: #41e46a;
+    }
+
+    /* ── Liens ── */
+    .reset-link {
+        color: #41e46a;
+    }
+
+    /* ── Rank list ── */
+    .rank-name {
+        color: #ccc;
+    }
+
+    .rank-pos {
+        background: #1e3a2a;
+    }
+
+    /* ── Légende ── */
+    .dash-legend li {
+        color: #ccc;
+    }
+
+    .legende-note {
+        border-top-color: #3a3a3a;
+    }
+
+    /* ── Carte Leaflet ── */
+    .leaflet-container {
+        background: #1a1a1a !important;
+    }
+
+    .leaflet-info-box,
+    .carte-titre-overlay {
+        background: #1e1e1e;
+        color: #e0e0e0;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+    }
+
+    /* ── Empty messages ── */
+    .empty-message {
+        background: #1e1e1e;
+        color: #aaa;
+    }
+}
