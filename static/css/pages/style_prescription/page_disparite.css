@@ -1,19 +1,9 @@
 /* ==============================================================================
-   STYLE CSS DU FILTRES
+   STYLE CSS DES FILTRES
    ============================================================================== */
-.filters-box {
-    background-color: #ffffff;
-    border-radius: 20px;
-    padding: 0px 30px 50px 30px;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-    border: 1px solid #e2e8f0;
-    margin-bottom: 1.5rem;
-    
-    /* ⭐ CORRECTION MAJEURE : On force un alignement vertical */
-    display: flex;
-    flex-direction: column; 
-    gap: 0.5rem; /* Crée automatiquement l'espace parfait entre la zone grise et les boutons */
-}
+
+/* Import d'une police moderne similaire à celle de l'image (Google Fonts) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
 /* ==========================================
    LE PETIT BLOC GRIS (Intérieur - Relief)
@@ -23,17 +13,16 @@
     border-radius: 14px;
     padding: 1rem;
     border: 1px solid #e2e8f0;
-    width: 100%; /* S'assure que le bloc prend toute la largeur disponible */
+    width: 100%;
     box-sizing: border-box;
 }
 
-/* Le titre "FILTRES" à l'intérieur du bloc gris */
 .filter-label {
     color: #475569;
     font-size: 0.85rem;
     font-weight: 700;
     letter-spacing: 0.05em;
-    margin: 0 0 1rem 0.25rem;  /* Marge sous le titre */
+    margin: 0 0 1rem 0.25rem;
 }
 
 /* Alignement des 3 menus déroulants */
@@ -43,91 +32,266 @@
     gap: 1rem;
 }
 
-.api-form select {
-    flex: 1;
-    min-width: 220px;
-    padding: 0.75rem 1.25rem;
-    font-size: 0.95rem;
-    color: #334155;
-    background-color: #ffffff; /* Les selects restent blancs pour ressortir sur le gris */
-    border: 1px solid #cbd5e1;
-    border-radius: 30px;       /* Hyper arrondi */
-    outline: none;
-    transition: all 0.2s ease;
+/* 1. Assurer que le grand conteneur et le formulaire prennent 100% de l'espace */
+.filters-box, 
+#form-filtres {
+    width: 100%;
+    display: block; /* S'assure qu'ils se comportent comme de vrais blocs pleins */
+    box-sizing: border-box;
 }
 
-.api-form select:focus {
-    border-color: #10b981;     
-    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+/* 2. Étirer le bloc gris des filtres */
+.form-section {
+    width: 100%;
+    box-sizing: border-box; /* Crucial pour que le padding ne rajoute pas de largeur supplémentaire */
+    /* ... le reste de ton style (background, border-radius, padding, etc.) reste identique ... */
 }
+
+/* 3. Étirer la zone des boutons */
+#filtres-button {
+    width: 100%;
+    box-sizing: border-box;
+    /* ... le reste (display: flex, justify-content: center, gap) reste identique ... */
+}
+/*********************************/
+/** STYLE RÉGION ET DÉPARTEMENT **/
+/*********************************/
+
+.multi-select-container {
+  position: relative;
+  flex: 1; /* Permet au bloc de s'étirer uniformément avec les autres */
+  min-width: 220px; /* Largeur minimale avant de passer à la ligne */
+  font-family: 'Inter', sans-serif;
+  color: #111827; 
+}
+
+/* 1. Le bouton principal (façon "bouton pilule" de l'image) */
+.select-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 22px;
+  border: 1px solid #f3f4f6; 
+  border-radius: 50px; 
+  background-color: #ffffff;
+  cursor: pointer;
+  font-weight: 600; 
+  font-size: 15px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03); 
+  transition: all 0.3s ease;
+  height: 100%; /* S'assure que tous les boutons ont la même hauteur */
+  box-sizing: border-box;
+}
+
+.select-btn:hover {
+  border-color: #3de068; 
+  background-color: #f9fafb;
+}
+
+.select-btn .arrow {
+  color: #3de068; 
+  font-size: 12px;
+}
+
+/* 2. Le menu déroulant (façon "carte" de l'image) */
+.dropdown-content {
+  display: none; 
+  position: absolute;
+  top: calc(100% + 10px); 
+  left: 0;
+  width: 100%;
+  border-radius: 16px; 
+  background-color: #ffffff;
+  z-index: 10;
+  max-height: 250px;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); 
+  padding: 8px 0;
+}
+
+.dropdown-content.show {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 3. Les options à l'intérieur */
+.dropdown-content label {
+  padding: 12px 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  font-weight: 400;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* 🟢 NOUVEAU : Ligne de séparation pour "Toutes régions" / "Tous départements" */
+.dropdown-content label:first-child {
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 4px;
+  padding-bottom: 12px;
+}
+
+/* 🟢 NOUVEAU : Classe utilisée par le JS pour masquer les départements */
+.dropdown-content label.masque {
+  display: none !important;
+}
+
+.dropdown-content label:hover {
+  background-color: #e6fbee; 
+  color: #0b8a2f; 
+  font-weight: 600;
+}
+
+/* 4. Les cases à cocher */
+.dropdown-content input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #3de068; 
+}
+
+/* 5. Esthétique de la barre de défilement */
+.dropdown-content::-webkit-scrollbar { width: 6px; }
+.dropdown-content::-webkit-scrollbar-thumb { background-color: #e5e7eb; border-radius: 10px; }
+.dropdown-content::-webkit-scrollbar-track { margin: 10px 0; }
+
+
+/**************************/
+/** STYLE FILTRES ANNÉES **/
+/**************************/
+/* Ciblage de notre select simple pour s'aligner parfaitement avec les autres */
+.filtre-pilule {
+  flex: 1; /* Permet de s'étirer comme les autres boutons */
+  min-width: 220px;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  padding: 14px 40px 14px 22px; 
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #002b49; 
+  
+  background-color: #ffffff;
+  border: 1px solid transparent; 
+  border-radius: 50px; 
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03); 
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="%233de068"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 18px center; 
+  background-size: 16px; 
+}
+
+.filtre-pilule:hover {
+  border-color: #3de068; 
+  background-color: #f9fafb;
+}
+
+.filtre-pilule:focus {
+  outline: 2px solid #3de068;
+  outline-offset: 2px;
+  border-color: transparent;
+}
+
 
 /* ==========================================
-   LA ZONE DES BOUTONS (Sur le fond blanc du grand bloc)
+   LA ZONE DES BOUTONS (En dessous du bloc gris)
    ========================================== */
 #filtres-button {
     display: flex;
     align-items: center;
-    justify-content: center; /* ⭐ Centre parfaitement tes 3 boutons */
-    gap: 1.25rem;            /* Espace horizontal entre les boutons */
+    justify-content: center; 
+    gap: 1.5rem;            
     flex-wrap: wrap;
     width: 100%;
-    margin: 0; /* On remet à zéro car le 'gap' de la .filters-box gère l'espacement du dessus */
+    margin-top: 1.5rem; /* Crée l'espace entre le bloc gris et les boutons */
 }
 
-/* Style de base des boutons et liens */
-#filtres-button button, 
-.reset-link {
-    padding: 0.75rem 2rem;
+/* Style de base commun avec effet de transition fluide */
+#filtres-button .submit-btn, 
+#filtres-button .reset-link, 
+#filtres-button .export-btn {
+    padding: 0.85rem 2.2rem;
     font-size: 0.95rem;
-    font-weight: 600;
-    border-radius: 30px;
+    font-family: 'Inter', sans-serif; 
+    font-weight: 700; /* Un peu plus gras pour accentuer le côté "bouton physique" */
+    border-radius: 50px; 
     border: none;
     cursor: pointer;
-    transition: all 0.2s ease;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    box-sizing: border-box;
+    /* Transition très rapide pour un effet mécanique réactif */
+    transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.2s ease;
 }
 
-/* 🟢 Bouton "Afficher" */
-.submit-btn {
-    background-color: #2ecc71;
-    color: #ffffff;
+/* 🟢 Bouton "Afficher" (Vert vif principal) */
+.submit-btn { 
+    background-color: #3de068; 
+    color: #ffffff; 
+    /* Ombre dure pour le relief (4px) + Ombre floue pour la profondeur (10px) */
+    box-shadow: 0 4px 0 #25a046, 0 6px 10px rgba(61, 224, 104, 0.3);
+}
+.submit-btn:hover { 
+    background-color: #35cf5e; 
+    transform: translateY(2px); /* Descend de 2px (semi-appuyé) */
+    box-shadow: 0 2px 0 #25a046, 0 4px 6px rgba(61, 224, 104, 0.3); /* Le relief diminue */
+}
+.submit-btn:active {
+    background-color: #2bb652;
+    transform: translateY(4px); /* Descend de 4px (totalement appuyé) */
+    box-shadow: 0 0 0 #25a046, 0 0 0 rgba(61, 224, 104, 0.3); /* Le relief disparaît */
 }
 
-.submit-btn:hover {
-    background-color: #0b4e38;
-    transform: translateY(-1px);
+/* ⚪ Bouton "Réinitialiser" (Gris neutre élégant) */
+.reset-link { 
+    background-color: #f1f5f9; 
+    color: #475569; 
+    box-shadow: 0 4px 0 #cbd5e1, 0 6px 10px rgba(0, 0, 0, 0.05);
 }
-
-/* ⚪ Bouton "Réinitialiser" */
-.reset-link {
-    background-color: #e2e8f0;
-    color: #475569;
+.reset-link:hover { 
+    background-color: #e2e8f0; 
+    color: #334155; 
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #94a3b8, 0 4px 6px rgba(0, 0, 0, 0.05);
 }
-
-.reset-link:hover {
+.reset-link:active {
     background-color: #cbd5e1;
-    color: #1e293b;
+    transform: translateY(4px);
+    box-shadow: 0 0 0 #94a3b8, 0 0 0 rgba(0, 0, 0, 0.05);
 }
 
-/* 🔵 Bouton "Exporter" */
-.export-btn {
-    background-color: #2ecc71;
-    color: #ffffff;
+/* 🔵 Bouton "Exporter" (Vert Émeraude - Nuance data) */
+.export-btn { 
+    background-color: #10b981; /* Une nuance de vert plus sérieuse/data */
+    color: #ffffff; 
+    box-shadow: 0 4px 0 #059669, 0 6px 10px rgba(16, 185, 129, 0.3);
+}
+.export-btn:hover { 
+    background-color: #059669; 
+    transform: translateY(2px); 
+    box-shadow: 0 2px 0 #047857, 0 4px 6px rgba(16, 185, 129, 0.3);
+}
+.export-btn:active {
+    background-color: #047857;
+    transform: translateY(4px);
+    box-shadow: 0 0 0 #047857, 0 0 0 rgba(16, 185, 129, 0.3);
 }
 
-.export-btn:hover {
-    background-color: #025224;
-    transform: translateY(-1px);
-}
 
 /* ==============================================================================
-   STYLE CSS DU TABLEAU
+   STYLE CSS DU TABLEAU ET DES ONGLETS
    ============================================================================== */
 
-/* --- SECTION DES RÉSULTATS --- */
 .prescriptions-results {
     margin-top: 2rem;
     padding: 1.5rem;
@@ -145,9 +309,7 @@
     transition: color 0.2s ease;
 }
 
-.back-link:hover {
-    color: #41e46a;
-}
+.back-link:hover { color: #41e46a; }
 
 /* --- SYSTÈME D'ONGLETS --- */
 .tabs-menu {
@@ -167,23 +329,13 @@
     cursor: pointer;
     border-bottom: 3px solid transparent;
     transition: all 0.2s ease;
-    margin-bottom: -2px; /* S'aligne parfaitement sur la bordure du menu */
+    margin-bottom: -2px; 
 }
 
-.tab-btn:hover {
-    color: #1a5c2d;
-}
+.tab-btn:hover { color: #1a5c2d; }
+.tab-btn.active { color: #1a5c2d; border-bottom-color: #41e46a; }
 
-.tab-btn.active {
-    color: #1a5c2d;
-    border-bottom-color: #41e46a; /* Couleur verte signature */
-}
-
-/* Gestion de l'affichage du contenu des onglets */
-.tab-content {
-    display: none;
-}
-
+.tab-content { display: none; }
 .tab-content.active {
     display: block;
     animation: fadeIn 0.3s ease-in-out;
@@ -211,9 +363,7 @@
     margin-bottom: 1rem;
 }
 
-.prescriptions-table-box {
-    overflow-x: auto; /* Sécurité si l'écran est petit */
-}
+.prescriptions-table-box { overflow-x: auto; }
 
 table {
     width: 100%;
@@ -244,15 +394,8 @@ td {
     transition: background-color 0.15s ease;
 }
 
-/* Lignes alternées (Zebra striping) */
-tbody tr:nth-child(even) {
-    background-color: #fcfdfd;
-}
-
-/* Effet au survol d'une ligne */
-tbody tr:hover {
-    background-color: #f0fdf4; /* Teinte verte très subtile */
-}
+tbody tr:nth-child(even) { background-color: #fcfdfd; }
+tbody tr:hover { background-color: #f0fdf4; }
 
 /* --- MESSAGE VIDE --- */
 .empty-message {

@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% block titre %}Prescriptions selon le poste{% endblock %}
+
+{% block contenu %}
+
+    <section class="prescriptions-header">
+        <h1>Disparités géographiques</h1>
+        <p>
+            Identifier les écarts de prescription entre deux ou plusieurs zones géographiques
+             afin de mesurer précisément l'impact des déserts médicaux sur les dépenses de santé de ville.
+        </p>
+    </section>
+
+    {% if error_message %}
+        <div class="alert-error" style="background-color: #fce8e6; 
+                                        color: #a51d24; 
+                                        padding: 12px; 
+                                        border-radius: 8px; 
+                                        margin-bottom: 15px; 
+                                        font-weight: 500; 
+                                        border: 1px solid #f5c2c7;">
+            {{ error_message }}
+        </div>
+    {% endif %}
+
+    <section class="filters-box">
+
+        <form action="{{ url_for('prescriptions.page_disparite') }}" method="get"  id="form-filtres">
+
+            <section class="form-section"> 
+
+                <h2 class="filter-label">FILTRES</h2>
+
+                <div class="api-form"> 
+                    <!-- FILTRES DE RÉGIONS -->
+                    <div class="multi-select-container">
+                        <div class="select-btn">
+                            <span class="btnText">RÉGIONS</span>
+                            <span class="arrow">▼</span>
+                        </div>
+
+                        <div class="dropdown-content">
+                            <label><input type="checkbox" name="regions" value="ALL"> Toutes régions </label>
+                            {% for region in regions %}
+                                <label><input type="checkbox" name="regions" value="{{ region.id }}"> {{ region.libelle }}</label>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- FILTRES DE DÉPARTEMENTS -->
+                    <div class="multi-select-container">
+                        <div class="select-btn">
+                            <span class="btnText">DÉPARTEMENT</span>
+                            <span class="arrow">▼</span>
+                        </div>
+
+                        <div class="dropdown-content">
+                            <label><input type="checkbox" name="departements" value="ALL"> Tous départements </label>
+                            {% for depart in departements %}
+                                <label>
+                                    <input type="checkbox" name="departements" value="{{ depart.id }}" data-region="{{ depart.region_id }}"> {{ depart.libelle }}
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- FILTRES D'ANNÉES -->
+                    <select name="annee" id="annee_select" class="filtre-pilule">
+                        {% for a in range(2024, 2013, -1) %}
+                            <option value="{{ a }}" {% if a|string == annee|string %}selected{% endif %}>{{ a }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </section>
+
+            <div id="filtres-button">
+                <button type="submit" class="submit-btn">Afficher</button>
+                
+                <a href="{{ url_for('prescriptions.page_disparite') }}" class="reset-link">Réinitialiser</a>
+                
+                <button type="button" class="export-btn">Exporter (CSV)</button>
+            </div>
+                    
+                
+            
+        </form>     
+    </section>
+
+<!------------------------------------------->
+<!-- AFFICHAGE DES RÉSULTATS APRÈS FILTRAGE-->
+<!------------------------------------------->
+
+    {% if resultats is not none %}
+
+        <section class="prescriptions-results">
+            
+            {% if resultats|length > 0 %}
+                <div class="tabs-menu">
+                    <button class="tab-btn active" onclick="switchTab(event, 'tab-graphique')">Graphique</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'tab-tableau')">Tableau des données</button>
+                </div>
+
+
+                <div id="tab-graphique" class="tab-content active">
+                    <div class="chart-box prescription-chart">
+                        <canvas id="graphique-prescriptions"></canvas>
+                    </div>
+                </div>
+
+
+                <div id="tab-tableau" class="tab-content">
+                    <div class="prescriptions-table-box">
+                        <h3>Tableau des données brutes</h3>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    {% if mode_maillage_regional %}
+                                        <th>Région</th>
+                                    {% else %}
+                                        <th>Département</th>
+                                    {% endif %}
+                                    <th>Montant Total</th>
+                                    <th>Montant Moyen</th>
+                                    <th>Année</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for r in resultats %}
+                                    <tr>
+                                        {% if mode_maillage_regional %}
+                                            <td>{{ r.region if r.region is defined else 'N/A' }}</td>
+                                        {% else %}
+                                            <td>{{ r.departement if r.departement is defined else 'N/A' }}</td>
+                                        {% endif %}
+                                        <td>{{ r.montant_total_prescription_integer }} €</td>
+                                        <td>{{ r.montant_moyen_prescription_integer }} €</td>
+                                        <td>{{ r.annee }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            {% else %}
+
+                <div class="empty-message">
+                    <h3>Erreurs d'affichage</h3>
+                    <p>Les données rencontrent un problèmes dans leur affichage</p>
+                </div>
+
+            {% endif %}
+
+        </section>
+
+    {% else %}
+
+        <div class="empty-message">
+            <h3>Aucunes données</h3>
+            <p>Les données n'ont pas pu être récupéré</p>
+        </div>
+
+    {% endif %}
+
+    <script src="{{ url_for('static', filename='js/disparite_onglet.js') }}"></script>
+
+{% endblock %}
