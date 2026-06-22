@@ -169,8 +169,19 @@
         color: #aaa;
     }
 
+    /* ── Liens nav : underline blanc au survol ── */
+    nav a::after {
+        background-color: white;
+    }
+
     h1, h2, h3, h4, h5 {
         color: #f0f0f0;
+    }
+
+    /* ── Footer : titres colonnes restent verts ── */
+    .footer-col h3,
+    .footer-col h4 {
+        color: #41e46a;
     }
 
     /* ── Tableaux ── */
