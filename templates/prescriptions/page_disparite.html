@@ -4,11 +4,10 @@
 {% block contenu %}
 
     <section class="prescriptions-header">
-        <h1>Analyse des prescriptions selon le poste</h1>
+        <h1>Disparités géographiques</h1>
         <p>
-            Analyse des ordonnances et des soins prescrits par les professionnels de santé, 
-            croisant les catégories de soins (postes), les coûts (€) et les quantités (volumes) pour cartographier
-            les habitudes médicales et les dépenses de l'Assurance Maladie.
+            Identifier les écarts de prescription entre deux ou plusieurs zones géographiques
+             afin de mesurer précisément l'impact des déserts médicaux sur les dépenses de santé de ville.
         </p>
     </section>
 
@@ -26,62 +25,65 @@
 
     <section class="filters-box">
 
-        <section class="form-section"> 
+        <form action="{{ url_for('prescriptions.page_disparite') }}" method="get"  id="form-filtres">
 
-            <h2 class="filter-label">FILTRES</h2>
+            <section class="form-section"> 
 
-            <form action="{{ url_for('prescriptions.page_disparite') }}" method="get" class="api-form" id="form-filtres">
+                <h2 class="filter-label">FILTRES</h2>
 
+                <div class="api-form"> 
+                    <!-- FILTRES DE RÉGIONS -->
+                    <div class="multi-select-container">
+                        <div class="select-btn">
+                            <span class="btnText">RÉGIONS</span>
+                            <span class="arrow">▼</span>
+                        </div>
 
-                <!-- FILTRES DE RÉGIONS -->
-                <div class="multi-select-container">
-                    <div class="select-btn">
-                        <span class="btnText">RÉGIONS</span>
-                        <span class="arrow">▼</span>
+                        <div class="dropdown-content">
+                            <label><input type="checkbox" name="regions" value="ALL"> Toutes régions </label>
+                            {% for region in regions %}
+                                <label><input type="checkbox" name="regions" value="{{ region.id }}"> {{ region.libelle }}</label>
+                            {% endfor %}
+                        </div>
                     </div>
 
-                    <div class="dropdown-content">
-                        <label><input type="checkbox" name="regions" value="ALL"> Toutes régions </label>
-                        {% for region in regions %}
-                            <label><input type="checkbox" name="regions" value="{{ region.id }}"> {{ region.libelle }}</label>
+                    <!-- FILTRES DE DÉPARTEMENTS -->
+                    <div class="multi-select-container">
+                        <div class="select-btn">
+                            <span class="btnText">DÉPARTEMENT</span>
+                            <span class="arrow">▼</span>
+                        </div>
+
+                        <div class="dropdown-content">
+                            <label><input type="checkbox" name="departements" value="ALL"> Tous départements </label>
+                            {% for depart in departements %}
+                                <label>
+                                    <input type="checkbox" name="departements" value="{{ depart.id }}" data-region="{{ depart.region_id }}"> {{ depart.libelle }}
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- FILTRES D'ANNÉES -->
+                    <select name="annee" id="annee_select" class="filtre-pilule">
+                        {% for a in range(2024, 2013, -1) %}
+                            <option value="{{ a }}" {% if a|string == annee|string %}selected{% endif %}>{{ a }}</option>
                         {% endfor %}
-                    </div>
+                    </select>
                 </div>
+            </section>
 
-                <!-- FILTRES DE DÉPARTEMENTS -->
-                <div class="multi-select-container">
-                    <div class="select-btn">
-                        <span class="btnText">DÉPARTEMENT</span>
-                        <span class="arrow">▼</span>
-                    </div>
-
-                    <div class="dropdown-content">
-                        <label><input type="checkbox" name="departements" value="ALL"> Tous départements </label>
-                        {% for depart in departements %}
-                            <label><input type="checkbox" name="departements" value="{{ depart.id }}"> {{ depart.libelle }}</label>
-                        {% endfor %}
-                    </div>
-                </div>
-
-                <!-- FILTRES D'ANNÉES -->
-                <select name="annee" id="annee_select" class="filtre-pilule">
-                    {% for a in range(2024, 2013, -1) %}
-                        <option value="{{ a }}" {% if a|string == annee|string %}selected{% endif %}>{{ a }}</option>
-                    {% endfor %}
-                </select>
-
-            </form>
-
-        </section>
-
-        <nav id="filtre-button"> 
-            <button type="submit" form="form-filtres" class="submit-btn">Afficher</button>
-            <a href="{{ url_for('prescriptions.page_disparite') }}" class="reset-link">
-                Réinitialiser
-            </a>
-            <button class="export-btn">Exporter (CSV)</button>
-        </nav>
-        
+            <div id="filtres-button">
+                <button type="submit" class="submit-btn">Afficher</button>
+                
+                <a href="{{ url_for('prescriptions.page_disparite') }}" class="reset-link">Réinitialiser</a>
+                
+                <button type="button" class="export-btn">Exporter (CSV)</button>
+            </div>
+                    
+                
+            
+        </form>     
     </section>
 
 <!------------------------------------------->
@@ -95,9 +97,9 @@
             {% if resultats|length > 0 %}
                 <div class="tabs-menu">
                     <button class="tab-btn active" onclick="switchTab(event, 'tab-graphique')">Graphique</button>
-                    <button class="tab-btn" onclick="switchTab(event, 'tab-indicateur')">Indicateur</button>
                     <button class="tab-btn" onclick="switchTab(event, 'tab-tableau')">Tableau des données</button>
                 </div>
+
 
                 <div id="tab-graphique" class="tab-content active">
                     <div class="chart-box prescription-chart">
@@ -105,11 +107,6 @@
                     </div>
                 </div>
 
-                <div id="tab-indicateur" class="tab-content active">
-                    <div class="indicator prescription-chart">
-                        <canvas id="Indicateur"></canvas>
-                    </div>
-                </div>
 
                 <div id="tab-tableau" class="tab-content">
                     <div class="prescriptions-table-box">
@@ -149,13 +146,20 @@
             {% else %}
 
                 <div class="empty-message">
-                    <h3>Aucune donnée disponible</h3>
-                    <p>Aucune donnée n’a été trouvée pour cette sélection.</p>
+                    <h3>Erreurs d'affichage</h3>
+                    <p>Les données rencontrent un problèmes dans leur affichage</p>
                 </div>
 
             {% endif %}
 
         </section>
+
+    {% else %}
+
+        <div class="empty-message">
+            <h3>Aucunes données</h3>
+            <p>Les données n'ont pas pu être récupéré</p>
+        </div>
 
     {% endif %}
 

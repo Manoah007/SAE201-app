@@ -95,7 +95,7 @@ class AmeliAPI:
 
         print("\nameli_api.py | get_region_prescription()")
 
-        conditions_de_filtres = [f"annee='{annee}'"]
+        conditions_de_filtres = [f"year(annee)={annee}"]
 
         if region_list_id:
             ids_formates = ",".join([f"'{r_id}'" for r_id in region_list_id]) # On s'assure que tous les IDs sont des chaînes ou des entiers propres
@@ -124,7 +124,7 @@ class AmeliAPI:
         """
         print("\nameli_api.py | get_prescriptions_cross_filter()")
 
-        where_clauses = [f"annee='{annee}'"]
+        where_clauses = [f"year(annee)={annee}"]
         select_fields = ""
 
         # Si TOUTES les régions et TOUS les départements sont sélectionnés
