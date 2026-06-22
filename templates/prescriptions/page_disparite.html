@@ -41,7 +41,7 @@
                     {% endfor %}
                 </select>
 
-                <select name="departement_id" id="departement_select" multiple {% if mode_maillage_regional %}style="display: none;"{% endif %}>
+                <select name="departement_id" id="departement_select" multiple>
                     <option value="TOUT" {% if not departement_id or "TOUT" in departement_id %}selected{% endif %}>-- Tous départements --</option>
                     {% for depart in departements %}
                         <option value="{{ depart.id }}" {% if departement_id and depart.id|string in departement_id %}selected{% endif %}>
