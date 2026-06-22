@@ -77,6 +77,11 @@
         color: #41e46a;
     }
 
+    .dropdown-content a.active {
+        background: #1e3a2a;
+        color: #41e46a;
+    }
+
     /* ── Bouton toggle thème ── */
     .theme-toggle {
         background: #2a2a2a;
@@ -95,6 +100,7 @@
     .honoraires-page,
     .prescriptions-page,
     .comparaison-page,
+    .api-page,
     .carte-page,
     .faq-page {
         background: #121212;
@@ -112,6 +118,9 @@
     .prescriptions-table-box,
     .prescriptions-results,
     .result-title,
+    .api-card,
+    .api-table-preview,
+    .comparaison-table-box,
     .carte-container,
     .carte-legende {
         background: #1e1e1e;
@@ -137,13 +146,15 @@
     /* ── Filtres ── */
     .filters-box,
     .effectifs-filter-box,
-    .honoraires-filter-box {
+    .honoraires-filter-box,
+    .comparaison-filter-box {
         background: #2a2a2a;
     }
 
     .effectifs-form select,
     .honoraires-form select,
     .api-form select,
+    .comparaison-form select,
     .carte-form select {
         background: #3a3a3a;
         color: #e0e0e0;
@@ -167,8 +178,20 @@
         color: #e0e0e0;
     }
 
-    thead {
+    thead,
+    th {
+        background: #2a2a2a !important;
+        color: #9e9e9e !important;
+    }
+
+    /* ── Bouton Export ── */
+    .export-btn {
         background: #2a2a2a;
+        color: #e0e0e0;
+    }
+
+    .export-btn:hover {
+        background: #3a3a3a;
     }
 
     tbody tr:nth-child(even) {
