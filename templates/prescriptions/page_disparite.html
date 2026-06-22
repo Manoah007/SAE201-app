@@ -12,6 +12,18 @@
         </p>
     </section>
 
+    {% if error_message %}
+        <div class="alert-error" style="background-color: #fce8e6; 
+                                        color: #a51d24; 
+                                        padding: 12px; 
+                                        border-radius: 8px; 
+                                        margin-bottom: 15px; 
+                                        font-weight: 500; 
+                                        border: 1px solid #f5c2c7;">
+            {{ error_message }}
+        </div>
+    {% endif %}
+
     <section class="filters-box">
 
         <section class="form-section"> 
@@ -21,7 +33,7 @@
             <form action="{{ url_for('prescriptions.page_disparite') }}" method="get" class="api-form" id="form-filtres">
 
                 <select name="region_id" id="region_select" multiple>
-                    <option {% if not region_id %}selected{% endif %}>-- Toutes régions --</option>
+                    <option value="TOUT" {% if not region_id or "TOUT" in region_id %}selected{% endif %}>-- Toutes régions --</option>
                     {% for region in regions %}
                         <option value="{{ region.id }}" {% if region_id and region.id|string in region_id %}selected{% endif %}>
                             {{ region.libelle }}
@@ -29,8 +41,8 @@
                     {% endfor %}
                 </select>
 
-                <select name="departement_id" id="departement_select" multiple>
-                    <option  {% if not departement_id %}selected{% endif %}>-- Tous départements --</option>
+                <select name="departement_id" id="departement_select" multiple {% if mode_maillage_regional %}style="display: none;"{% endif %}>
+                    <option value="TOUT" {% if not departement_id or "TOUT" in departement_id %}selected{% endif %}>-- Tous départements --</option>
                     {% for depart in departements %}
                         <option value="{{ depart.id }}" {% if departement_id and depart.id|string in departement_id %}selected{% endif %}>
                             {{ depart.libelle }}
@@ -39,15 +51,14 @@
                 </select>
 
                 <select name="annee" id="annee_select">
-                    {% for a in range(2024, 2014, -1)%}
-                        <option value="{{ a }}" {% if a == annee %}selected{% endif %}>{{ a }}</option>
+                    {% for a in range(2024, 2013, -1) %}
+                        <option value="{{ a }}" {% if a|string == annee|string %}selected{% endif %}>{{ a }}</option>
                     {% endfor %}
                 </select>
 
             </form>
 
         </section>
-
 
         <nav id="filtre-button"> 
             <button type="submit" form="form-filtres" class="submit-btn">Afficher</button>
@@ -57,16 +68,14 @@
             <button class="export-btn">Exporter (CSV)</button>
         </nav>
         
-
     </section>
 
-    
-
-<!----------------------------------->
-<!-- GESTION DES DONNÉES RÉSULTATS -->
- <!----------------------------------->
+<!------------------------------------------->
+<!-- AFFICHAGE DES RÉSULTATS APRÈS FILTRAGE-->
+<!------------------------------------------->
 
     {% if resultats is not none %}
+
         <section class="prescriptions-results">
             
             {% if resultats|length > 0 %}
@@ -95,10 +104,10 @@
                         <table>
                             <thead>
                                 <tr>
-                                    {% if zone_geo == region_name %}
-                                        <th>region_name</th>
+                                    {% if mode_maillage_regional %}
+                                        <th>Région</th>
                                     {% else %}
-                                        <th>depart_name</th>
+                                        <th>Département</th>
                                     {% endif %}
                                     <th>Montant Total</th>
                                     <th>Montant Moyen</th>
@@ -108,12 +117,13 @@
                             <tbody>
                                 {% for r in resultats %}
                                     <tr>
-                                        {% if region %}
-                                            <td>{{ r.region }}</td>
-                                        {% elif departement %}
-                                            <td>{{ r.department }}</td>
+                                        {% if mode_maillage_regional %}
+                                            <td>{{ r.region if r.region is defined else 'N/A' }}</td>
+                                        {% else %}
+                                            <td>{{ r.departement if r.departement is defined else 'N/A' }}</td>
                                         {% endif %}
-                                        <td>{{ r.libelle_poste_prescription}}</td>
+                                        <td>{{ r.montant_total_prescription_integer }} €</td>
+                                        <td>{{ r.montant_moyen_prescription_integer }} €</td>
                                         <td>{{ r.annee }}</td>
                                     </tr>
                                 {% endfor %}
@@ -134,6 +144,7 @@
             {% endif %}
 
         </section>
+
     {% endif %}
 
 {% endblock %}
