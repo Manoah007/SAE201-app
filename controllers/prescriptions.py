@@ -49,7 +49,7 @@ def page_disparite():
         
         # CAS 1 : Premier chargement ou Option "TOUT" active sur les Régions (Maillage Régional)
         if is_region_tout:
-            print("💡 Règle active : Maillage Régional National")
+            print("Maillage Régional National")
             mode_maillage_regional = True
             # On appelle l'API sans filtres géographiques (Cas 1 de ton cross_filter)
             resultats = api.get_prescriptions_cross_filter(
@@ -58,16 +58,16 @@ def page_disparite():
                 annee=annee_str
             )
 
-        # CAS 2 : Région spécifique ET option "TOUT" sélectionnée au sein de cette région
+        # Région spécifique ET option "TOUT" sélectionnée au sein de cette région
         elif not is_region_tout and is_dept_tout:
-            print("💡 Règle active : Sélection rapide de tous les départements d'une région")
+            print("Sélection rapide de tous les départements d'une région")
             resultats = api.get_prescriptions_cross_filter(
                 region_list_id=clean_regions, 
                 departement_list_id=None, 
                 annee=annee_str
             )
 
-        # CAS 3 : Région spécifique ET départements spécifiques cochés
+        # Région spécifique ET départements spécifiques cochés
         else:
             # CONTRAINTE : Au moins 2 départements
             if len(clean_departments) < 2:
@@ -78,14 +78,13 @@ def page_disparite():
                 mode_maillage_regional = True
                 resultats = api.get_prescription_default(annee=annee_str)
             else:
-                print("Règle active : Comparaison ciblée de départements")
+                print("Comparaison ciblée de départements")
                 resultats = api.get_prescriptions_cross_filter(
                     region_list_id=clean_regions, 
                     departement_list_id=clean_departments, 
                     annee=annee_str
                 )
 
-        # 5. Envoi de TOUTES les variables nécessaires au template Jinja2
         return render_template(
             "prescriptions/page_disparite.html",
             regions=regions,
