@@ -74,9 +74,10 @@ class AmeliAPI:
 # REQUËTES SQL DE RÉCUPÉRATION DE DONNÉES RELATIVES AUX PRESCRIPTIONS #
 #=====================================================================#
 
-    def get_prescription_default(self, annee="2024", limite_ligne=30):
+    def get_prescription_default(self, annee='2024', limite_ligne=30):
         """Retourne les données par défaut quand rien n'est sélectionner par l"utilisateur"""
 
+        print("\nameli_api.py | get_prescription_default()")
         return self._requete("prescriptions",
                              {
                               "select" : "region,montant_total_prescription_integer,montant_moyen_prescription_integer,annee",
@@ -92,11 +93,13 @@ class AmeliAPI:
         On affiche toutes les régions si 'region_list_id=None'
         """
 
-        conditions_de_filtres = [f"annee={annee}"]
+        print("\nameli_api.py | get_region_prescription()")
+
+        conditions_de_filtres = [f"annee='{annee}'"]
 
         if region_list_id:
-            ids_formates = ",".join([str(r_id) for r_id in region_list_id]) # On s'assure que tous les IDs sont des chaînes ou des entiers propres
-            conditions_de_filtres.append(f"region_id IN ({ids_formates})") # Utilisation de l'opérateur IN pour gérer la liste
+            ids_formates = ",".join([f"'{r_id}'" for r_id in region_list_id]) # On s'assure que tous les IDs sont des chaînes ou des entiers propres
+            conditions_de_filtres.append(f"region IN ({ids_formates})") # Utilisation de l'opérateur IN pour gérer la liste
 
         where = " AND ".join(conditions_de_filtres)
 
@@ -119,28 +122,29 @@ class AmeliAPI:
         Cas 2 : Un (ou plusieurs) régions sont séléctionnées, on filtre selon les départements associés
         Cas 3 : Un (ou plusieurs) régions séléctionnées, on filtres selon TOUT les départements associés
         """
+        print("\nameli_api.py | get_prescriptions_cross_filter()")
 
-        where_clauses = [f"annee={annee}"]
+        where_clauses = [f"annee='{annee}'"]
         select_fields = ""
 
         # Si TOUTES les régions et TOUS les départements sont sélectionnés
         if not region_list_id and not departement_list_id:
-            print(f"Toutes les options ont été séléctionnées | select_fields : {select_fields}")
             select_fields = "region,montant_total_prescription_integer,montant_moyen_prescription_integer,annee"
+            print(f"Toutes les options ont été séléctionnées | select_fields : {select_fields}")
  
 
         # Si l'utilisateur a coché une (ou plusieurs) région(s) et des départements (min 2)
         elif departement_list_id:
-            ids_dep = ",".join([str(d_id) for d_id in departement_list_id])
-            where_clauses.append(f"departement_id IN ({ids_dep})")
+            ids_dep = ",".join([f"'{d_id}'" for d_id in departement_list_id])
+            where_clauses.append(f"departement IN ({ids_dep})")
             
             select_fields = "departement,montant_total_prescription_integer,montant_moyen_prescription_integer,annee"
             print(f"Sélections de (ou plusieurs) région(s) et min=2 départements | select_fields : {select_fields}")
         
         # Si l'utilisateur a sélectionné une (ou plusieurs) région(s) mais veut TOUS ses départements (Sélection rapide)
         elif region_list_id:
-            ids_reg = ",".join([str(r_id) for r_id in region_list_id])
-            where_clauses.append(f"region_id IN ({ids_reg})")
+            ids_reg = ",".join([f"'{r_id}'" for r_id in region_list_id])
+            where_clauses.append(f"region IN ({ids_reg})")
 
             select_fields = "departement,montant_total_prescription_integer,montant_moyen_prescription_integer,annee"
             print(f"Sélections de (ou plusieurs) région(s) et TOUS les départements | select_fields : {select_fields}")
