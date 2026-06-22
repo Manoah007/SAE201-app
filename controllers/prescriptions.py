@@ -19,40 +19,83 @@ def page_disparite():
     session = Session()
  
     try:
-        # Récupère les tables pour charger listes déroulantes
+        # Récupère les tables pour charger les listes déroulantes
         regions = session.query(Region).order_by(Region.libelle).all()
         departements = session.query(Departement).order_by(Departement.libelle).all()
 
-        
         # Récupération des choix de l'utilisateur (via l'URL en GET)
-        # Renvoie l'ID de chaque choix pour les identifiés 
-        region_list_id = request.args.getlist("region_id") # On récupère une liste d'ID pour des choix mutliple
+        region_list_id = request.args.getlist("region_id")
         departement_list_id = request.args.getlist("departement_id")
-        annee = request.args.get("annee", type=int)
+        
+        # On passe l'année en string pour correspondre à la signature de l'API ('2024')
+        annee = request.args.get("annee", default="2024")
+        annee_str = str(annee) if annee else "2024"
+
+
+
+        # Si l'utilisateur choisit "TOUT", la valeur soumise est souvent une chaîne "TOUT" ou vide
+        is_region_tout = not region_list_id or "TOUT" in region_list_id or "" in region_list_id
+        is_dept_tout = not departement_list_id or "TOUT" in departement_list_id or "" in departement_list_id
+
+        # Nettoyage des listes pour l'API (on ne garde que les vrais IDs numériques)
+        clean_regions = [r for r in region_list_id if str(r).isdigit()]
+        clean_departments = [d for d in departement_list_id if str(d).isdigit()]
 
         resultats = None
+        error_message = None
+        mode_maillage_regional = False
 
-        if not region_list_id and not departement_list_id and not annee:
-            # Cas où aucun filtre n'a été saisie
-            resultats = api.get_prescription_default()
 
-        elif not departement_list_id:
-            # Cas où l'on filtre selon la région et/ou l'année uniquement
-            resultats = api.get_region_prescription()
         
-        
+        # CAS 1 : Premier chargement ou Option "TOUT" active sur les Régions (Maillage Régional)
+        if is_region_tout:
+            print("💡 Règle active : Maillage Régional National")
+            mode_maillage_regional = True
+            # On appelle l'API sans filtres géographiques (Cas 1 de ton cross_filter)
+            resultats = api.get_prescriptions_cross_filter(
+                region_list_id=None, 
+                departement_list_id=None, 
+                annee=annee_str
+            )
 
-        # Envoi de TOUTES les variables nécessaires au template Jinja2
+        # CAS 2 : Région spécifique ET option "TOUT" sélectionnée au sein de cette région
+        elif not is_region_tout and is_dept_tout:
+            print("💡 Règle active : Sélection rapide de tous les départements d'une région")
+            resultats = api.get_prescriptions_cross_filter(
+                region_list_id=clean_regions, 
+                departement_list_id=None, 
+                annee=annee_str
+            )
+
+        # CAS 3 : Région spécifique ET départements spécifiques cochés
+        else:
+            # CONTRAINTE : Au moins 2 départements
+            if len(clean_departments) < 2:
+                print("Infraction règle : Moins de 2 départements sélectionnés")
+                error_message = "Contrainte de comparaison : Veuillez sélectionner au minimum 2 départements pour générer les graphiques."
+                
+                # Comportement de secours pour éviter un écran blanc : on affiche le maillage régional par défaut
+                mode_maillage_regional = True
+                resultats = api.get_prescription_default(annee=annee_str)
+            else:
+                print("Règle active : Comparaison ciblée de départements")
+                resultats = api.get_prescriptions_cross_filter(
+                    region_list_id=clean_regions, 
+                    departement_list_id=clean_departments, 
+                    annee=annee_str
+                )
+
+        # 5. Envoi de TOUTES les variables nécessaires au template Jinja2
         return render_template(
             "prescriptions/page_disparite.html",
-            # Pour charger les listes
             regions=regions,
             departements=departements,
-            #Pour filtrer les données
-            annee=annee,
-            region_id=region_list_id,
-            departement_id=departement_list_id,
+            annee=annee_str,
+            region_id=region_list_id,                  # Renvoie la sélection brute pour garder le focus HTML
+            departement_id=departement_list_id,          # Renvoie la sélection brute pour garder le focus HTML
             resultats=resultats,
+            error_message=error_message,               # Contient le message d'erreur si < 2 départements
+            mode_maillage_regional=mode_maillage_regional # Variable utilisable en Jinja2 pour masquer/afficher des blocs
         )
     
     except Exception as e:
@@ -60,7 +103,7 @@ def page_disparite():
         return "Une erreur serveur est survenue.", 500
     
     finally:
-        session.close() 
+        session.close()
         
 
 @bp_prescriptions.route("/prescriptions/correlation_demographique")
