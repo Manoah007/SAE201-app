@@ -1,19 +1,154 @@
 /* ==============================================================================
    STYLE CSS DU FILTRES
    ============================================================================== */
-.filters-box {
-    background-color: #ffffff;
-    border-radius: 20px;
-    padding: 0px 30px 50px 30px;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-    border: 1px solid #e2e8f0;
-    margin-bottom: 1.5rem;
-    
-    /* ⭐ CORRECTION MAJEURE : On force un alignement vertical */
-    display: flex;
-    flex-direction: column; 
-    gap: 0.5rem; /* Crée automatiquement l'espace parfait entre la zone grise et les boutons */
+
+/*********************************/
+/** STYLE RÉGION ET DÉPARTEMENT **/
+/*********************************/
+
+/* Import d'une police moderne similaire à celle de l'image (Google Fonts) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+.multi-select-container {
+  position: relative;
+  width: 280px;
+  font-family: 'Inter', sans-serif;
+  color: #111827; /* Noir profond du texte de l'image */
 }
+
+/* 1. Le bouton principal (façon "bouton pilule" de l'image) */
+.select-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 22px;
+  border: 1px solid #f3f4f6; /* Bordure très discrète */
+  border-radius: 50px; /* Bords complètement arrondis comme le bouton vert */
+  background-color: #ffffff;
+  cursor: pointer;
+  font-weight: 600; /* Texte en gras comme sur la charte */
+  font-size: 15px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03); /* Ombre très douce */
+  transition: all 0.3s ease;
+}
+
+/* Effet au survol du bouton */
+.select-btn:hover {
+  border-color: #3de068; /* Vert vif de l'image */
+  background-color: #f9fafb;
+}
+
+/* La flèche prend la couleur verte pour le rappel visuel */
+.select-btn .arrow {
+  color: #3de068; 
+  font-size: 12px;
+}
+
+/* 2. Le menu déroulant (façon "carte" de l'image) */
+.dropdown-content {
+  display: none; 
+  position: absolute;
+  top: calc(100% + 10px); /* Laisse un espace de 10px sous le bouton */
+  left: 0;
+  width: 100%;
+  border-radius: 16px; /* Bords arrondis comme les cartes "100M+", "Temps réel" */
+  background-color: #ffffff;
+  z-index: 10;
+  max-height: 250px;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* Ombre élégante flottante */
+  padding: 8px 0;
+}
+
+.dropdown-content.show {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 3. Les options à l'intérieur */
+.dropdown-content label {
+  padding: 12px 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  font-weight: 400;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Effet au survol d'une option : utilise le vert pâle de l'image */
+.dropdown-content label:hover {
+  background-color: #e6fbee; /* Vert pâle similaire au fond des icônes */
+  color: #0b8a2f; /* Texte légèrement plus foncé pour la lisibilité */
+  font-weight: 600;
+}
+
+/* 4. Les cases à cocher */
+.dropdown-content input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  /* Utilise la propriété native pour colorer la case avec le vert vif */
+  accent-color: #3de068; 
+}
+
+/* 5. Esthétique de la barre de défilement (Scrollbar) */
+.dropdown-content::-webkit-scrollbar {
+  width: 6px;
+}
+.dropdown-content::-webkit-scrollbar-thumb {
+  background-color: #e5e7eb;
+  border-radius: 10px;
+}
+.dropdown-content::-webkit-scrollbar-track {
+  margin: 10px 0;
+}
+
+
+/**************************/
+/** STYLE FILTRES ANNÉES **/
+/**************************/
+/* Ciblage de notre select simple */
+.filtre-pilule {
+  /* 1. On efface le style natif du navigateur (flèche classique incluse) */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  /* 2. Dimensions et typographie */
+  /* On laisse un padding à droite plus grand (40px) pour ne pas que le texte chevauche la flèche */
+  padding: 14px 40px 14px 22px; 
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #002b49; /* Le bleu très foncé utilisé sur le mot "RÉGIONS" */
+  
+  /* 3. Esthétique de la forme */
+  background-color: #ffffff;
+  border: none; /* Supprime la bordure verte visible sur votre image */
+  border-radius: 50px; /* Forme de pilule */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03); /* Ombre douce identique aux autres */
+  cursor: pointer;
+
+  /* 4. Création de la petite flèche verte personnalisée */
+  /* SVG encodé directement dans le CSS (la couleur %233de068 correspond au vert #3de068) */
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="%233de068"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 18px center; /* Positionne la flèche à droite au centre */
+  background-size: 16px; /* Taille de la flèche */
+  
+  /* Optionnel : fixe une largeur minimale pour l'homogénéité */
+  min-width: 180px; 
+}
+
+/* 5. Accessibilité : État au clic/focus */
+.filtre-pilule:focus {
+  outline: 2px solid #3de068;
+  outline-offset: 2px;
+}
+
+
 
 /* ==========================================
    LE PETIT BLOC GRIS (Intérieur - Relief)

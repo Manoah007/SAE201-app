@@ -1,65 +1,54 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const regionTout = document.getElementById('region_tout');
-    const regionCheckboxes = document.querySelectorAll('.region-checkbox');
-    const deptFilterGroup = document.getElementById('dept_filter_group');
-    
-    const departementTout = document.getElementById('departement_tout');
-    const departementCheckboxes = document.querySelectorAll('.departement-checkbox');
-    const formFiltres = document.getElementById('form-filtres');
+document.addEventListener('DOMContentLoaded', () => {
+    // On récupère tous les blocs de filtres à choix multiple
+    const containers = document.querySelectorAll('.multi-select-container');
+    const form = document.getElementById('form-filtres');
 
-    // --- LOGIQUE DES CHECKBOXES DE RÉGION ---
-    if (regionTout) {
-        regionTout.addEventListener('change', function () {
-            if (this.checked) {
-                // Si on coche TOUT, on décoche les autres régions
-                regionCheckboxes.forEach(cb => cb.checked = false);
-                if (deptFilterGroup) deptFilterGroup.style.display = 'none';
-                if (departementTout) departementTout.checked = true;
-                departementCheckboxes.forEach(cb => cb.checked = false);
-            }
-        });
+    containers.forEach(container => {
+        // Pour chaque bloc, on cherche ses éléments internes spécifiques
+        const btn = container.querySelector('.select-btn');
+        const dropdown = container.querySelector('.dropdown-content');
+        const btnText = container.querySelector('.btnText');
+        const defaultText = btnText.textContent; // Sauvegarde le texte d'origine ("RÉGIONS" ou "DÉPARTEMENT")
+        const checkboxes = dropdown.querySelectorAll('input[type="checkbox"]');
 
-        regionCheckboxes.forEach(cb => {
-            cb.addEventListener('change', function () {
-                if (this.checked) {
-                    // Si on coche une région, on décoche obligatoirement le "TOUT"
-                    regionTout.checked = false;
-                    if (deptFilterGroup) deptFilterGroup.style.style.display = 'block';
-                }
+        // OUVERTURE / FERMETURE au clic sur le bouton
+        btn.addEventListener('click', (event) => {
+            // Ferme les autres menus déroulants s'ils sont ouverts
+            containers.forEach(c => {
+                if (c !== container) c.querySelector('.dropdown-content').classList.remove('show');
             });
-        });
-    }
-
-    // --- LOGIQUE DES CHECKBOXES DE DÉPARTEMENT ---
-    if (departementTout) {
-        departementTout.addEventListener('change', function () {
-            if (this.checked) {
-                departementCheckboxes.forEach(cb => cb.checked = false);
-            }
+            // Alterne l'affichage du menu actuel
+            dropdown.classList.toggle('show');
+            event.stopPropagation(); // Empêche le clic de se propager au document
         });
 
-        departementCheckboxes.forEach(cb => {
-            cb.addEventListener('change', function () {
-                if (this.checked) {
-                    departementTout.checked = false;
+        // MISE À JOUR DU TEXTE DU BOUTON au changement des cases à cocher
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                const checkedBoxes = dropdown.querySelectorAll('input[type="checkbox"]:checked');
+                const checkedCount = checkedBoxes.length;
+
+                if (checkedCount === 0) {
+                    btnText.textContent = defaultText; // Revenir à "RÉGIONS"
+                } else if (checkedCount === 1) {
+                    // S'il n'y a qu'un choix, on affiche son nom exact (ex: "Bretagne")
+                    btnText.textContent = checkedBoxes[0].parentElement.textContent.trim();
                 } else {
-                    const unDeptEstCoche = Array.from(departementCheckboxes).some(c => c.checked);
-                    if (!unDeptEstCoche) departementTout.checked = true;
+                    // S'il y a plusieurs choix, on affiche le nombre (ex: "3 sélectionnés")
+                    btnText.textContent = `${checkedCount} sélectionnés`;
                 }
+
+                // SOUUMISSION AUTOMATIQUE (Optionnel)
+                // Si tu veux que la page se recharge dès qu'on coche une case, décommente la ligne suivante :
+                // form.submit();
             });
         });
-    }
+    });
 
-    // --- SÉCURITÉ AU SUBMIT (CONTRAINTE STRICTE MIN 2 DEPARTEMENTS) ---
-    if (formFiltres) {
-        formFiltres.addEventListener('submit', function (e) {
-            const deptsCoches = Array.from(departementCheckboxes).filter(cb => cb.checked);
-            
-            // Si on filtre une région spécifique mais qu'on choisit des départements précis, il en faut min 2
-            if (!regionTout.checked && !departementTout.checked && deptsCoches.length < 2) {
-                e.preventDefault();
-                alert("⚠️ Contrainte de comparaison : Veuillez cocher au minimum 2 départements pour générer les graphiques.");
-            }
+    // FERMETURE DU MENU si on clique n'importe où à l'extérieur sur la page
+    document.addEventListener('click', () => {
+        containers.forEach(container => {
+            container.querySelector('.dropdown-content').classList.remove('show');
         });
-    }
+    });
 });
