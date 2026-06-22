@@ -121,7 +121,7 @@ class AmeliAPI:
         """
 
         where_clauses = [f"annee={annee}"]
-
+        select_fields = ""
 
         # Si TOUTES les régions et TOUS les départements sont sélectionnés
         if not region_list_id and not departement_list_id:
