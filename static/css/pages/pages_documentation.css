@@ -1,0 +1,357 @@
+/* ==========================================
+   DOCUMENTATION - PAGE
+   ========================================== */
+
+.documentation-page {
+    background: #f4f4f4;
+    padding: 45px 50px;
+}
+
+/* HERO */
+
+.documentation-hero {
+    max-width: 1350px;
+    margin: 0 auto 35px;
+    background: white;
+    border-radius: 22px;
+    padding: 45px 50px;
+    display: grid;
+    grid-template-columns: 1.5fr 0.8fr;
+    gap: 40px;
+    align-items: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+}
+
+.doc-badge {
+    display: inline-block;
+    background: #dfffe8;
+    color: #0c8d35;
+    font-weight: bold;
+    padding: 7px 16px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+    font-size: 14px;
+}
+
+.documentation-hero h1 {
+    font-size: 42px;
+    line-height: 1.15;
+    margin-bottom: 18px;
+    font-weight: 800;
+}
+
+.documentation-hero p {
+    font-size: 18px;
+    color: #555;
+    line-height: 1.6;
+}
+
+.doc-hero-actions {
+    display: flex;
+    gap: 18px;
+    margin-top: 28px;
+}
+
+.doc-hero-card {
+    background: #f7f7f7;
+    border-radius: 18px;
+    padding: 28px;
+    border: 1px solid #eeeeee;
+}
+
+.doc-hero-card h3 {
+    font-size: 24px;
+    margin-bottom: 12px;
+}
+
+.doc-hero-card p {
+    font-size: 16px;
+}
+
+/* MINI CARTES */
+
+.doc-quick-grid {
+    max-width: 1350px;
+    margin: 0 auto 35px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+}
+
+.doc-mini-card {
+    background: white;
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+}
+
+.doc-mini-card span {
+    width: 40px;
+    height: 40px;
+    background: #dfffe8;
+    color: #0c8d35;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    margin-bottom: 16px;
+}
+
+.doc-mini-card h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.doc-mini-card p {
+    color: #555;
+    line-height: 1.5;
+}
+
+/* LAYOUT DOCUMENTATION */
+
+.doc-content-layout {
+    max-width: 1350px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 28px;
+    align-items: start;
+}
+
+.doc-sidebar {
+    background: white;
+    border-radius: 18px;
+    padding: 24px;
+    position: sticky;
+    top: 90px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+}
+
+.doc-sidebar h3 {
+    margin-bottom: 18px;
+    font-size: 20px;
+}
+
+.doc-sidebar a {
+    display: block;
+    text-decoration: none;
+    color: #333;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    font-weight: 500;
+}
+
+.doc-sidebar a:hover {
+    color: #23b84d;
+}
+
+.doc-main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.doc-section {
+    background: white;
+    border-radius: 18px;
+    padding: 32px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+}
+
+.doc-section h2 {
+    font-size: 28px;
+    margin-bottom: 16px;
+}
+
+.doc-section p {
+    color: #555;
+    line-height: 1.7;
+    margin-bottom: 12px;
+}
+
+/* ÉTAPES */
+
+.doc-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-top: 20px;
+}
+
+.doc-steps div {
+    background: #f7f7f7;
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.doc-steps strong {
+    width: 34px;
+    height: 34px;
+    background: #41e46a;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+/* CARTES DE PAGES */
+
+.doc-pages-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    margin-top: 20px;
+}
+
+.doc-page-link {
+    background: #f7f7f7;
+    border-radius: 16px;
+    padding: 22px;
+    text-decoration: none;
+    color: #111;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.doc-page-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 18px rgba(0, 0, 0, 0.06);
+}
+
+.doc-page-link h3 {
+    margin-bottom: 8px;
+    color: #23b84d;
+}
+
+.doc-page-link p {
+    margin: 0;
+}
+
+/* INFO BOX */
+
+.doc-info-box {
+    background: #dfffe8;
+    border-left: 5px solid #41e46a;
+    border-radius: 14px;
+    padding: 22px;
+    margin-top: 18px;
+}
+
+.doc-info-box h3 {
+    margin-bottom: 8px;
+}
+
+.doc-info-box p {
+    margin: 0;
+    color: #0c4d22;
+}
+
+/* CONSEILS */
+
+.doc-tips {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.doc-tips li {
+    background: #f7f7f7;
+    border-radius: 14px;
+    padding: 16px 18px;
+    color: #333;
+}
+
+.doc-tips li::before {
+    content: "✓";
+    color: #23b84d;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1000px) {
+    .documentation-hero {
+        grid-template-columns: 1fr;
+    }
+
+    .doc-quick-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .doc-content-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .doc-sidebar {
+        position: static;
+    }
+
+    .doc-steps {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 650px) {
+    .documentation-page {
+        padding: 30px 20px;
+    }
+
+    .doc-quick-grid,
+    .doc-pages-grid,
+    .doc-steps {
+        grid-template-columns: 1fr;
+    }
+
+    .documentation-hero h1 {
+        font-size: 32px;
+    }
+}
+
+/* MODE SOMBRE */
+
+[data-theme="dark"] .documentation-page {
+    background: #121212;
+}
+
+[data-theme="dark"] .documentation-hero,
+[data-theme="dark"] .doc-mini-card,
+[data-theme="dark"] .doc-sidebar,
+[data-theme="dark"] .doc-section {
+    background: #1e1e1e;
+    color: #e0e0e0;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .doc-hero-card,
+[data-theme="dark"] .doc-steps div,
+[data-theme="dark"] .doc-page-link,
+[data-theme="dark"] .doc-tips li {
+    background: #2a2a2a;
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .documentation-hero p,
+[data-theme="dark"] .doc-mini-card p,
+[data-theme="dark"] .doc-section p,
+[data-theme="dark"] .doc-sidebar a,
+[data-theme="dark"] .doc-tips li {
+    color: #aaa;
+}
+
+[data-theme="dark"] .doc-page-link h3 {
+    color: #41e46a;
+}
+
+[data-theme="dark"] .doc-info-box {
+    background: #1e3a2a;
+    border-left-color: #41e46a;
+}
+
+[data-theme="dark"] .doc-info-box p {
+    color: #c9f5d6;
+}

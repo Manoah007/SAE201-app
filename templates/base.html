@@ -43,7 +43,7 @@
             </div>
 
             <div class="nav-right">
-                <a href="#">Documentation</a>
+                <a href="{{ url_for('documentation.afficher') }}" class="{% if request.endpoint == 'documentation.afficher' %}active{% endif %}">Documentation</a>
                 <a href="#">À propos</a>
 
                 <button id="theme-toggle" class="theme-toggle" aria-label="Passer au thème sombre" title="Thème sombre">
@@ -84,7 +84,7 @@
 
         <div class="footer-col">
             <h4>Ressources</h4>
-                <p><a href="#">Documentation API</a></p>
+                <p><a href="{{ url_for('documentation.afficher') }}">Documentation API</a></p>
                 <p><a href="#">Guides</a></p>
                 <p><a href="{{ url_for('faq') }}">FAQ</a></p>
                 <p><a href="#">Blog</a></p>
