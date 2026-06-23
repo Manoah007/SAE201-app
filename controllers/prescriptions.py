@@ -33,9 +33,9 @@ def page_disparite():
 
 
 
-        # Si l'utilisateur choisit "TOUT", la valeur soumise est souvent une chaîne "TOUT" ou vide
-        is_region_tout = not region_list_id or "TOUT" in region_list_id or "" in region_list_id
-        is_dept_tout = not departement_list_id or "TOUT" in departement_list_id or "" in departement_list_id
+        # Si l'utilisateur choisit "ALL", la valeur soumise est souvent une chaîne "ALL" ou vide
+        is_region_tout = not region_list_id or "ALL" in region_list_id or "" in region_list_id
+        is_dept_tout = not departement_list_id or "ALL" in departement_list_id or "" in departement_list_id
 
         # Nettoyage des listes pour l'API (on ne garde que les vrais IDs numériques)
         clean_regions = [r for r in region_list_id if str(r).isdigit()]
