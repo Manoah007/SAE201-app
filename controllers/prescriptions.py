@@ -43,8 +43,35 @@ def page_disparite():
         mode_maillage_regional = False
 
         # APPELS API (Scénarios)
-        if is_region_tout and not is_dept_tout:
-            print("I - Maillage Régional National")
+        if departments_ids or (is_dept_tout and not departments_ids):
+            print("I - Sélection de départements spécifiques")
+            resultats = api.get_departement_prescriptions(
+                region_list_id=regions_ids,
+                departement_list_id=departments_ids, 
+                annee=annee_str,
+                limite_ligne=limit_ligne
+            )
+
+        elif is_dept_tout and is_region_tout:
+            print("II - Sélection de tous les départements de France")
+            resultats = api.get_prescription_toutes_zones(
+                toutes_regions=True,
+                tous_départ=True,
+                annee=annee_str,
+                limite_ligne=limit_ligne
+            )  
+
+        elif regions_ids and not departments_ids:
+            print("III - Sélection de régions spécifiques")
+            mode_maillage_regional = True
+            resultats = api.get_region_prescription(
+                region_list_id=regions_ids, 
+                annee=annee_str,
+                limite_ligne=limit_ligne
+            )
+        
+        else:
+            print("IV - Maillage Régional National")
             mode_maillage_regional = True
             resultats = api.get_prescription_toutes_zones(
                 toutes_regions=True,
@@ -53,31 +80,10 @@ def page_disparite():
                 limite_ligne=limit_ligne
             )
 
-        elif regions_ids and not departments_ids:
-            print("II - Sélection de régions spécifiques")
-            mode_maillage_regional = True
-            resultats = api.get_region_prescription(
-                region_list_id=regions_ids, 
-                annee=annee_str,
-                limite_ligne=limit_ligne
-            )
-
-        else:
-            if is_dept_tout:
-                print("III.A - Sélection de tous les départements de France")
-                resultats = api.get_prescription_toutes_zones(
-                    toutes_regions=True,
-                    tous_départ=True,
-                    annee=annee_str,
-                    limite_ligne=limit_ligne
-                )
-            elif departments_ids:
-                print("III.B - Sélection de départements spécifiques")
-                resultats = api.get_departement_prescriptions(
-                    departement_list_id=departments_ids, 
-                    annee=annee_str,
-                    limite_ligne=limit_ligne
-                )
+        
+        
+        
+        
 
         # PRÉPARATION DES DONNÉES POUR CHART.JS
         labels_zones = []

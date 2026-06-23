@@ -77,7 +77,7 @@ class AmeliAPI:
     def get_prescription_toutes_zones(self, toutes_regions=True, tous_départ=False, annee="2024", limite_ligne=30):
         """Retourne les données par défaut quand rien n'est sélectionner par l"utilisateur"""
 
-        print("\nameli_api.py | get_prescription_default()")
+        print("\nameli_api.py | get_prescription_toutes_zones()")
 
         if toutes_regions and tous_départ:
             return self._requete("prescriptions",
@@ -130,23 +130,29 @@ class AmeliAPI:
         )
 
 
-    def get_departement_prescriptions(self, departement_list_id=None, annee="2024", limite_ligne=100):
+    def get_departement_prescriptions(self, region_list_id=None, departement_list_id=None, annee="2024", limite_ligne=100):
         """
         Croise les filtres du montant (total et moyen) selon la région et le département sur une annéee
         """
-        print("\nameli_api.py | get_prescriptions_cross_filter()")
+        print("\nameli_api.py | get_departement_prescriptionsr()")
 
         where_clauses = [f"year(annee)={annee}"]
         select_fields = ""
 
-        # Si l'utilisateur a coché une (ou plusieurs) région(s) et des départements (min 2)
+        
         if departement_list_id:
             ids_dep = ",".join([f"'{d_id}'" for d_id in departement_list_id])
             where_clauses.append(f"departement IN ({ids_dep})")
             
             select_fields = "libelle_departement,SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen"
-            print(f"Sélections de (ou plusieurs) région(s) et min=2 départements | select_fields : {select_fields}")
+            print(f"Sélections de départements spécifiques | select_fields : {select_fields}")
+        
+        else:
+            ids_reg = ",".join([f"'{r_id}'" for r_id in region_list_id])
+            where_clauses.append(f"region IN ({ids_reg})")
 
+            select_fields = "libelle_departement,SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen"
+            print(f"Sélections de départements spécifiques | select_fields : {select_fields}")
 
         where_final = " AND ".join(where_clauses)
         print(f"Filtre WHERE : {where_final}")

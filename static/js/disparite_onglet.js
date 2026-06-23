@@ -222,6 +222,57 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 100);
         }
     }
+    
+    // ---------------------------------------------------------
+    // EXPORTATION DES DONNÉES EN CSV (Bouton Exporter)
+    // ---------------------------------------------------------
+    const btnExport = document.querySelector('.export-btn');
+
+    if (btnExport) {
+        btnExport.addEventListener('click', () => {
+            // 1. On cible le tableau HTML
+            const table = document.querySelector('.prescriptions-table-box table');
+            if (!table) {
+                alert("Aucune donnée à exporter.");
+                return;
+            }
+
+            // 2. On prépare le fichier CSV (\uFEFF force l'UTF-8 pour que Excel lise bien les accents)
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+
+            // 3. On lit toutes les lignes du tableau (titres + données)
+            const rows = table.querySelectorAll('tr');
+            rows.forEach(row => {
+                const cols = row.querySelectorAll('th, td');
+                const rowData = Array.from(cols).map(col => {
+                    // On récupère le texte en enlevant les espaces inutiles
+                    let text = col.innerText.trim();
+                    
+                    // Nettoyage pour Excel : on enlève le symbole "€" pour avoir de vrais nombres
+                    text = text.replace('€', '').trim();
+                    
+                    // Optionnel pour la France : remplacer le point par une virgule pour les décimales
+                    // text = text.replace('.', ','); 
+
+                    // On met chaque cellule entre guillemets pour éviter les bugs si un nom contient une virgule
+                    return `"${text}"`;
+                });
+                
+                // On assemble la ligne avec un point-virgule (le standard d'Excel en France)
+                csvContent += rowData.join(";") + "\r\n";
+            });
+
+            // 4. On simule un clic sur un lien invisible pour lancer le téléchargement
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "export_prescriptions_ameli.csv");
+            
+            document.body.appendChild(link); // Requis pour Firefox
+            link.click();
+            document.body.removeChild(link); // On nettoie après le téléchargement
+        });
+    }
 });
 
 
