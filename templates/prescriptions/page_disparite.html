@@ -83,7 +83,7 @@
                         </div>
                     </div>
 
-                    
+
                 </div>
             </section>
 
@@ -125,6 +125,24 @@
                 <div id="tab-tableau" class="tab-content">
                     <div class="prescriptions-table-box">
                         <h3>Tableau des données brutes</h3>
+
+
+                        <div class="multi-select-container">
+                            <div class="select-btn">
+                                <span class="btnText">Ligne max</span>
+                                <span class="arrow">▼</span>
+                            </div>
+
+                            <div class="dropdown-content">
+                                <label><input type="radio" name="ligne_max" value="25" form="form-filtres" {% if limite_ligne|string == '25' %}checked{% endif %}>25</label>
+                                <label><input type="radio" name="ligne_max" value="50" form="form-filtres" {% if limite_ligne|string == '50' %}checked{% endif %}>50</label>
+                                <label><input type="radio" name="ligne_max" value="100" form="form-filtres" {% if not limite_ligne or limite_ligne|string == '100' %}checked{% endif %}>100</label>
+                                <label><input type="radio" name="ligne_max" value="150" form="form-filtres" {% if limite_ligne|string == '150' %}checked{% endif %}>150</label>
+                                <label><input type="radio" name="ligne_max" value="200" form="form-filtres" {% if limite_ligne|string == '200' %}checked{% endif %}>200</label>
+                                <label><input type="radio" name="ligne_max" value="250" form="form-filtres" {% if limite_ligne|string == '250' %}checked{% endif %}>250</label>
+                            </div>
+                        </div>
+
 
                         <table>
                             <thead>

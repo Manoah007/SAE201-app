@@ -126,7 +126,46 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Initialisation au chargement de la page
     filtrerDepartements();
+
+    const ligneMaxRadios = document.querySelectorAll('input[name="ligne_max"]');
+    const formulairePrincipal = document.getElementById('form-filtres');
+
+    ligneMaxRadios.forEach(radio => {
+        radio.addEventListener('change', () => {
+            // Dès qu'une nouvelle limite est choisie, on envoie le formulaire au serveur Python
+            if (formulairePrincipal) {
+                formulairePrincipal.submit();
+            }
+        });
+    });
+
+    // ---------------------------------------------------------
+    // RESTAURATION DE L'ONGLET ET DÉFILEMENT (Mémoire de session)
+    // ---------------------------------------------------------
+    const ongletSauvegarde = sessionStorage.getItem('ongletActif');
+    
+    // Si une sauvegarde existe ET que ce n'est pas le graphique (qui est là par défaut)
+    if (ongletSauvegarde && ongletSauvegarde !== 'tab-graphique') {
+        // On trouve le bouton qui correspond à cet onglet
+        const boutonCorrespondant = document.querySelector(`button[onclick*="${ongletSauvegarde}"]`);
+        
+        if (boutonCorrespondant) {
+            // 1. On simule virtuellement un clic sur ce bouton
+            boutonCorrespondant.click();
+            
+            // 2. On fait défiler la page automatiquement et en douceur vers la zone de données
+            // Pour éviter un saut brutal, on laisse un petit délai pour que le HTML se place bien
+            setTimeout(() => {
+                document.getElementById(ongletSauvegarde).scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' // Aligne le haut de l'onglet avec le haut de l'écran
+                });
+            }, 100);
+        }
+    }
 });
+
+
 
 /*************************************************************/
 /** SCRIPT EN JS POUR GÉRÉ LES ONGLETS GRAPHIQUE ET TABLEAU **/
@@ -158,4 +197,7 @@ function switchTab(event, tabId) {
 
     // 4. Ajouter la classe "active" au bouton qui vient d'être cliqué
     event.currentTarget.classList.add('active');
+
+    // 5. NOUVEAU : Sauvegarder le choix dans la mémoire du navigateur !
+    sessionStorage.setItem('ongletActif', tabId);
 }
