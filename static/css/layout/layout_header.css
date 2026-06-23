@@ -17,6 +17,18 @@ header {
     display: flex;
     align-items: center;
     gap: 10px;
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Annule l'underline animé hérité de nav a::after */
+.logo::after {
+    display: none !important;
+}
+
+.logo:hover .logo-text {
+    text-shadow: 0 0 0.80px currentColor;
+    transition: 0.7s;
 }
 
 .logo-img {
