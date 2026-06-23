@@ -29,7 +29,7 @@ def page_disparite():
         departement_list = request.args.getlist("departements")
         
         annee_str = str(request.args.get("annee", default="2024"))
-        limit_ligne = request.args.get("ligne_max", default=100, type=int)
+        limit_ligne = request.args.get("ligne_max", default=110, type=int)
 
         # ANALYSE DES CHOIX
         is_region_tout = not region_list or "ALL" in region_list or "" in region_list
@@ -43,8 +43,18 @@ def page_disparite():
         mode_maillage_regional = False
 
         # APPELS API (Scénarios)
-        if departments_ids or (is_dept_tout and not departments_ids):
-            print("I - Sélection de départements spécifiques")
+        if not request.args.get('regions') and not request.args.get('departements'):
+            print("0 - Premier chargement de page, aucune sélection")
+            mode_maillage_regional = True
+            resultats = api.get_prescription_toutes_zones(
+                toutes_regions=True,
+                tous_départ=False,
+                annee=annee_str,
+                limite_ligne=limit_ligne
+            )
+
+        elif departments_ids or (is_dept_tout and regions_ids):
+            print("I - Affichage maillage Départemental (Filtré)")
             resultats = api.get_departement_prescriptions(
                 region_list_id=regions_ids,
                 departement_list_id=departments_ids, 
@@ -53,7 +63,7 @@ def page_disparite():
             )
 
         elif is_dept_tout and is_region_tout:
-            print("II - Sélection de tous les départements de France")
+            print("I - Sélection de tous les départements de France")
             resultats = api.get_prescription_toutes_zones(
                 toutes_regions=True,
                 tous_départ=True,
@@ -62,7 +72,7 @@ def page_disparite():
             )  
 
         elif regions_ids and not departments_ids:
-            print("III - Sélection de régions spécifiques")
+            print("II - Sélection de régions spécifiques")
             mode_maillage_regional = True
             resultats = api.get_region_prescription(
                 region_list_id=regions_ids, 

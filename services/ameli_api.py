@@ -137,22 +137,19 @@ class AmeliAPI:
         print("\nameli_api.py | get_departement_prescriptionsr()")
 
         where_clauses = [f"year(annee)={annee}"]
-        select_fields = ""
-
+        select_fields = "libelle_departement,SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen"
+        print(f"Sélections de départements spécifiques | select_fields : {select_fields}")
         
         if departement_list_id:
             ids_dep = ",".join([f"'{d_id}'" for d_id in departement_list_id])
             where_clauses.append(f"departement IN ({ids_dep})")
             
-            select_fields = "libelle_departement,SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen"
-            print(f"Sélections de départements spécifiques | select_fields : {select_fields}")
-        
-        else:
+        if region_list_id:
             ids_reg = ",".join([f"'{r_id}'" for r_id in region_list_id])
             where_clauses.append(f"region IN ({ids_reg})")
-
-            select_fields = "libelle_departement,SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen"
-            print(f"Sélections de départements spécifiques | select_fields : {select_fields}")
+        
+        else:
+            print(f"Les listes sont vides | region_list_id={region_list_id}, departement_list_id={departement_list_id}")
 
         where_final = " AND ".join(where_clauses)
         print(f"Filtre WHERE : {where_final}")

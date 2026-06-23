@@ -28,7 +28,7 @@
                         </div>
 
                         <div class="dropdown-content">
-                            <label><input type="checkbox" name="regions" value="ALL" {% if not region_id or 'ALL' in region_id %}checked{% endif %}>
+                            <label><input type="checkbox" name="regions" value="ALL" {% if 'ALL' in region_id %}checked{% endif %}>
                                     Toutes régions 
                             </label>
                             {% for region in regions %}
@@ -48,7 +48,7 @@
                         </div>
 
                         <div class="dropdown-content">
-                            <label><input type="checkbox" name="departements" value="ALL" {% if not departement_id or 'ALL' in departement_id %}checked{% endif %}> 
+                            <label><input type="checkbox" name="departements" value="ALL" {% if 'ALL' in departement_id %}checked{% endif %}> 
                                 Tous départements 
                             </label>
                             {% for depart in departements %}
@@ -133,10 +133,8 @@
                             <div class="dropdown-content">
                                 <label><input type="radio" name="ligne_max" value="25" form="form-filtres" {% if limite_ligne|int == 25 %}checked{% endif %}>25</label>
                                 <label><input type="radio" name="ligne_max" value="50" form="form-filtres" {% if limite_ligne|int == 50 %}checked{% endif %}>50</label>
-                                <label><input type="radio" name="ligne_max" value="100" form="form-filtres" {% if not limite_ligne or limite_ligne|int == 100 %}checked{% endif %}>100</label>
-                                <label><input type="radio" name="ligne_max" value="150" form="form-filtres" {% if limite_ligne|int == 150 %}checked{% endif %}>150</label>
-                                <label><input type="radio" name="ligne_max" value="200" form="form-filtres" {% if limite_ligne|int == 200 %}checked{% endif %}>200</label>
-                                <label><input type="radio" name="ligne_max" value="250" form="form-filtres" {% if limite_ligne|int == 250 %}checked{% endif %}>250</label>
+                                <label><input type="radio" name="ligne_max" value="100" form="form-filtres" {% if limite_ligne|int == 100 %}checked{% endif %}>100</label>
+                                <label><input type="radio" name="ligne_max" value="150" form="form-filtres" {% if not limite_ligne or limite_ligne|int == 150 %}checked{% endif %}>150</label>
                             </div>
                         </div>
 
