@@ -74,28 +74,31 @@ class AmeliAPI:
 # REQUËTES SQL DE RÉCUPÉRATION DE DONNÉES RELATIVES AUX PRESCRIPTIONS #
 #=====================================================================#
 
-    def get_prescription_default(self, toutes_regions=True, tous_départ=False, annee='2024', limite_ligne=30):
+    def get_prescription_toutes_zones(self, toutes_regions=True, tous_départ=False, annee='2024', limite_ligne=30):
         """Retourne les données par défaut quand rien n'est sélectionner par l"utilisateur"""
 
         print("\nameli_api.py | get_prescription_default()")
-        if toutes_regions:
+
+        if toutes_regions and tous_départ:
             return self._requete("prescriptions",
                                 {
-                                "select" : "region,montant_total_prescription_integer,montant_moyen_prescription_integer,annee",
+                                "select" : "departement,SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen",
                                 "where" : f'year(annee)={annee}',
-                                "groupby" : "region",
+                                "group_by" : "departement",
                                 "limit" : limite_ligne
                                 }
                                 )
-        elif toutes_regions and tous_départ:
+        
+        elif toutes_regions:
             return self._requete("prescriptions",
                                 {
-                                "select" : "departement,montant_total_prescription_integer,montant_moyen_prescription_integer,annee",
+                                "select" : "region,SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen",
                                 "where" : f'year(annee)={annee}',
-                                "groupby" : "departement",
+                                "group_by" : "region",
                                 "limit" : limite_ligne
                                 }
                                 )
+        
 
 
     def get_region_prescription(self, region_list_id=None, annee='2024', limite_ligne=25):
@@ -117,16 +120,17 @@ class AmeliAPI:
         print(f"Création du filtre SQL : WHERE {where}")
 
         return self._requete(
-            "prescription",
+            "prescriptions",
             {
-                "select" : "region,montant_total_prescription_integer,montant_moyen_prescription_integer,annee",
+                "select" : "region,SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen",
                 "where" : where,
+                "group_by" : "region",
                 "limit" : limite_ligne
             }
         )
 
 
-    def get_prescriptions_departement(self, region_list_id=None, departement_list_id=None, annee='2024', limite_ligne=100):
+    def get_departement_prescriptions(self, departement_list_id=None, annee='2024', limite_ligne=100):
         """
         Croise les filtres du montant (total et moyen) selon la région et le département sur une annéee
         """
@@ -140,7 +144,7 @@ class AmeliAPI:
             ids_dep = ",".join([f"'{d_id}'" for d_id in departement_list_id])
             where_clauses.append(f"departement IN ({ids_dep})")
             
-            select_fields = "departement,montant_total_prescription_integer,montant_moyen_prescription_integer,annee"
+            select_fields = "departement,SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen"
             print(f"Sélections de (ou plusieurs) région(s) et min=2 départements | select_fields : {select_fields}")
 
 
@@ -152,11 +156,12 @@ class AmeliAPI:
             {
                 "select": select_fields,
                 "where": where_final,
+                "group_by" : "departement",
                 "limit": limite_ligne
             }
         )
 
-
+#====================================================================================================#
 
 
     def get_patientele(self, profession, departement_code, annee):

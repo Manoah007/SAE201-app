@@ -46,7 +46,7 @@ def page_disparite():
         if is_region_tout:
             print("I - Maillage Régional National")
             mode_maillage_regional = True
-            resultats = api.get_prescription_default(
+            resultats = api.get_prescription_toutes_zones(
                 toutes_regions=True,
                 tous_départ=False,
                 annee=annee_str,
@@ -56,8 +56,7 @@ def page_disparite():
         elif regions_ids and not departments_ids:
             print("II - Sélection de régions spécifiques")
             resultats = api.get_region_prescription(
-                region_list_id=regions_ids,
-                departement_list_id=None, 
+                region_list_id=regions_ids, 
                 annee=annee_str,
                 limite_ligne=limit_ligne
             )
@@ -73,8 +72,7 @@ def page_disparite():
                 )
             elif departments_ids:
                 print("III B - Sélection de départements spécifiques")
-                resultats = api.get_prescriptions_departement(
-                    region_list_id=regions_ids, 
+                resultats = api.get_departement_prescriptions(
                     departement_list_id=departments_ids, 
                     annee=annee_str,
                     limite_ligne=limit_ligne
@@ -87,10 +85,16 @@ def page_disparite():
 
         if resultats:
             for ligne in resultats:
-                # A adapter selon le vrai nom des colonnes/attributs renvoyés par ton API
-                labels_zones.append(ligne.nom_zone) 
-                valeurs_totales.append(ligne.cout_total)
-                valeurs_moyennes.append(ligne.cout_moyen)
+                nom_zone = ligne.get('departement') or ligne.get('region') or "Inconnu"
+                labels_zones.append(nom_zone) 
+                
+                # On utilise les noms exacts de tes colonnes 'select'
+                valeurs_totales.append(ligne.get('cout_total', 0))
+
+                moyenne_brute = ligne.get('cout_moyen', 0)
+                # S'il y a un chiffre, on l'arrondit à 2 décimales. Sinon, on met 0.
+                moyenne_arrondie = round(moyenne_brute, 2) if moyenne_brute else 0
+                valeurs_moyennes.append(moyenne_arrondie)
 
 
         return render_template(

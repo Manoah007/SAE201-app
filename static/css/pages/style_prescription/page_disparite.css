@@ -378,7 +378,12 @@
     border-radius: 8px;
     border: 1px solid #eeeeee;
     max-height: 450px;
+    position: relative; /* Très important pour Chart.js */
+    height: 400px; /* Tu pourras ajuster cette taille selon tes goûts */
+    width: 100%;
+    margin-bottom: 2rem; /* Pour espacer les deux graphiques */
 }
+
 
 /* --- STRUCTURE DU TABLEAU --- */
 .prescriptions-table-box h3 {
@@ -433,3 +438,4 @@ tbody tr:hover { background-color: #f0fdf4; }
     color: #4a5568;
     margin-bottom: 0.5rem;
 }
+

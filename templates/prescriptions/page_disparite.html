@@ -145,20 +145,18 @@
                                     {% endif %}
                                     <th>Montant Total</th>
                                     <th>Montant Moyen</th>
-                                    <th>Année</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for r in resultats %}
+                                {% for ligne in resultats %}
                                     <tr>
                                         {% if mode_maillage_regional %}
-                                            <td>{{ r.region if r.region is defined else 'N/A' }}</td>
+                                            <td>{{ ligne.region if ligne.region is defined else 'N/A' }}</td>
                                         {% else %}
-                                            <td>{{ r.departement if r.departement is defined else 'N/A' }}</td>
+                                            <td>{{ ligne.departement if ligne.departement is defined else 'N/A' }}</td>
                                         {% endif %}
-                                        <td>{{ r.montant_total_prescription_integer }} €</td>
-                                        <td>{{ r.montant_moyen_prescription_integer }} €</td>
-                                        <td>{{ r.annee }}</td>
+                                        <td>{{ ligne.cout_total | round(2) }} €</td>
+                                        <td>{{ ligne.cout_moyen | round(2) }} €</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -188,9 +186,9 @@
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <div id="data-passerelle" 
-        data-labels="{{ labels_zones | tojson | safe }}"
-        data-totaux="{{ valeurs_totales | tojson | safe }}"
-        data-moyennes="{{ valeurs_moyennes | tojson | safe }}">
+        data-labels='{{ labels_zones | tojson | safe }}'
+        data-totaux='{{ valeurs_totales | tojson | safe }}'
+        data-moyennes='{{ valeurs_moyennes | tojson | safe }}'>
     </div>
     <script src="{{ url_for('static', filename='js/disparite_onglet.js') }}"></script>
 
