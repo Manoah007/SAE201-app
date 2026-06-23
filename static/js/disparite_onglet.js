@@ -4,7 +4,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     // ---------------------------------------------------------
-    // 1. MÉCANIQUE D'INTERFACE (Ouverture, Fermeture, Compteurs)
+    // MÉCANIQUE D'INTERFACE (Ouverture, Fermeture, Compteurs)
     // ---------------------------------------------------------
     const containers = document.querySelectorAll('.multi-select-container');
     const form = document.getElementById('form-filtres');
@@ -12,10 +12,11 @@ document.addEventListener('DOMContentLoaded', () => {
     containers.forEach(container => {
         const btn = container.querySelector('.select-btn');
         const dropdown = container.querySelector('.dropdown-content');
-        // Attention: Assure-toi que la classe dans ton HTML est bien "btnText" ou "btn-text"
         const btnText = container.querySelector('.btnText') || container.querySelector('.btn-text');
         const defaultText = btnText.textContent; 
-        const checkboxes = dropdown.querySelectorAll('input[type="checkbox"]');
+        
+        // On récupère TOUS les inputs (checkboxes ET radios)
+        const inputs = dropdown.querySelectorAll('input[type="checkbox"], input[type="radio"]');
 
         // OUVERTURE / FERMETURE au clic sur le bouton
         btn.addEventListener('click', (event) => {
@@ -26,18 +27,33 @@ document.addEventListener('DOMContentLoaded', () => {
             event.stopPropagation();
         });
 
-        // MISE À JOUR DU TEXTE DU BOUTON au changement des cases
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', () => {
-                const checkedBoxes = dropdown.querySelectorAll('input[type="checkbox"]:checked');
-                const checkedCount = checkedBoxes.length;
+        // Empêche le clic dans le menu de fermer le menu
+        dropdown.addEventListener('click', (event) => {
+            event.stopPropagation(); 
+        });
 
-                if (checkedCount === 0) {
-                    btnText.textContent = defaultText; 
-                } else if (checkedCount === 1) {
-                    btnText.textContent = checkedBoxes[0].parentElement.textContent.trim();
+        // MISE À JOUR DU TEXTE ET COMPORTEMENT au changement des cases/radios
+        inputs.forEach(input => {
+            input.addEventListener('change', () => {
+                
+                if (input.type === 'radio') {
+                    // --- Logique pour l'ANNÉE (choix unique) ---
+                    if (input.checked) {
+                        btnText.textContent = input.parentElement.textContent.trim();
+                        dropdown.classList.remove('show'); // Ferme le menu
+                    }
                 } else {
-                    btnText.textContent = `${checkedCount} sélectionnés`;
+                    // --- Logique pour RÉGIONS / DÉPARTEMENTS (choix multiples) ---
+                    const checkedBoxes = dropdown.querySelectorAll('input[type="checkbox"]:checked');
+                    const checkedCount = checkedBoxes.length;
+
+                    if (checkedCount === 0) {
+                        btnText.textContent = defaultText; 
+                    } else if (checkedCount === 1) {
+                        btnText.textContent = checkedBoxes[0].parentElement.textContent.trim();
+                    } else {
+                        btnText.textContent = `${checkedCount} sélectionnés`;
+                    }
                 }
             });
         });
@@ -51,49 +67,65 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ---------------------------------------------------------
-    // 2. MÉCANIQUE DE CASCADE (Filtre : Régions -> Départements)
+    // MÉCANIQUE DE CASCADE (Filtre : Régions -> Départements)
     // ---------------------------------------------------------
     const regionCheckboxes = document.querySelectorAll('input[name="regions"]');
     const departementCheckboxes = document.querySelectorAll('input[name="departements"]');
 
     function filtrerDepartements() {
-        // A. On récupère les IDs de toutes les régions actuellement cochées (hors "ALL")
         const regionsSelectionnees = Array.from(regionCheckboxes)
             .filter(cb => cb.checked && cb.value !== 'ALL')
             .map(cb => cb.value);
 
-        // B. On vérifie si on doit tout afficher (soit "Toutes régions" est coché, soit aucune région n'est cochée)
-        const afficherTout = document.querySelector('input[name="regions"][value="ALL"]').checked || regionsSelectionnees.length === 0;
+        const touteRegionCochee = document.querySelector('input[name="regions"][value="ALL"]').checked;
+        const deptContainer = document.querySelector('input[name="departements"]').closest('.multi-select-container');
 
-        // C. On boucle sur chaque département pour le masquer ou l'afficher
+        if (regionsSelectionnees.length === 0 && !touteRegionCochee) {
+            deptContainer.classList.add('bouton-inactif');
+            
+            departementCheckboxes.forEach(deptCb => {
+                if (deptCb.checked) {
+                    deptCb.checked = false;
+                    deptCb.dispatchEvent(new Event('change'));
+                }
+                // CORRECTION : Utilisation de la classe CSS pour masquer, pas de style en ligne
+                if (deptCb.value !== 'ALL') {
+                    deptCb.parentElement.classList.add('masque');
+                }
+            });
+            
+            return; 
+        } else {
+            deptContainer.classList.remove('bouton-inactif');
+        }
+
+        const afficherTout = touteRegionCochee;
+
         departementCheckboxes.forEach(deptCb => {
-            const deptLabel = deptCb.parentElement; // C'est le <label> entier qu'il faut masquer, pas juste la case
+            const deptLabel = deptCb.parentElement;
             const deptRegionId = deptCb.getAttribute('data-region');
 
-            // On ignore l'option "Tous départements" pour qu'elle reste toujours visible
             if (deptCb.value === 'ALL') return;
 
             if (afficherTout || regionsSelectionnees.includes(deptRegionId)) {
-                // Si le département correspond à la région, on l'affiche (retire le display: none)
-                deptLabel.style.display = ''; 
+                deptLabel.classList.remove('masque'); 
             } else {
-                // Sinon, on le masque !
-                deptLabel.style.display = 'none'; 
+                deptLabel.classList.add('masque');
                 
-                // Si la case était cochée alors qu'elle vient d'être masquée, on la décoche
                 if (deptCb.checked) {
                     deptCb.checked = false;
-                    // On déclenche manuellement l'événement 'change' pour mettre à jour le bouton (ex: passer de "3 sélectionnés" à "2")
                     deptCb.dispatchEvent(new Event('change')); 
                 }
             }
         });
     }
 
-    // On écoute les clics sur les cases "Régions" pour déclencher le filtrage
     regionCheckboxes.forEach(cb => {
         cb.addEventListener('change', filtrerDepartements);
     });
+    
+    // Initialisation au chargement de la page
+    filtrerDepartements();
 });
 
 /*************************************************************/

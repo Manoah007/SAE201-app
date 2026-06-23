@@ -47,6 +47,7 @@
                         </div>
                     </div>
 
+
                     <!-- FILTRES DE DÉPARTEMENTS -->
                     <div class="multi-select-container">
                         <div class="select-btn">
@@ -64,12 +65,25 @@
                         </div>
                     </div>
 
+
                     <!-- FILTRES D'ANNÉES -->
-                    <select name="annee" id="annee_select" class="filtre-pilule">
-                        {% for a in range(2024, 2013, -1) %}
-                            <option value="{{ a }}" {% if a|string == annee|string %}selected{% endif %}>{{ a }}</option>
-                        {% endfor %}
-                    </select>
+                    <div class="multi-select-container">
+                        <div class="select-btn">
+                            <span class="btnText">{% if annee %}{{ annee }}{% else %}2024{% endif %}</span>
+                            <span class="arrow">▼</span>
+                        </div>
+
+                        <div class="dropdown-content">
+                            {% for a in range(2024, 2013, -1) %}
+                                <label>
+                                    <input type="radio" name="annee" value="{{ a }}" {% if a|string == annee|string %}checked{% endif %}>
+                                    {{ a }}
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    
                 </div>
             </section>
 
