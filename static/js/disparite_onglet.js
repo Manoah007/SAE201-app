@@ -57,6 +57,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
+
+        // ---------------------------------------------------------
+        // NOUVEAU : INITIALISATION AU CHARGEMENT (Juste après la boucle)
+        // ---------------------------------------------------------
+        const casesCochees = dropdown.querySelectorAll('input:checked');
+        if (casesCochees.length > 0) {
+            // On simule un événement "change" sur la première case trouvée
+            casesCochees[0].dispatchEvent(new Event('change'));
+        }
     });
 
     // FERMETURE DU MENU si on clique n'importe où à l'extérieur
@@ -127,14 +136,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialisation au chargement de la page
     filtrerDepartements();
 
+    // ---------------------------------------------------------
+    // SOUMISSION AUTOMATIQUE CORRIGÉE (Filtre Ligne Max)
+    // ---------------------------------------------------------
     const ligneMaxRadios = document.querySelectorAll('input[name="ligne_max"]');
     const formulairePrincipal = document.getElementById('form-filtres');
 
     ligneMaxRadios.forEach(radio => {
         radio.addEventListener('change', () => {
-            // Dès qu'une nouvelle limite est choisie, on envoie le formulaire au serveur Python
             if (formulairePrincipal) {
-                formulairePrincipal.submit();
+                // STRATÉGIE : On cherche le bouton de soumission du formulaire
+                const boutonSoumettre = formulairePrincipal.querySelector('button[type="submit"]') || document.getElementById('btn-rechercher');
+                
+                if (boutonSoumettre) {
+                    // On simule un clic : cela déclenche TOUTE la logique des filtres sans rien oublier
+                    boutonSoumettre.click(); 
+                } else {
+                    // Si le bouton n'est pas trouvé, on utilise la méthode moderne qui respecte les événements
+                    formulairePrincipal.requestSubmit(); 
+                }
             }
         });
     });
