@@ -24,7 +24,7 @@ def page_disparite():
         regions = session.query(Region).order_by(Region.libelle).all()
         departements = session.query(Departement).order_by(Departement.libelle).all()
 
-        # 1. RÉCUPÉRATION DES CHOIX (Noms corrigés pour matcher le HTML)
+        # RÉCUPÉRATION DES CHOIX (Noms corrigés pour matcher le HTML)
         region_list = request.args.getlist("regions") 
         departement_list = request.args.getlist("departements")
         
@@ -42,7 +42,7 @@ def page_disparite():
         resultats = []
         mode_maillage_regional = False
 
-        # 3. APPELS API (Scénarios)
+        # APPELS API (Scénarios)
         if is_region_tout:
             print("I - Maillage Régional National")
             mode_maillage_regional = True
@@ -55,6 +55,7 @@ def page_disparite():
 
         elif regions_ids and not departments_ids:
             print("II - Sélection de régions spécifiques")
+            mode_maillage_regional = True
             resultats = api.get_region_prescription(
                 region_list_id=regions_ids, 
                 annee=annee_str,
@@ -63,7 +64,7 @@ def page_disparite():
 
         else:
             if is_dept_tout:
-                print("III A - Sélection de tous les départements de France")
+                print("III.A - Sélection de tous les départements de France")
                 resultats = api.get_prescription_default(
                     toutes_regions=True,
                     tous_départ=True,
@@ -71,7 +72,7 @@ def page_disparite():
                     limite_ligne=limit_ligne
                 )
             elif departments_ids:
-                print("III B - Sélection de départements spécifiques")
+                print("III.B - Sélection de départements spécifiques")
                 resultats = api.get_departement_prescriptions(
                     departement_list_id=departments_ids, 
                     annee=annee_str,
@@ -85,7 +86,7 @@ def page_disparite():
 
         if resultats:
             for ligne in resultats:
-                nom_zone = ligne.get('departement') or ligne.get('region') or "Inconnu"
+                nom_zone = ligne.get('libelle_departement') or ligne.get('libelle_region') or "Inconnu"
                 labels_zones.append(nom_zone) 
                 
                 # On utilise les noms exacts de tes colonnes 'select'

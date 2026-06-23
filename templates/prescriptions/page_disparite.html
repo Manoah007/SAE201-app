@@ -32,7 +32,7 @@
                                     Toutes régions 
                             </label>
                             {% for region in regions %}
-                                <label><input type="checkbox" name="regions" value="{{ region.id }}" {% if region.id|string in region_id %}checked{% endif %}>
+                                <label><input type="checkbox" name="regions" value="{{ region.code }}" {% if region.code|string in region_id %}checked{% endif %}>
                                     {{ region.libelle }}
                                 </label>
                             {% endfor %}
@@ -52,7 +52,7 @@
                                 Tous départements 
                             </label>
                             {% for depart in departements %}
-                                <label><input type="checkbox" name="departements" value="{{ depart.id }}" data-region="{{ depart.region_id }}" {% if depart.id|string in departement_id %}checked{% endif %}> 
+                                <label><input type="checkbox" name="departements" value="{{ depart.code }}" data-region="{{ depart.region.code }}" {% if depart.code|string in departement_id %}checked{% endif %}> 
                                     {{ depart.libelle }}
                                 </label>
                             {% endfor %}
@@ -157,9 +157,9 @@
                                 {% for ligne in resultats %}
                                     <tr>
                                         {% if mode_maillage_regional %}
-                                            <td>{{ ligne.region if ligne.region is defined else 'N/A' }}</td>
+                                            <td>{{ ligne.libelle_region if ligne.libelle_region is defined else 'N/A' }}</td>
                                         {% else %}
-                                            <td>{{ ligne.departement if ligne.departement is defined else 'N/A' }}</td>
+                                            <td>{{ ligne.libelle_departement if ligne.libelle_departement is defined else 'N/A' }}</td>
                                         {% endif %}
                                         <td>{{ ligne.cout_total | round(2) }} €</td>
                                         <td>{{ ligne.cout_moyen | round(2) }} €</td>
@@ -173,20 +173,13 @@
             {% else %}
 
                 <div class="empty-message">
-                    <h3>Erreurs d'affichage</h3>
-                    <p>Les données rencontrent un problèmes dans leur affichage</p>
-                </div>
+            <h3>Aucunes données</h3>
+            <p>Les données n'ont pas pu être récupéré</p>
+        </div>
 
             {% endif %}
 
         </section>
-
-    {% else %}
-
-        <div class="empty-message">
-            <h3>Aucunes données</h3>
-            <p>Les données n'ont pas pu être récupéré</p>
-        </div>
 
     {% endif %}
     

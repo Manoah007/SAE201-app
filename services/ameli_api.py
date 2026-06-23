@@ -74,7 +74,7 @@ class AmeliAPI:
 # REQUËTES SQL DE RÉCUPÉRATION DE DONNÉES RELATIVES AUX PRESCRIPTIONS #
 #=====================================================================#
 
-    def get_prescription_toutes_zones(self, toutes_regions=True, tous_départ=False, annee='2024', limite_ligne=30):
+    def get_prescription_toutes_zones(self, toutes_regions=True, tous_départ=False, annee="2024", limite_ligne=30):
         """Retourne les données par défaut quand rien n'est sélectionner par l"utilisateur"""
 
         print("\nameli_api.py | get_prescription_default()")
@@ -82,9 +82,9 @@ class AmeliAPI:
         if toutes_regions and tous_départ:
             return self._requete("prescriptions",
                                 {
-                                "select" : "departement,SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen",
+                                "select" : "libelle_departement,SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen",
                                 "where" : f'year(annee)={annee}',
-                                "group_by" : "departement",
+                                "group_by" : "libelle_departement",
                                 "limit" : limite_ligne
                                 }
                                 )
@@ -92,16 +92,16 @@ class AmeliAPI:
         elif toutes_regions:
             return self._requete("prescriptions",
                                 {
-                                "select" : "region,SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen",
+                                "select" : "libelle_region,SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen",
                                 "where" : f'year(annee)={annee}',
-                                "group_by" : "region",
+                                "group_by" : "libelle_region",
                                 "limit" : limite_ligne
                                 }
                                 )
         
 
 
-    def get_region_prescription(self, region_list_id=None, annee='2024', limite_ligne=25):
+    def get_region_prescription(self, region_list_id=None, annee="2024", limite_ligne=30):
         """
         Filtre les montants totales et moyens selon la (ou les) région(s) pour une année
         On affiche toutes les régions si 'region_list_id=None'
@@ -122,15 +122,15 @@ class AmeliAPI:
         return self._requete(
             "prescriptions",
             {
-                "select" : "region,SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen",
+                "select" : "libelle_region,SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen",
                 "where" : where,
-                "group_by" : "region",
+                "group_by" : "libelle_region",
                 "limit" : limite_ligne
             }
         )
 
 
-    def get_departement_prescriptions(self, departement_list_id=None, annee='2024', limite_ligne=100):
+    def get_departement_prescriptions(self, departement_list_id=None, annee="2024", limite_ligne=100):
         """
         Croise les filtres du montant (total et moyen) selon la région et le département sur une annéee
         """
@@ -144,7 +144,7 @@ class AmeliAPI:
             ids_dep = ",".join([f"'{d_id}'" for d_id in departement_list_id])
             where_clauses.append(f"departement IN ({ids_dep})")
             
-            select_fields = "departement,SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen"
+            select_fields = "libelle_departement,SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen"
             print(f"Sélections de (ou plusieurs) région(s) et min=2 départements | select_fields : {select_fields}")
 
 
@@ -156,7 +156,7 @@ class AmeliAPI:
             {
                 "select": select_fields,
                 "where": where_final,
-                "group_by" : "departement",
+                "group_by" : "libelle_departement",
                 "limit": limite_ligne
             }
         )
