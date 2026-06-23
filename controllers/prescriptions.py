@@ -43,7 +43,7 @@ def page_disparite():
         mode_maillage_regional = False
 
         # APPELS API (Scénarios)
-        if is_region_tout:
+        if is_region_tout and not is_dept_tout:
             print("I - Maillage Régional National")
             mode_maillage_regional = True
             resultats = api.get_prescription_toutes_zones(
@@ -65,7 +65,7 @@ def page_disparite():
         else:
             if is_dept_tout:
                 print("III.A - Sélection de tous les départements de France")
-                resultats = api.get_prescription_default(
+                resultats = api.get_prescription_toutes_zones(
                     toutes_regions=True,
                     tous_départ=True,
                     annee=annee_str,
