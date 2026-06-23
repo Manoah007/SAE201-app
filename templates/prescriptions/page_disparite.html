@@ -11,18 +11,6 @@
         </p>
     </section>
 
-    {% if error_message %}
-        <div class="alert-error" style="background-color: #fce8e6; 
-                                        color: #a51d24; 
-                                        padding: 12px; 
-                                        border-radius: 8px; 
-                                        margin-bottom: 15px; 
-                                        font-weight: 500; 
-                                        border: 1px solid #f5c2c7;">
-            {{ error_message }}
-        </div>
-    {% endif %}
-
     <section class="filters-box">
 
         <form action="{{ url_for('prescriptions.page_disparite') }}" method="get"  id="form-filtres">

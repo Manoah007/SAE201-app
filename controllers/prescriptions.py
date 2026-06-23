@@ -17,84 +17,95 @@ def accueil_prescription():
 @bp_prescriptions.route("/prescriptions/disparite")
 def page_disparite():
     session = Session()
- 
+    print("\nprescription.py | page_disparite()")
+
     try:
         # Récupère les tables pour charger les listes déroulantes
         regions = session.query(Region).order_by(Region.libelle).all()
         departements = session.query(Departement).order_by(Departement.libelle).all()
 
-        # Récupération des choix de l'utilisateur (via l'URL en GET)
-        region_list_id = request.args.getlist("region_id")
-        departement_list_id = request.args.getlist("departement_id")
+        # 1. RÉCUPÉRATION DES CHOIX (Noms corrigés pour matcher le HTML)
+        region_list = request.args.getlist("regions") 
+        departement_list = request.args.getlist("departements")
         
-        # On passe l'année en string pour correspondre à la signature de l'API ('2024')
-        annee = request.args.get("annee", default="2024")
-        annee_str = str(annee) if annee else "2024"
+        annee_str = str(request.args.get("annee", default="2024"))
+        limit_ligne = request.args.get("ligne_max", default=100, type=int)
 
+        # ANALYSE DES CHOIX
+        is_region_tout = not region_list or "ALL" in region_list or "" in region_list
+        is_dept_tout = not departement_list or "ALL" in departement_list or "" in departement_list
 
+        # Nettoyage
+        regions_ids = [r for r in region_list if r != "ALL"]
+        departments_ids = [d for d in departement_list if d != "ALL"]
 
-        # Si l'utilisateur choisit "ALL", la valeur soumise est souvent une chaîne "ALL" ou vide
-        is_region_tout = not region_list_id or "ALL" in region_list_id or "" in region_list_id
-        is_dept_tout = not departement_list_id or "ALL" in departement_list_id or "" in departement_list_id
-
-        # Nettoyage des listes pour l'API (on ne garde que les vrais IDs numériques)
-        clean_regions = [r for r in region_list_id if str(r).isdigit()]
-        clean_departments = [d for d in departement_list_id if str(d).isdigit()]
-
-        resultats = None
-        error_message = None
+        resultats = []
         mode_maillage_regional = False
 
-
-        
-        # CAS 1 : Premier chargement ou Option "TOUT" active sur les Régions (Maillage Régional)
+        # 3. APPELS API (Scénarios)
         if is_region_tout:
-            print("Maillage Régional National")
+            print("I - Maillage Régional National")
             mode_maillage_regional = True
-            # On appelle l'API sans filtres géographiques (Cas 1 de ton cross_filter)
-            resultats = api.get_prescriptions_cross_filter(
-                region_list_id=None, 
-                departement_list_id=None, 
-                annee=annee_str
+            resultats = api.get_prescription_default(
+                toutes_regions=True,
+                tous_départ=False,
+                annee=annee_str,
+                limite_ligne=limit_ligne
             )
 
-        # Région spécifique ET option "TOUT" sélectionnée au sein de cette région
-        elif not is_region_tout and is_dept_tout:
-            print("Sélection rapide de tous les départements d'une région")
-            resultats = api.get_prescriptions_cross_filter(
-                region_list_id=clean_regions, 
+        elif regions_ids and not departments_ids:
+            print("II - Sélection de régions spécifiques")
+            resultats = api.get_region_prescription(
+                region_list_id=regions_ids,
                 departement_list_id=None, 
-                annee=annee_str
+                annee=annee_str,
+                limite_ligne=limit_ligne
             )
 
-        # Région spécifique ET départements spécifiques cochés
         else:
-            # CONTRAINTE : Au moins 2 départements
-            if len(clean_departments) < 2:
-                print("Infraction règle : Moins de 2 départements sélectionnés")
-                error_message = "Contrainte de comparaison : Veuillez sélectionner au minimum 2 départements pour générer les graphiques."
-                
-                # Comportement de secours pour éviter un écran blanc : on affiche le maillage régional par défaut
-                mode_maillage_regional = True
-                resultats = api.get_prescription_default(annee=annee_str)
-            else:
-                print("Comparaison ciblée de départements")
-                resultats = api.get_prescriptions_cross_filter(
-                    region_list_id=clean_regions, 
-                    departement_list_id=clean_departments, 
-                    annee=annee_str
+            if is_dept_tout:
+                print("III A - Sélection de tous les départements de France")
+                resultats = api.get_prescription_default(
+                    toutes_regions=True,
+                    tous_départ=True,
+                    annee=annee_str,
+                    limite_ligne=limit_ligne
                 )
+            elif departments_ids:
+                print("III B - Sélection de départements spécifiques")
+                resultats = api.get_prescriptions_departement(
+                    region_list_id=regions_ids, 
+                    departement_list_id=departments_ids, 
+                    annee=annee_str,
+                    limite_ligne=limit_ligne
+                )
+
+        # PRÉPARATION DES DONNÉES POUR CHART.JS
+        labels_zones = []
+        valeurs_totales = []
+        valeurs_moyennes = []
+
+        if resultats:
+            for ligne in resultats:
+                # A adapter selon le vrai nom des colonnes/attributs renvoyés par ton API
+                labels_zones.append(ligne.nom_zone) 
+                valeurs_totales.append(ligne.cout_total)
+                valeurs_moyennes.append(ligne.cout_moyen)
+
 
         return render_template(
             "prescriptions/page_disparite.html",
             regions=regions,
             departements=departements,
             annee=annee_str,
-            region_id=region_list_id,                  # Renvoie la sélection brute pour garder le focus HTML
-            departement_id=departement_list_id,          # Renvoie la sélection brute pour garder le focus HTML
+            limite_ligne=limit_ligne, # On renvoie la limite pour le HTML
+            region_id=region_list,    
+            departement_id=departement_list,
             resultats=resultats,
-            error_message=error_message,               # Contient le message d'erreur si < 2 départements
-            mode_maillage_regional=mode_maillage_regional # Variable utilisable en Jinja2 pour masquer/afficher des blocs
+            mode_maillage_regional=mode_maillage_regional,
+            labels_zones=labels_zones,
+            valeurs_totales=valeurs_totales,
+            valeurs_moyennes=valeurs_moyennes
         )
     
     except Exception as e:
