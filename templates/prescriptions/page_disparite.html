@@ -117,7 +117,10 @@
 
                 <div id="tab-graphique" class="tab-content active">
                     <div class="chart-box prescription-chart">
-                        <canvas id="graphique-prescriptions"></canvas>
+                        <canvas id="histogram-total"></canvas>
+                    </div>
+                    <div class="chart-box prescription-chart">
+                        <canvas id="histogram-moyenne"></canvas>
                     </div>
                 </div>
 
@@ -194,7 +197,13 @@
         </div>
 
     {% endif %}
-
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <div id="data-passerelle" 
+        data-labels="{{ labels_zones | tojson | safe }}"
+        data-totaux="{{ valeurs_totales | tojson | safe }}"
+        data-moyennes="{{ valeurs_moyennes | tojson | safe }}">
+    </div>
     <script src="{{ url_for('static', filename='js/disparite_onglet.js') }}"></script>
 
 {% endblock %}
