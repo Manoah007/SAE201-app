@@ -126,4 +126,113 @@ function switchTab(event, tabId) {
 
     // 4. Ajouter la classe "active" au bouton qui vient d'être cliqué
     event.currentTarget.classList.add('active');
+
+    // 5. NOUVEAU : Sauvegarder le choix dans la mémoire du navigateur !
+    sessionStorage.setItem('ongletActif', tabId);
 }
+
+/*********************************************/
+/** SCRIPT EN JS POUR GÉRÉ LES HISTOGRAMMES **/
+/*********************************************/
+document.addEventListener('DOMContentLoaded', () => {
+    
+    // ---------------------------------------------------------
+    // 1. RÉCUPÉRATION DES DONNÉES (La Passerelle)
+    // ---------------------------------------------------------
+    const passerelle = document.getElementById('data-passerelle');
+    
+    if (passerelle) {
+        window.chartData = {
+            labels: JSON.parse(passerelle.dataset.labels),
+            totaux: JSON.parse(passerelle.dataset.totaux),
+            moyennes: JSON.parse(passerelle.dataset.moyennes)
+        };
+    }
+
+    // ---------------------------------------------------------
+    // 2. CRÉATION DES GRAPHIQUES CHART.JS
+    // ---------------------------------------------------------
+    // On s'assure que les données existent ET que l'on est bien sur la page avec les canvas
+    const canvasTotal = document.getElementById('histogram-total');
+    const canvasMoyenne = document.getElementById('histogram-moyenne');
+
+    if (window.chartData && canvasTotal && canvasMoyenne) {
+
+        // --- Histogramme 1 : Coût Global ---
+        new Chart(canvasTotal, {
+            type: 'bar', // Type histogramme (barres)
+            data: {
+                labels: window.chartData.labels, // Axe X (ex: IDF, Bretagne)
+                datasets: [{
+                    label: 'Coût total (€)',
+                    data: window.chartData.totaux, // Axe Y
+                    backgroundColor: '#3b82f6', // Un beau bleu moderne
+                    borderRadius: 4 // Arrondit légèrement le haut des barres
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // Permet au graphique de s'adapter à la hauteur de ta div
+                plugins: {
+                    legend: { display: false }, // Cache la légende si tu n'as qu'une seule couleur
+                    title: {
+                        display: true,
+                        text: 'Coût total des prescriptions',
+                        font: { size: 16 }
+                    }
+                }
+            }
+        });
+
+        // --- Histogramme 2 : Coût Moyen ---
+        new Chart(canvasMoyenne, {
+            type: 'bar',
+            data: {
+                labels: window.chartData.labels,
+                datasets: [{
+                    label: 'Coût moyen par professionnel (€)',
+                    data: window.chartData.moyennes,
+                    backgroundColor: '#10b981', // Un beau vert
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: 'Coût moyen de prescription par professionnel',
+                        font: { size: 16 }
+                    }
+                }
+            }
+        });
+    }
+
+    // ---------------------------------------------------------
+    // RESTAURATION DE L'ONGLET ET DÉFILEMENT (Mémoire de session)
+    // ---------------------------------------------------------
+    const ongletSauvegarde = sessionStorage.getItem('ongletActif');
+    
+    // Si une sauvegarde existe ET que ce n'est pas le graphique (qui est là par défaut)
+    if (ongletSauvegarde && ongletSauvegarde !== 'tab-graphique') {
+        // On trouve le bouton qui correspond à cet onglet
+        const boutonCorrespondant = document.querySelector(`button[onclick*="${ongletSauvegarde}"]`);
+        
+        if (boutonCorrespondant) {
+            // 1. On simule virtuellement un clic sur ce bouton
+            boutonCorrespondant.click();
+            
+            // 2. On fait défiler la page automatiquement et en douceur vers la zone de données
+            // Pour éviter un saut brutal, on laisse un petit délai pour que le HTML se place bien
+            setTimeout(() => {
+                document.getElementById(ongletSauvegarde).scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' // Aligne le haut de l'onglet avec le haut de l'écran
+                });
+            }, 100);
+        }
+    }
+});
