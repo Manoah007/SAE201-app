@@ -143,6 +143,18 @@
         background: #1e3a2a;
     }
 
+    .stat-icon img {
+        filter: brightness(0) saturate(100%) invert(62%) sepia(60%) saturate(400%) hue-rotate(95deg) brightness(105%);
+    }
+
+    .stat-item strong {
+        color: #f0f0f0;
+    }
+
+    .stat-item span {
+        color: #aaa;
+    }
+
     /* ── Filtres ── */
     .filters-box,
     .effectifs-filter-box,
