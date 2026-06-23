@@ -1,13 +1,13 @@
 /* ==============================================================================
-   STYLE CSS DES FILTRES
+   STYLE CSS DES FILTRES ET DES RÉSULTATS
    ============================================================================== */
 
-/* Import d'une police moderne similaire à celle de l'image (Google Fonts) */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
-/* ==========================================
-   LE PETIT BLOC GRIS (Intérieur - Relief)
-   ========================================== */
+/******************************************************************************/
+/** 1. STRUCTURE DU BLOC DE FILTRES (CONTENEURS & STRATÉGIE FLEXBOX)         **/
+/******************************************************************************/
+
 .form-section {
     background-color: #f8fafc;
     border-radius: 14px;
@@ -25,210 +25,136 @@
     margin: 0 0 1rem 0.25rem;
 }
 
-/* Alignement des 3 menus déroulants */
 .api-form {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
 }
 
-/* 1. Assurer que le grand conteneur et le formulaire prennent 100% de l'espace */
 .filters-box, 
 #form-filtres {
     width: 100%;
-    display: block; /* S'assure qu'ils se comportent comme de vrais blocs pleins */
+    display: block; 
     box-sizing: border-box;
 }
 
-/* 2. Étirer le bloc gris des filtres */
-.form-section {
-    width: 100%;
-    box-sizing: border-box; /* Crucial pour que le padding ne rajoute pas de largeur supplémentaire */
-    /* ... le reste de ton style (background, border-radius, padding, etc.) reste identique ... */
-}
-
-/* 3. Étirer la zone des boutons */
-#filtres-button {
-    width: 100%;
-    box-sizing: border-box;
-    /* ... le reste (display: flex, justify-content: center, gap) reste identique ... */
-}
-/*********************************/
-/** STYLE RÉGION ET DÉPARTEMENT **/
-/*********************************/
+/******************************************************************************/
+/** 2. COMPOSANTS DE MENUS DÉROULANTS (RÉGIONS, DÉPARTEMENTS, ANNÉES)        **/
+/******************************************************************************/
 
 .multi-select-container {
-  position: relative;
-  flex: 1; /* Permet au bloc de s'étirer uniformément avec les autres */
-  min-width: 220px; /* Largeur minimale avant de passer à la ligne */
-  font-family: 'Inter', sans-serif;
-  color: #111827; 
+    position: relative;
+    flex: 1; 
+    min-width: 220px; 
+    font-family: 'Inter', sans-serif;
+    color: #111827; 
 }
 
-/* Style pour bloquer le menu Département tant qu'aucune région n'est choisie */
 .multi-select-container.bouton-inactif {
-    opacity: 0.5;                  /* Effet visuel grisé */
-    pointer-events: none;          /* Rend le bloc totalement inclyquable */
-    user-select: none;             /* Empêche la sélection du texte */
-    cursor: not-allowed;           /* Optionnel : montre un curseur d'interdiction */
+    opacity: 0.5;                  
+    pointer-events: none;          
+    user-select: none;             
+    cursor: not-allowed;           
 }
 
-/* 1. Le bouton principal (façon "bouton pilule" de l'image) */
 .select-btn {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 22px;
-  border: 1px solid #f3f4f6; 
-  border-radius: 50px; 
-  background-color: #ffffff;
-  cursor: pointer;
-  font-weight: 600; 
-  font-size: 15px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03); 
-  transition: all 0.3s ease;
-  height: 100%; /* S'assure que tous les boutons ont la même hauteur */
-  box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 22px;
+    border: 1px solid #f3f4f6; 
+    border-radius: 50px; 
+    background-color: #ffffff;
+    cursor: pointer;
+    font-weight: 600; 
+    font-size: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03); 
+    transition: all 0.3s ease;
+    height: 100%; 
+    box-sizing: border-box;
 }
 
 .select-btn:hover {
-  border-color: #3de068; 
-  background-color: #f9fafb;
+    border-color: #3de068; 
+    background-color: #f9fafb;
 }
 
 .select-btn .arrow {
-  color: #3de068; 
-  font-size: 12px;
+    color: #3de068; 
+    font-size: 12px;
 }
 
-/* 2. Le menu déroulant (façon "carte" de l'image) */
 .dropdown-content {
-  display: none; 
-  position: absolute;
-  top: calc(100% + 10px); 
-  left: 0;
-  width: 100%;
-  border-radius: 16px; 
-  background-color: #ffffff;
-  z-index: 10;
-  max-height: 250px;
-  overflow-y: auto;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); 
-  padding: 8px 0;
+    display: none; 
+    position: absolute;
+    top: calc(100% + 10px); 
+    left: 0;
+    width: 100%;
+    border-radius: 16px; 
+    background-color: #ffffff;
+    z-index: 10;
+    max-height: 250px;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); 
+    padding: 8px 0;
 }
 
 .dropdown-content.show {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
-/* 3. Les options à l'intérieur */
 .dropdown-content label {
-  padding: 12px 22px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 15px;
-  font-weight: 400;
-  transition: background-color 0.2s ease, color 0.2s ease;
+    padding: 12px 22px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    font-weight: 400;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/*Ligne de séparation pour "Toutes régions" / "Tous départements" */
 .dropdown-content label:first-child {
-  border-bottom: 1px solid #e5e7eb;
-  margin-bottom: 4px;
-  padding-bottom: 12px;
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: 4px;
+    padding-bottom: 12px;
 }
 
-/* Classe utilisée par le JS pour masquer les départements */
 .dropdown-content label.masque {
-  display: none !important;
+    display: none !important;
 }
 
 .dropdown-content label:hover {
-  background-color: #e6fbee; 
-  color: #0b8a2f; 
-  font-weight: 600;
+    background-color: #e6fbee; 
+    color: #0b8a2f; 
+    font-weight: 600;
 }
 
-/* 4. Les cases à cocher */
-.dropdown-content input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-  accent-color: #3de068; 
-}
-
-/* 5. Esthétique de la barre de défilement */
-.dropdown-content::-webkit-scrollbar { width: 6px; }
-.dropdown-content::-webkit-scrollbar-thumb { background-color: #e5e7eb; border-radius: 10px; }
-.dropdown-content::-webkit-scrollbar-track { margin: 10px 0; }
-
-
-/**************************/
-/** STYLE FILTRES ANNÉES **/
-/**************************/
-/* Ciblage de notre select simple pour s'aligner parfaitement avec les autres */
-.multi-select-container {
-  position: relative;
-  flex: 1; 
-  min-width: 220px; 
-  font-family: 'Inter', sans-serif;
-  color: #111827; 
-}
-
-/* S'applique à Régions, Département ET Année automatiquement */
-.select-btn {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 22px;
-  border: 1px solid #f3f4f6; 
-  border-radius: 50px; 
-  background-color: #ffffff;
-  cursor: pointer;
-  font-weight: 600; 
-  font-size: 15px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03); 
-  transition: all 0.3s ease;
-  height: 100%; 
-  box-sizing: border-box;
-}
-
-.select-btn:hover {
-  border-color: #3de068; 
-  background-color: #f9fafb;
-}
-
-.select-btn .arrow {
-  color: #3de068; 
-  font-size: 12px;
-}
-
-
-/** STYLE DES CASES À COCHER ET DES RONDS **/
 .dropdown-content input[type="checkbox"],
 .dropdown-content input[type="radio"] {
     width: 18px;
     height: 18px;
     cursor: pointer;
-    accent-color: #3de068; /* Vert de ta charte */
+    accent-color: #3de068; 
     border: none;
     outline: none;
 }
 
-/* Nettoyage du focus pour les ronds de l'année */
 .dropdown-content input[type="radio"]:focus,
 .dropdown-content input[type="radio"]:active {
     outline: none !important;
     box-shadow: none !important;
 }
 
+.dropdown-content::-webkit-scrollbar { width: 6px; }
+.dropdown-content::-webkit-scrollbar-thumb { background-color: #e5e7eb; border-radius: 10px; }
+.dropdown-content::-webkit-scrollbar-track { margin: 10px 0; }
 
-/* ==========================================
-   LA ZONE DES BOUTONS (En dessous du bloc gris)
-   ========================================== */
+/******************************************************************************/
+/** 3. BLOC DES BOUTONS D'ACTION (EFFETS 3D EN RELIEF)                       **/
+/******************************************************************************/
+
 #filtres-button {
     display: flex;
     align-items: center;
@@ -236,17 +162,16 @@
     gap: 1.5rem;            
     flex-wrap: wrap;
     width: 100%;
-    margin-top: 1.5rem; /* Crée l'espace entre le bloc gris et les boutons */
+    margin-top: 1.5rem; 
 }
 
-/* Style de base commun avec effet de transition fluide */
 #filtres-button .submit-btn, 
 #filtres-button .reset-link, 
 #filtres-button .export-btn {
     padding: 0.85rem 2.2rem;
     font-size: 0.95rem;
     font-family: 'Inter', sans-serif; 
-    font-weight: 700; /* Un peu plus gras pour accentuer le côté "bouton physique" */
+    font-weight: 700; 
     border-radius: 50px; 
     border: none;
     cursor: pointer;
@@ -255,67 +180,67 @@
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    /* Transition très rapide pour un effet mécanique réactif */
     transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.2s ease;
 }
 
-/* 🟢 Bouton "Afficher" (Vert vif principal) */
 .submit-btn { 
     background-color: #3de068; 
     color: #ffffff; 
-    /* Ombre dure pour le relief (4px) + Ombre floue pour la profondeur (10px) */
     box-shadow: 0 4px 0 #25a046, 0 6px 10px rgba(61, 224, 104, 0.3);
 }
+
 .submit-btn:hover { 
     background-color: #35cf5e; 
-    transform: translateY(2px); /* Descend de 2px (semi-appuyé) */
-    box-shadow: 0 2px 0 #25a046, 0 4px 6px rgba(61, 224, 104, 0.3); /* Le relief diminue */
-}
-.submit-btn:active {
-    background-color: #2bb652;
-    transform: translateY(4px); /* Descend de 4px (totalement appuyé) */
-    box-shadow: 0 0 0 #25a046, 0 0 0 rgba(61, 224, 104, 0.3); /* Le relief disparaît */
+    transform: translateY(2px); 
+    box-shadow: 0 2px 0 #25a046, 0 4px 6px rgba(61, 224, 104, 0.3); 
 }
 
-/* ⚪ Bouton "Réinitialiser" (Gris neutre élégant) */
+.submit-btn:active {
+    background-color: #2bb652;
+    transform: translateY(4px); 
+    box-shadow: 0 0 0 #25a046, 0 0 0 rgba(61, 224, 104, 0.3); 
+}
+
 .reset-link { 
     background-color: #f1f5f9; 
     color: #475569; 
     box-shadow: 0 4px 0 #cbd5e1, 0 6px 10px rgba(0, 0, 0, 0.05);
 }
+
 .reset-link:hover { 
     background-color: #e2e8f0; 
     color: #334155; 
     transform: translateY(2px);
     box-shadow: 0 2px 0 #94a3b8, 0 4px 6px rgba(0, 0, 0, 0.05);
 }
+
 .reset-link:active {
     background-color: #cbd5e1;
     transform: translateY(4px);
     box-shadow: 0 0 0 #94a3b8, 0 0 0 rgba(0, 0, 0, 0.05);
 }
 
-/* 🔵 Bouton "Exporter" (Vert Émeraude - Nuance data) */
 .export-btn { 
-    background-color: #10b981; /* Une nuance de vert plus sérieuse/data */
+    background-color: #10b981; 
     color: #ffffff; 
     box-shadow: 0 4px 0 #059669, 0 6px 10px rgba(16, 185, 129, 0.3);
 }
+
 .export-btn:hover { 
     background-color: #059669; 
     transform: translateY(2px); 
     box-shadow: 0 2px 0 #047857, 0 4px 6px rgba(16, 185, 129, 0.3);
 }
+
 .export-btn:active {
     background-color: #047857;
     transform: translateY(4px);
     box-shadow: 0 0 0 #047857, 0 0 0 rgba(16, 185, 129, 0.3);
 }
 
-
-/* ==============================================================================
-   STYLE CSS DU TABLEAU ET DES ONGLETS
-   ============================================================================== */
+/******************************************************************************/
+/** 4. PANNEAU DES RÉSULTATS (ONGLETS ET CONTENEURS GRAPHIQUES)               **/
+/******************************************************************************/
 
 .prescriptions-results {
     margin-top: 2rem;
@@ -336,7 +261,6 @@
 
 .back-link:hover { color: #41e46a; }
 
-/* --- SYSTÈME D'ONGLETS --- */
 .tabs-menu {
     display: flex;
     gap: 0.5rem;
@@ -371,21 +295,22 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- COMMONS GRAPH & CONTAINERS --- */
 .chart-box {
     padding: 1rem;
     background: #fafafa;
     border-radius: 8px;
     border: 1px solid #eeeeee;
     max-height: 450px;
-    position: relative; /* Très important pour Chart.js */
-    height: 400px; /* Tu pourras ajuster cette taille selon tes goûts */
+    position: relative; 
+    height: 400px; 
     width: 100%;
-    margin-bottom: 2rem; /* Pour espacer les deux graphiques */
+    margin-bottom: 2rem; 
 }
 
+/******************************************************************************/
+/** 5. INTERFACE ET RÈGLES STYLISTIQUES DU TABLEAU                           **/
+/******************************************************************************/
 
-/* --- STRUCTURE DU TABLEAU --- */
 .prescriptions-table-box h3 {
     margin-top: 0;
     color: #333333;
@@ -427,7 +352,6 @@ td {
 tbody tr:nth-child(even) { background-color: #fcfdfd; }
 tbody tr:hover { background-color: #f0fdf4; }
 
-/* --- MESSAGE VIDE --- */
 .empty-message {
     text-align: center;
     padding: 3rem 1rem;
@@ -439,12 +363,10 @@ tbody tr:hover { background-color: #f0fdf4; }
     margin-bottom: 0.5rem;
 }
 
-/* ==========================================================================
-   MODE NUIT (Thème Sombre) pour la Page Disparité
-   S'active automatiquement via [data-theme="dark"]
-   ========================================================================== */
+/******************************************************************************/
+/** 6. MODE NUIT (ADAPTATION GLOBALE SOMBRE SUR DATA-THEME)                  **/
+/******************************************************************************/
 
-/* --- 1. BLOC DES FILTRES (Formulaire) --- */
 [data-theme="dark"] .form-section {
     background-color: #2a2a2a;
     border-color: #3a3a3a;
@@ -454,7 +376,6 @@ tbody tr:hover { background-color: #f0fdf4; }
     color: #e0e0e0;
 }
 
-/* --- 2. BOUTONS DÉROULANTS (Régions, Départements, Année) --- */
 [data-theme="dark"] .multi-select-container {
     color: #e0e0e0;
 }
@@ -468,10 +389,9 @@ tbody tr:hover { background-color: #f0fdf4; }
 
 [data-theme="dark"] .select-btn:hover {
     background-color: #2a2a2a;
-    border-color: #41e46a; /* Garde le liseré vert au survol */
+    border-color: #41e46a; 
 }
 
-/* --- 3. MENUS DÉROULANTS (Contenu des options) --- */
 [data-theme="dark"] .dropdown-content {
     background-color: #1e1e1e;
     border: 1px solid #3a3a3a;
@@ -487,17 +407,14 @@ tbody tr:hover { background-color: #f0fdf4; }
 }
 
 [data-theme="dark"] .dropdown-content label:hover {
-    background-color: #1e3a2a; /* Vert très sombre */
-    color: #41e46a; /* Texte vert fluo */
+    background-color: #1e3a2a; 
+    color: #41e46a; 
 }
 
-/* Scrollbar du menu déroulant */
 [data-theme="dark"] .dropdown-content::-webkit-scrollbar-thumb {
     background-color: #444444;
 }
 
-/* --- 4. BOUTONS D'ACTION (Le bouton Réinitialiser principalement) --- */
-/* (Les boutons Verts sont déjà bien adaptés au mode nuit, on adapte juste le gris) */
 [data-theme="dark"] .reset-link {
     background-color: #2a2a2a;
     color: #e0e0e0;
@@ -515,7 +432,6 @@ tbody tr:hover { background-color: #f0fdf4; }
     box-shadow: 0 0 0 #1a1a1a, 0 0 0 rgba(0, 0, 0, 0.3);
 }
 
-/* --- 5. RÉSULTATS ET ONGLETS --- */
 [data-theme="dark"] .prescriptions-results {
     background-color: #1e1e1e;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
@@ -538,7 +454,6 @@ tbody tr:hover { background-color: #f0fdf4; }
     border-bottom-color: #41e46a;
 }
 
-/* --- 6. GRAPHIQUES ET TABLEAUX SPÉCIFIQUES --- */
 [data-theme="dark"] .chart-box {
     background-color: #2a2a2a;
     border-color: #3a3a3a;
@@ -569,10 +484,9 @@ tbody tr:hover { background-color: #f0fdf4; }
 }
 
 [data-theme="dark"] tbody tr:hover {
-    background-color: #1e3a2a; /* Ligne survolée en vert sombre */
+    background-color: #1e3a2a; 
 }
 
-/* --- 7. MESSAGES D'ERREUR/VIDE --- */
 [data-theme="dark"] .empty-message {
     color: #aaaaaa;
 }

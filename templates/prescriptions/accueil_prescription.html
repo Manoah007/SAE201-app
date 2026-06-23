@@ -3,62 +3,54 @@
 
 {% block contenu %}
 
-<!-- 1. Le Header est désormais SEUL et indépendant, directement sur le fond du site -->
-<section class="prescriptions-header">
-    <h1>Analyse des prescriptions</h1>
-    <p>
-        Analyse interactive des dépenses de la médecine libérale (via l'API Ameli). 
-        Visualisez instantanément la structure des coûts par soin, les disparités 
-        territoriales et l'impact des déserts médicaux sur les profils de prescription.
-    </p>
-</section>
-
-<!-- 2. Le bloc blanc commence ICI et n'enveloppe que les cartes et la petite image -->
-<section class="prescriptions-page">
-
-    <section class="prescriptions-cards">
-        <div class="prescriptions-cards-top">
-            <h2>Thèmes d'analyse associés</h2>
-            <img src="{{ url_for('static', filename='images/antibiotique.png') }}" alt="Antibiotiques" class="prescriptions-header-image">
-        </div>
-
-        <a href="{{ url_for('prescriptions.page_disparite') }}" class="prescription-card-link"> 
-            <div class="prescription-card">
-                <h3>Disparités géographiques</h3>
-                <p>
-                    Outil d'analyse comparative territoriale conçu pour mesurer l'impact des déserts médicaux sur les dépenses de santé.
-                </p>
-            </div>
-        </a>
-
-        <a href="{{ url_for('prescriptions.page_correlation') }}" class="prescription-card-link">
-            <div class="prescription-card">
-                <h3>Corrélations démographiques des professionnels</h3>
-                <p>
-                    Module d'analyse sociologique conçu pour identifier l'impact de l'âge
-                    et du sexe des praticiens sur leurs habitudes de prescription.
-                </p>
-            </div>
-        </a>
-
-        <a href="{{ url_for('prescriptions.page_prescript_majeur') }}" class="prescription-card-link">
-            <div class="prescription-card">
-                <h3>Type de prescriptions de dépenses majeures</h3>
-                <p>
-                    Module d'analyse macroéconomique conçu pour isoler et identifier la nature des soins 
-                    (médicaments, kinésithérapie, biologie, transports) dont la charge financière
-                    est la plus lourde pour la collectivité. 
-                </p>
-            </div>
-        </a>
-
+    <section class="prescriptions-header">
+        <h1>Analyse des prescriptions</h1>
+        <p>
+            Analyse interactive des dépenses de la médecine libérale (via l'API Ameli). 
+            Visualisez instantanément la structure des coûts par soin, les disparités 
+            territoriales et l'impact des déserts médicaux sur les profils de prescription.
+        </p>
     </section>
 
-</section>
 
-<script>
-    const BASE_URL = "{{ BASE_URL | default('') }}";
-</script>
-<script src="{{ url_for('static', filename='js/cascade.js') }}"></script>
+    <section class="prescriptions-page">
+
+        <section class="prescriptions-cards">
+            <div class="prescriptions-cards-top">
+                <h2>Thèmes d'analyse associés</h2>
+                <img src="{{ url_for('static', filename='images/antibiotique.png') }}" alt="Antibiotiques" class="prescriptions-header-image">
+            </div>
+
+            <a href="{{ url_for('prescriptions.page_disparite') }}" class="prescription-card-link"> 
+                <div class="prescription-card">
+                    <h3>Disparités géographiques</h3>
+                    <p>
+                        Outil d'analyse comparative territoriale conçu pour mesurer l'impact des déserts médicaux sur les dépenses de santé.
+                    </p>
+                </div>
+            </a>
+
+            <a href="{{ url_for('prescriptions.page_correlation') }}" class="prescription-card-link">
+                <div class="prescription-card">
+                    <h3>Corrélations démographiques des professionnels</h3>
+                    <p>
+                        Module d'analyse sociologique conçu pour identifier l'impact de l'âge
+                        et du sexe des praticiens sur leurs habitudes de prescription.
+                    </p>
+                </div>
+            </a>
+
+            <a href="{{ url_for('prescriptions.page_prescript_majeur') }}" class="prescription-card-link">
+                <div class="prescription-card">
+                    <h3>Type de prescriptions de dépenses majeures</h3>
+                    <p>
+                        Module d'analyse macroéconomique conçu pour isoler et identifier la nature des soins 
+                        (médicaments, kinésithérapie, biologie, transports) dont la charge financière
+                        est la plus lourde pour la collectivité. 
+                    </p>
+                </div>
+            </a>
+        </section>
+    </section>
 
 {% endblock %}

@@ -11,6 +11,11 @@
         </p>
     </section>
 
+
+<!------------------------------------------->
+<!--        AFFICHAGE DES  FILTRAGE        -->
+<!------------------------------------------->
+
     <section class="filters-box">
 
         <form action="{{ url_for('prescriptions.page_disparite') }}" method="get"  id="form-filtres">
@@ -18,8 +23,9 @@
             <section class="form-section"> 
 
                 <h2 class="filter-label">FILTRES</h2>
-
                 <div class="api-form"> 
+
+
                     <!-- FILTRES DE RÉGIONS -->
                     <div class="multi-select-container">
                         <div class="select-btn">
@@ -81,15 +87,14 @@
                 </div>
             </section>
 
+            <!-- BLOCS D'ACTIONS - BOUTON D'AFFICHAGE, DE RÉINITIALISER ET D'EXPORT CSV-->
             <div id="filtres-button">
                 <button type="submit" class="submit-btn">Afficher</button>
                 
                 <a href="{{ url_for('prescriptions.page_disparite') }}" class="reset-link">Réinitialiser</a>
                 
                 <button type="button" class="export-btn">Exporter (CSV)</button>
-            </div>
-                    
-                
+            </div>    
             
         </form>     
     </section>
@@ -131,10 +136,10 @@
                             </div>
 
                             <div class="dropdown-content">
-                                <label><input type="radio" name="ligne_max" value="25" form="form-filtres" {% if limite_ligne|int == 25 %}checked{% endif %}>25</label>
+                                <label><input type="radio" name="ligne_max" value="25" form="form-filtres" {% if not limite_ligne or limite_ligne|int == 25 %}checked{% endif %}>25</label>
                                 <label><input type="radio" name="ligne_max" value="50" form="form-filtres" {% if limite_ligne|int == 50 %}checked{% endif %}>50</label>
-                                <label><input type="radio" name="ligne_max" value="100" form="form-filtres" {% if limite_ligne|int == 100 %}checked{% endif %}>100</label>
-                                <label><input type="radio" name="ligne_max" value="150" form="form-filtres" {% if not limite_ligne or limite_ligne|int == 150 %}checked{% endif %}>150</label>
+                                <label><input type="radio" name="ligne_max" value="50" form="form-filtres" {% if limite_ligne|int == 75 %}checked{% endif %}>75</label>
+                                <label><input type="radio" name="ligne_max" value="100" form="form-filtres" {% if limite_ligne|int == 101 %}checked{% endif %}>101</label>
                             </div>
                         </div>
 
@@ -171,9 +176,9 @@
             {% else %}
 
                 <div class="empty-message">
-            <h3>Aucunes données</h3>
-            <p>Les données n'ont pas pu être récupéré</p>
-        </div>
+                    <h3>Aucunes données</h3>
+                    <p>Les données n'ont pas pu être récupéré</p>
+                </div>
 
             {% endif %}
 
@@ -181,6 +186,7 @@
 
     {% endif %}
     
+    <!-- GESTION Js DES GRAPHIQUES ET DES FILTRES -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <div id="data-passerelle" 
         data-labels='{{ labels_zones | tojson | safe }}'
