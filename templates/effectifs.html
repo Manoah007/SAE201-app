@@ -4,14 +4,14 @@
 
 {% block contenu %}
 
-<section class="prescriptions-page" style="width: 90%; margin: 0 auto; padding: 45px 0;">
+<section class="prescriptions-page">
 
     <div class="prescriptions-header">
         <div>
             <h1>Analyse des effectifs</h1>
             <p>Consultez les effectifs et la densité des professionnels de santé selon une profession, un territoire et une année.</p>
         </div>
-        <button class="export-btn">Exporter (CSV/PDF)</button>
+        <button class="export-btn">Exporter (CSV/Excel)</button>
     </div>
 
     <section class="filters-box">
@@ -45,14 +45,14 @@
 
             <button type="submit">Afficher</button>
 
-            <a href="{{ url_for('accueil.api_ameli') }}" class="reset-link">
+            <a href="{{ url_for('effectifs.afficher') }}" class="reset-link">
                 Réinitialiser
             </a>
         </form>
     </section>
 
     {% if prof and dept and annee %}
-        <section class="prescriptions-results" style="margin-top: 0;">
+        <section class="prescriptions-results">
 
             <div class="result-title">
                 <h2>Résultats de l’analyse</h2>

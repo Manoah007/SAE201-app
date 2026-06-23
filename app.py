@@ -7,7 +7,9 @@ from controllers.effectifs import bp_effectifs
 from controllers.prescriptions import bp_prescriptions
 from controllers.honoraires import bp_honoraires
 from controllers.comparaison import bp_comparaison
+from controllers.carte import bp_carte
 from flask import Flask, render_template
+from controllers.documentation import bp_documentation
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -27,6 +29,8 @@ app.register_blueprint(bp_effectifs)
 app.register_blueprint(bp_prescriptions)
 app.register_blueprint(bp_honoraires)
 app.register_blueprint(bp_comparaison)
+app.register_blueprint(bp_carte)
+app.register_blueprint(bp_documentation)
 
 @app.errorhandler(404)
 def page_non_trouvee(e):
@@ -45,6 +49,7 @@ def erreur_serveur(e):
 @app.route('/faq')
 def faq():
     return render_template('faq.html')
+
 
 if __name__ == "__main__":
     print(app.url_map)

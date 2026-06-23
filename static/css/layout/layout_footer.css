@@ -3,9 +3,25 @@ footer {
     background: black;
     color: white;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
-    padding: 40px;
+    padding: 40px 40px 0;
     margin-top: 0;
+}
+
+/* FOOTER - BARRE COPYRIGHT */
+.footer-bottom {
+    flex-basis: 100%;
+    border-top: 1px solid #2a2a2a;
+    margin-top: 30px;
+    padding: 18px 0;
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+}
+
+.footer-bottom p {
+    margin: 0;
 }
 
 .footer-col h3,
@@ -66,4 +82,38 @@ footer a:hover::after {
 
 .adresse-link:hover::after {
     width: 100%;
+}
+
+/* FOOTER - ICÔNE GITHUB */
+.footer-social {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.footer-social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: #2a2a2a;
+    border-radius: 8px;
+    color: white;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.footer-social-link:hover {
+    background: #41e46a;
+    transform: translateY(-2px);
+}
+
+/* Annule l'underline animé hérité du footer a::after */
+.footer-social-link::after {
+    display: none !important;
+}
+
+.footer-social-link svg {
+    width: 20px;
+    height: 20px;
 }

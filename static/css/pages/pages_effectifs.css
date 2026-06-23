@@ -5,7 +5,6 @@
 .effectifs-page {
     background: #f4f4f4;
     padding: 45px 50px;
-    width: 100%;
 }
 
 .effectifs-header {
@@ -33,7 +32,6 @@
     display: flex;
     align-items: center;
     gap: 18px;
-    width: 100%;
 }
 
 .effectifs-form {
