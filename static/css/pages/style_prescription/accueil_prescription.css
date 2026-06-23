@@ -146,3 +146,59 @@
 .prescription-card-link:hover .prescription-card::before {
     transform: scaleY(1);
 }
+
+/* ==========================================================================
+   6. MODE NUIT (Thème Sombre)
+   S'active automatiquement via [data-theme="dark"]
+   ========================================================================== */
+
+/* Textes de l'en-tête */
+[data-theme="dark"] .prescriptions-header h1,
+[data-theme="dark"] .prescriptions-cards-top h2 {
+    color: #f0f0f0;
+}
+
+[data-theme="dark"] .prescriptions-header p {
+    color: #aaa;
+}
+
+/* Le grand conteneur central */
+[data-theme="dark"] .prescriptions-cards {
+    background-color: #1e1e1e;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); /* Ombre plus forte pour se détacher du fond noir */
+}
+
+/* Ligne séparatrice */
+[data-theme="dark"] .prescriptions-cards-top {
+    border-bottom-color: #2a2a2a;
+}
+
+/* Les petites cartes d'analyse */
+[data-theme="dark"] .prescription-card {
+    background-color: #2a2a2a;
+    border-color: #3a3a3a;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Assombrit l'ombre de base */
+}
+
+[data-theme="dark"] .prescription-card h3 {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .prescription-card p {
+    color: #aaa;
+}
+
+/* L'effet magique au survol (Adapté pour le mode nuit) */
+[data-theme="dark"] .prescription-card-link:hover .prescription-card {
+    background-color: #1e3a2a; /* Vert sapin très sombre pour le fond */
+    border-color: #41e46a; /* Bordure vert fluo */
+    
+    /* On garde l'aura verte mais on l'adapte pour qu'elle brille dans le noir */
+    box-shadow: 
+        0 15px 25px -5px rgba(65, 228, 106, 0.15), 
+        0 8px 10px -6px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .prescription-card-link:hover .prescription-card h3 {
+    color: #41e46a; /* Titre vert fluo au lieu de vert sapin foncé */
+}
