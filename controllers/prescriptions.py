@@ -16,8 +16,10 @@ def accueil_prescription():
 
 @bp_prescriptions.route("/prescriptions/disparite")
 def page_disparite():
+
     session = Session()
     print("\nprescription.py | page_disparite()")
+
 
     try:
         # Récupère les tables pour charger les listes déroulantes
@@ -29,7 +31,7 @@ def page_disparite():
         departement_list = request.args.getlist("departements")
         
         annee_str = str(request.args.get("annee", default="2024"))
-        limit_ligne = request.args.get("ligne_max", default=110, type=int)
+        limit_ligne = request.args.get("ligne_max", default=19, type=int)
 
         # ANALYSE DES CHOIX
         is_region_tout = not region_list or "ALL" in region_list or "" in region_list
@@ -42,7 +44,9 @@ def page_disparite():
         resultats = []
         mode_maillage_regional = False
 
-        # APPELS API (Scénarios)
+
+
+        # APPELS API - Géstion des Scénarios
         if not request.args.get('regions') and not request.args.get('departements'):
             print("0 - Premier chargement de page, aucune sélection")
             mode_maillage_regional = True
@@ -63,7 +67,7 @@ def page_disparite():
             )
 
         elif is_dept_tout and is_region_tout:
-            print("I - Sélection de tous les départements de France")
+            print("II - Sélection de tous les départements de France")
             resultats = api.get_prescription_toutes_zones(
                 toutes_regions=True,
                 tous_départ=True,
@@ -72,7 +76,7 @@ def page_disparite():
             )  
 
         elif regions_ids and not departments_ids:
-            print("II - Sélection de régions spécifiques")
+            print("III - Sélection de régions spécifiques")
             mode_maillage_regional = True
             resultats = api.get_region_prescription(
                 region_list_id=regions_ids, 
@@ -90,10 +94,6 @@ def page_disparite():
                 limite_ligne=limit_ligne
             )
 
-        
-        
-        
-        
 
         # PRÉPARATION DES DONNÉES POUR CHART.JS
         labels_zones = []
@@ -114,12 +114,13 @@ def page_disparite():
                 valeurs_moyennes.append(moyenne_arrondie)
 
 
+
         return render_template(
             "prescriptions/page_disparite.html",
             regions=regions,
             departements=departements,
             annee=annee_str,
-            limite_ligne=limit_ligne, # On renvoie la limite pour le HTML
+            limite_ligne=limit_ligne,
             region_id=region_list,    
             departement_id=departement_list,
             resultats=resultats,
@@ -136,6 +137,7 @@ def page_disparite():
     finally:
         session.close()
         
+
 
 @bp_prescriptions.route("/prescriptions/correlation_demographique")
 def page_correlation():

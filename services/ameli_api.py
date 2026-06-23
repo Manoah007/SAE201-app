@@ -75,11 +75,12 @@ class AmeliAPI:
 #=====================================================================#
 
     def get_prescription_toutes_zones(self, toutes_regions=True, tous_départ=False, annee="2024", limite_ligne=30):
-        """Retourne les données par défaut quand rien n'est sélectionner par l"utilisateur"""
+        """Affiche soit tous les départements, soit toutes les régions"""
 
         print("\nameli_api.py | get_prescription_toutes_zones()")
 
         if toutes_regions and tous_départ:
+            print(f"Retourne tous les départements : toutes_regions={toutes_regions} et tous_départ={tous_départ}")
             return self._requete("prescriptions",
                                 {
                                 "select" : "libelle_departement,SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen",
@@ -90,6 +91,7 @@ class AmeliAPI:
                                 )
         
         elif toutes_regions:
+            print(f"Retourne toutes les régions: toutes_regions={toutes_regions}")
             return self._requete("prescriptions",
                                 {
                                 "select" : "libelle_region,SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen",
@@ -102,20 +104,17 @@ class AmeliAPI:
 
 
     def get_region_prescription(self, region_list_id=None, annee="2024", limite_ligne=30):
-        """
-        Filtre les montants totales et moyens selon la (ou les) région(s) pour une année
-        On affiche toutes les régions si 'region_list_id=None'
-        """
+        """Filtre les montants totales et moyens selon la (ou les) région(s) pour une année donnée"""
 
         print("\nameli_api.py | get_region_prescription()")
 
-        conditions_de_filtres = [f"year(annee)={annee}"]
+        where_clauses = [f"year(annee)={annee}"]
 
         if region_list_id:
-            ids_formates = ",".join([f"'{r_id}'" for r_id in region_list_id]) # On s'assure que tous les IDs sont des chaînes ou des entiers propres
-            conditions_de_filtres.append(f"region IN ({ids_formates})") # Utilisation de l'opérateur IN pour gérer la liste
+            ids_reg = ",".join([f"'{r_id}'" for r_id in region_list_id]) # On s'assure que tous les IDs sont des chaînes ou des entiers propres
+            where_clauses.append(f"region IN ({ids_reg})") # Utilisation de l'opérateur IN pour gérer la liste
 
-        where = " AND ".join(conditions_de_filtres)
+        where = " AND ".join(where_clauses)
 
         print(f"Création du filtre SQL : WHERE {where}")
 
@@ -131,14 +130,12 @@ class AmeliAPI:
 
 
     def get_departement_prescriptions(self, region_list_id=None, departement_list_id=None, annee="2024", limite_ligne=100):
-        """
-        Croise les filtres du montant (total et moyen) selon la région et le département sur une annéee
-        """
+        """Filtre les montants totales et moyens selon le (ou les) département(s) pour une année donnée"""
+        
         print("\nameli_api.py | get_departement_prescriptionsr()")
 
         where_clauses = [f"year(annee)={annee}"]
         select_fields = "libelle_departement,SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen"
-        print(f"Sélections de départements spécifiques | select_fields : {select_fields}")
         
         if departement_list_id:
             ids_dep = ",".join([f"'{d_id}'" for d_id in departement_list_id])
@@ -151,8 +148,10 @@ class AmeliAPI:
         else:
             print(f"Les listes sont vides | region_list_id={region_list_id}, departement_list_id={departement_list_id}")
 
+
         where_final = " AND ".join(where_clauses)
         print(f"Filtre WHERE : {where_final}")
+
 
         return self._requete(
             "prescriptions",
