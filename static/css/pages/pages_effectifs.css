@@ -5,7 +5,6 @@
 .effectifs-page {
     background: #f4f4f4;
     padding: 45px 50px;
-    width: 100%;
 }
 
 .effectifs-header {
@@ -33,7 +32,6 @@
     display: flex;
     align-items: center;
     gap: 18px;
-    width: 100%;
 }
 
 .effectifs-form {
@@ -62,16 +60,4 @@
     font-weight: bold;
     cursor: pointer;
     white-space: nowrap;
-}
-
-/* Style principal de la section de la page */
-.prescriptions-page {
-    width: 90%;
-    margin: 0 auto;
-    padding: 45px 0;
-}
-
-/* Espace entre la barre de filtres et le bloc résultats */
-.prescriptions-results {
-    margin-top: 28px;
 }
