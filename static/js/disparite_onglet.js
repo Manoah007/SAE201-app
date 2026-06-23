@@ -137,6 +137,45 @@ document.addEventListener('DOMContentLoaded', () => {
     filtrerDepartements();
 
     // ---------------------------------------------------------
+    // EXCLUSIVITÉ MUTUELLE DES CASES "ALL" (Régions et Départements)
+    // ---------------------------------------------------------
+    function configurerExclusiviteTout(nomFormulaire) {
+        const checkboxes = document.querySelectorAll(`input[name="${nomFormulaire}"]`);
+        const caseTout = Array.from(checkboxes).find(cb => cb.value === 'ALL');
+        const casesSpecifiques = Array.from(checkboxes).filter(cb => cb.value !== 'ALL');
+
+        if (!caseTout) return;
+
+        // Cas 1 : Si on coche "TOUT", on décoche toutes les options spécifiques
+        caseTout.addEventListener('change', () => {
+            if (caseTout.checked) {
+                casesSpecifiques.forEach(cb => {
+                    if (cb.checked) {
+                        cb.checked = false;
+                        // Crucial : on déclenche l'événement pour mettre à jour les compteurs et la cascade
+                        cb.dispatchEvent(new Event('change')); 
+                    }
+                });
+            }
+        });
+
+        // Cas 2 : Si on coche une option spécifique, on décoche obligatoirement "TOUT"
+        casesSpecifiques.forEach(cb => {
+            cb.addEventListener('change', () => {
+                if (cb.checked && caseTout.checked) {
+                    caseTout.checked = false;
+                    // On déclenche l'événement pour que le compteur du bouton se mette à jour
+                    caseTout.dispatchEvent(new Event('change')); 
+                }
+            });
+        });
+    }
+
+    // On active cette logique pour les deux menus distincts
+    configurerExclusiviteTout('regions');
+    configurerExclusiviteTout('departements');
+    
+    // ---------------------------------------------------------
     // SOUMISSION AUTOMATIQUE CORRIGÉE (Filtre Ligne Max)
     // ---------------------------------------------------------
     const ligneMaxRadios = document.querySelectorAll('input[name="ligne_max"]');
