@@ -24,6 +24,7 @@
 @import url('pages/pages_comparaison.css');
 @import url('pages/pages_carte.css');
 @import url('pages/pages_documentation.css');
+@import url('pages/pages_apropos.css');
 
 /* 5. Pages prescriptions spécifiques */
 @import url('pages/style_prescription/accueil_prescription.css');

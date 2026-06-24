@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+
+{% block titre %}À propos{% endblock %}
+
+{% block contenu %}
+
+<section class="apropos-page">
+
+    <section class="apropos-hero">
+        <div class="apropos-hero-text">
+            <span class="apropos-badge">SAE 2.01 · Projet universitaire</span>
+            <h1>À propos de Santé Data France</h1>
+            <p>
+                Santé Data France est une application web développée dans le cadre de la SAE 2.01.
+                Elle permet d’explorer, visualiser et analyser des données publiques de santé issues
+                de l’Assurance Maladie.
+            </p>
+        </div>
+
+        <div class="apropos-hero-card">
+            <h3>Nom de la SAE</h3>
+            <strong>SAE 2.01</strong>
+            <p>Développement d’une application web de visualisation de données de santé.</p>
+        </div>
+    </section>
+
+    <section class="apropos-team">
+        <div class="section-title">
+            <span>Équipe A2</span>
+            <h2>Membres du projet</h2>
+            <p>Ce projet a été réalisé en groupe dans le cadre du BUT Informatique.</p>
+        </div>
+
+        <div class="team-grid">
+            <div class="team-card">
+                <div class="team-avatar">BM</div>
+                <h3>Boussaidi Malik</h3>
+                <p>Membre de l’équipe projet</p>
+            </div>
+
+            <div class="team-card">
+                <div class="team-avatar">CI</div>
+                <h3>Cherifi Ismael</h3>
+                <p>Membre de l’équipe projet</p>
+            </div>
+
+            <div class="team-card">
+                <div class="team-avatar">DA</div>
+                <h3>Dhali Afnanmasud</h3>
+                <p>Membre de l’équipe projet</p>
+            </div>
+
+            <div class="team-card">
+                <div class="team-avatar">GM</div>
+                <h3>Gilles Manoah</h3>
+                <p>Membre de l’équipe projet</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="apropos-grid">
+
+        <article class="apropos-card">
+            <div class="card-icon">🎯</div>
+            <h2>Contexte du projet</h2>
+            <p>
+                Le projet s’inscrit dans la continuité de la SAE 2.04, où une base de données
+                relationnelle a été construite à partir de dimensions issues des données de santé.
+                La SAE 2.01 consiste ensuite à exploiter cette base et l’API Ameli dans une application web.
+            </p>
+        </article>
+
+        <article class="apropos-card">
+            <div class="card-icon">📌</div>
+            <h2>Objectifs</h2>
+            <ul>
+                <li>Créer une interface web claire et simple à utiliser.</li>
+                <li>Permettre la recherche par profession, région, département et année.</li>
+                <li>Afficher les résultats sous forme de tableaux, graphiques et cartes.</li>
+                <li>Comparer des données de santé entre plusieurs territoires ou périodes.</li>
+                <li>Rendre l’analyse accessible à un utilisateur non technique.</li>
+            </ul>
+        </article>
+
+        <article class="apropos-card">
+            <div class="card-icon">🧰</div>
+            <h2>Technologies utilisées</h2>
+
+            <div class="tech-tags">
+                <span>Python</span>
+                <span>Flask</span>
+                <span>Jinja2</span>
+                <span>SQLAlchemy</span>
+                <span>MySQL</span>
+                <span>HTML</span>
+                <span>CSS</span>
+                <span>JavaScript</span>
+                <span>Chart.js</span>
+                <span>Leaflet</span>
+                <span>Git / GitHub</span>
+            </div>
+        </article>
+
+        <article class="apropos-card">
+            <div class="card-icon">📊</div>
+            <h2>Sources de données</h2>
+            <p>
+                Les données utilisées proviennent principalement de l’API publique
+                <strong>data.ameli.fr</strong>, mise à disposition par l’Assurance Maladie.
+            </p>
+            <p>
+                Les données affichées concernent notamment les effectifs de professionnels de santé,
+                les densités, les honoraires, les prescriptions et les indicateurs territoriaux.
+            </p>
+        </article>
+
+    </section>
+
+    <section class="architecture-section">
+        <div class="section-title">
+            <span>Organisation technique</span>
+            <h2>Architecture de l’application</h2>
+            <p>
+                Le projet suit une organisation proche du modèle MVC afin de séparer clairement
+                les responsabilités du code.
+            </p>
+        </div>
+
+        <div class="architecture-grid">
+            <div class="architecture-card">
+                <span>01</span>
+                <h3>Controllers</h3>
+                <p>
+                    Les contrôleurs gèrent les routes Flask. Ils récupèrent les choix de l’utilisateur,
+                    appellent les services nécessaires et renvoient les templates HTML.
+                </p>
+            </div>
+
+            <div class="architecture-card">
+                <span>02</span>
+                <h3>Models</h3>
+                <p>
+                    Les modèles représentent les tables de la base de données avec SQLAlchemy :
+                    régions, départements, professions, types de prescriptions, etc.
+                </p>
+            </div>
+
+            <div class="architecture-card">
+                <span>03</span>
+                <h3>Services</h3>
+                <p>
+                    Les services regroupent la logique métier, les appels à l’API Ameli et la préparation
+                    des données utilisées dans les graphiques et les tableaux.
+                </p>
+            </div>
+
+            <div class="architecture-card">
+                <span>04</span>
+                <h3>Templates & Static</h3>
+                <p>
+                    Les templates Jinja2 affichent les pages, tandis que les fichiers CSS et JavaScript
+                    gèrent l’apparence, les graphiques, les filtres dynamiques et les interactions.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="apropos-final">
+        <h2>Finalité du site</h2>
+        <p>
+            L’objectif final est de proposer une plateforme lisible, moderne et interactive,
+            capable de transformer des données publiques complexes en informations compréhensibles.
+            Le site aide ainsi à mieux observer les différences territoriales, les évolutions médicales
+            et les tendances liées au système de santé français.
+        </p>
+    </section>
+
+</section>
+
+{% endblock %}
