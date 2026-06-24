@@ -30,11 +30,8 @@ app.register_blueprint(bp_prescriptions)
 app.register_blueprint(bp_honoraires)
 app.register_blueprint(bp_comparaison)
 app.register_blueprint(bp_carte)
-<<<<<<< HEAD
 app.register_blueprint(bp_indicateurs)
-=======
 app.register_blueprint(bp_documentation)
->>>>>>> 58d5f2e487defbee7033ff58c2b856d92f399258
 
 @app.errorhandler(404)
 def page_non_trouvee(e):
