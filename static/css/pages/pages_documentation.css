@@ -355,3 +355,7 @@
 [data-theme="dark"] .doc-info-box p {
     color: #c9f5d6;
 }
+
+.doc-hero-actions {
+    justify-content: flex-start;
+}

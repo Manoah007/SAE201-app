@@ -192,3 +192,51 @@ input:focus {
 [data-theme="dark"] .doc-page-link p {
     color: #aaa;
 }
+
+/* ==========================================
+   BOUTON EXPORT CSV / EXCEL
+   ========================================== */
+
+.export-btn {
+    border: none;
+    background: #111;
+    color: white;
+    padding: 13px 24px;
+    border-radius: 24px;
+    font-weight: 800;
+    font-size: 15px;
+    cursor: pointer;
+    white-space: nowrap;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.export-btn::before {
+    content: "⬇ ";
+    font-size: 14px;
+}
+
+.export-btn:hover {
+    background: #23b84d;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(35, 184, 77, 0.25);
+}
+
+.export-btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Mode sombre */
+[data-theme="dark"] .export-btn {
+    background: #2a2a2a;
+    color: #e0e0e0;
+    border: 1px solid #3a3a3a;
+}
+
+[data-theme="dark"] .export-btn:hover {
+    background: #41e46a;
+    color: #111;
+    border-color: #41e46a;
+}
