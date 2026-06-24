@@ -77,6 +77,11 @@
         color: #41e46a;
     }
 
+    .dropdown-content a.active {
+        background: #1e3a2a;
+        color: #41e46a;
+    }
+
     /* ── Bouton toggle thème ── */
     .theme-toggle {
         background: #2a2a2a;
@@ -95,6 +100,7 @@
     .honoraires-page,
     .prescriptions-page,
     .comparaison-page,
+    .api-page,
     .carte-page,
     .faq-page {
         background: #121212;
@@ -112,6 +118,13 @@
     .prescriptions-table-box,
     .prescriptions-results,
     .result-title,
+    .api-card,
+    .api-table-preview,
+    .comparaison-table-box,
+    .comparaison-results .result-title,
+    .effectifs-results .result-title,
+    .effectifs-results .chart-box,
+    .effectifs-results .prescriptions-table-box,
     .carte-container,
     .carte-legende {
         background: #1e1e1e;
@@ -137,13 +150,20 @@
     /* ── Filtres ── */
     .filters-box,
     .effectifs-filter-box,
-    .honoraires-filter-box {
+    .honoraires-filter-box,
+    .comparaison-filter-box,
+    .carte-filter-box {
         background: #2a2a2a;
+    }
+
+    .filter-label {
+        color: #ccc !important;
     }
 
     .effectifs-form select,
     .honoraires-form select,
     .api-form select,
+    .comparaison-form select,
     .carte-form select {
         background: #3a3a3a;
         color: #e0e0e0;
@@ -158,8 +178,19 @@
         color: #aaa;
     }
 
+    /* ── Liens nav : underline blanc au survol ── */
+    nav a::after {
+        background-color: white;
+    }
+
     h1, h2, h3, h4, h5 {
         color: #f0f0f0;
+    }
+
+    /* ── Footer : titres colonnes restent verts ── */
+    .footer-col h3,
+    .footer-col h4 {
+        color: #41e46a;
     }
 
     /* ── Tableaux ── */
@@ -167,8 +198,22 @@
         color: #e0e0e0;
     }
 
-    thead {
+    thead,
+    th {
+        background: #2a2a2a !important;
+        color: #9e9e9e !important;
+    }
+
+    /* ── Bouton Export ── */
+    .export-btn {
         background: #2a2a2a;
+        color: #e0e0e0;
+        border: none !important;
+        outline: none;
+    }
+
+    .export-btn:hover {
+        background: #3a3a3a;
     }
 
     tbody tr:nth-child(even) {

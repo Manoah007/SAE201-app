@@ -15,9 +15,21 @@
 
 /* 4. Pages spécifiques */
 @import url('pages/pages_accueil.css');
+<<<<<<< HEAD
 @import url('pages/pages_indicateurs.css');
 @import url('pages/pages_prescriptions.css');
+=======
+@import url('pages/pages_api-ameli.css');
+
+/*DANS LE DOSSIER STYLE PRESCRIPTIONS - STYLE DES PAGES PRSCRIPTIONS */
+@import url('pages/style_prescription/accueil_prescription.css');
+@import url('pages/style_prescription/page_disparite.css');
+@import url('pages/style_prescription/page_correlation.css');
+@import url('pages/style_prescription/page_prescript_majeur.css');
+
+>>>>>>> 58d5f2e487defbee7033ff58c2b856d92f399258
 @import url('pages/pages_faq.css');
 @import url('pages/pages_honoraires.css');
 @import url('pages/pages_effectifs.css');
 @import url('pages/pages_comparaison.css');
+@import url('pages/pages_documentation.css');

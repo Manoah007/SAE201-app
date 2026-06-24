@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block titre %}Documentation{% endblock %}
+
+{% block contenu %}
+
+<section class="documentation-page">
+
+    <div class="documentation-hero">
+        <div>
+            <span class="doc-badge">Guide utilisateur</span>
+            <h1>Documentation de Santé Data France</h1>
+            <p>
+                Retrouvez ici les explications essentielles pour comprendre le fonctionnement du site,
+                utiliser les filtres, lire les résultats et vous repérer facilement entre les différentes pages.
+            </p>
+
+            <div class="doc-hero-actions">
+                <a href="{{ url_for('accueil.api_ameli') }}" class="btn-primary">Commencer une recherche</a>
+                <a href="{{ url_for('faq') }}" class="btn-secondary">Voir la FAQ</a>
+            </div>
+        </div>
+
+        <div class="doc-hero-card">
+            <h3>Objectif du site</h3>
+            <p>
+                Le site permet d’explorer les données publiques de l’Assurance Maladie
+                à travers des graphiques, tableaux, cartes et comparaisons.
+            </p>
+        </div>
+    </div>
+
+    <section class="doc-quick-grid">
+        <div class="doc-mini-card">
+            <span>01</span>
+            <h3>Choisir une donnée</h3>
+            <p>Sélectionnez une page selon ce que vous voulez analyser : effectifs, prescriptions ou honoraires.</p>
+        </div>
+
+        <div class="doc-mini-card">
+            <span>02</span>
+            <h3>Utiliser les filtres</h3>
+            <p>Choisissez une profession, une région, un département et une année.</p>
+        </div>
+
+        <div class="doc-mini-card">
+            <span>03</span>
+            <h3>Analyser les résultats</h3>
+            <p>Consultez les tableaux et graphiques générés automatiquement.</p>
+        </div>
+
+        <div class="doc-mini-card">
+            <span>04</span>
+            <h3>Comparer les données</h3>
+            <p>Utilisez les pages Comparaison ou Carte pour avoir une vision plus globale.</p>
+        </div>
+    </section>
+
+    <section class="doc-content-layout">
+
+        <aside class="doc-sidebar">
+            <h3>Sommaire</h3>
+            <a href="#navigation">Navigation</a>
+            <a href="#filtres">Filtres</a>
+            <a href="#pages">Pages disponibles</a>
+            <a href="#lecture">Lire les résultats</a>
+            <a href="#conseils">Conseils</a>
+        </aside>
+
+        <div class="doc-main-content">
+
+            <article class="doc-section" id="navigation">
+                <h2>Se repérer sur le site</h2>
+                <p>
+                    Le site est organisé autour d’un menu principal situé en haut de la page.
+                    L’onglet <strong>Accueil</strong> présente une vue générale avec un tableau de bord.
+                    L’onglet <strong>Données</strong> regroupe les pages d’analyse comme les prescriptions,
+                    les effectifs, les honoraires, la comparaison et la carte.
+                </p>
+                <p>
+                    La page <strong>API Ameli</strong> sert de point d’entrée pour rechercher rapidement
+                    des données à partir de filtres simples.
+                </p>
+            </article>
+
+            <article class="doc-section" id="filtres">
+                <h2>Comment utiliser les filtres ?</h2>
+
+                <div class="doc-steps">
+                    <div>
+                        <strong>1</strong>
+                        <p>Choisissez une profession de santé dans la liste déroulante.</p>
+                    </div>
+
+                    <div>
+                        <strong>2</strong>
+                        <p>Sélectionnez une région : cela met automatiquement à jour la liste des départements.</p>
+                    </div>
+
+                    <div>
+                        <strong>3</strong>
+                        <p>Choisissez le département et l’année que vous voulez analyser.</p>
+                    </div>
+
+                    <div>
+                        <strong>4</strong>
+                        <p>Cliquez sur <em>Afficher</em> ou <em>Analyser</em> pour obtenir les résultats.</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="doc-section" id="pages">
+                <h2>Pages disponibles</h2>
+
+                <div class="doc-pages-grid">
+                    <a href="{{ url_for('accueil.index') }}" class="doc-page-link">
+                        <h3>Accueil</h3>
+                        <p>Vue générale du site avec un tableau de bord Ameli.</p>
+                    </a>
+
+                    <a href="{{ url_for('accueil.api_ameli') }}" class="doc-page-link">
+                        <h3>API Ameli</h3>
+                        <p>Recherche rapide avec filtres sur les données publiques.</p>
+                    </a>
+
+                    <a href="{{ url_for('effectifs.afficher') }}" class="doc-page-link">
+                        <h3>Effectifs</h3>
+                        <p>Analyse du nombre de professionnels de santé par territoire.</p>
+                    </a>
+
+                    <a href="{{ url_for('prescriptions.accueil_prescription') }}" class="doc-page-link">
+                        <h3>Prescriptions</h3>
+                        <p>Présentation des données liées aux prescriptions médicales.</p>
+                    </a>
+
+                    <a href="{{ url_for('honoraires.afficher') }}" class="doc-page-link">
+                        <h3>Honoraires</h3>
+                        <p>Analyse des honoraires et dépassements selon les professionnels.</p>
+                    </a>
+
+                    <a href="{{ url_for('comparaison.afficher') }}" class="doc-page-link">
+                        <h3>Comparaison</h3>
+                        <p>Comparaison de deux professions ou périodes dans un département.</p>
+                    </a>
+
+                    <a href="{{ url_for('carte.afficher') }}" class="doc-page-link">
+                        <h3>Carte</h3>
+                        <p>Visualisation des effectifs par département sur une carte interactive.</p>
+                    </a>
+
+                    <a href="{{ url_for('faq') }}" class="doc-page-link">
+                        <h3>FAQ</h3>
+                        <p>Réponses aux questions les plus fréquentes.</p>
+                    </a>
+                </div>
+            </article>
+
+            <article class="doc-section" id="lecture">
+                <h2>Comment lire les résultats ?</h2>
+                <p>
+                    Les résultats sont généralement présentés sous deux formes :
+                    un <strong>graphique</strong> pour visualiser rapidement les tendances,
+                    et un <strong>tableau</strong> pour consulter les données brutes plus précisément.
+                </p>
+
+                <div class="doc-info-box">
+                    <h3>À retenir</h3>
+                    <p>
+                        Si aucune donnée ne s’affiche, cela ne veut pas forcément dire qu’il y a une erreur.
+                        Il est possible que l’API Ameli ne possède pas de résultat pour la combinaison choisie :
+                        profession, département et année.
+                    </p>
+                </div>
+            </article>
+
+            <article class="doc-section" id="conseils">
+                <h2>Conseils d’utilisation</h2>
+
+                <ul class="doc-tips">
+                    <li>Commencez par une profession courante, comme les médecins généralistes ou les infirmiers.</li>
+                    <li>Essayez d’abord une grande zone, comme Paris ou un département très peuplé.</li>
+                    <li>Changez d’année si aucune donnée n’est trouvée.</li>
+                    <li>Utilisez la carte pour obtenir une vue globale par département.</li>
+                    <li>Utilisez la comparaison pour observer des écarts entre deux professions ou deux années.</li>
+                </ul>
+            </article>
+
+        </div>
+    </section>
+
+</section>
+
+{% endblock %}

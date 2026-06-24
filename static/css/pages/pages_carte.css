@@ -5,7 +5,6 @@
 .carte-page {
     background: #f4f4f4;
     padding: 45px 50px;
-    width: 100%;
 }
 
 /* ── En-tête ──────────────────────────────── */
@@ -25,6 +24,23 @@
 }
 
 /* ── Barre de filtres ─────────────────────── */
+
+.carte-filter-box {
+    background: #eeeeee;
+    border-radius: 18px;
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 0;
+}
+
+.carte-filter-box .filter-label {
+    font-size: 15px;
+    font-weight: 800;
+    color: #333;
+    white-space: nowrap;
+}
 
 .carte-form {
     display: flex;

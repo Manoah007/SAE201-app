@@ -1,66 +1,149 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, jsonify, render_template, request
 from models.db import Session
-from models.dimensions import ProfessionSante, Region, Departement, TypePrescription
+from models.dimensions import Region, Departement
 from services.ameli_api import AmeliAPI
 
 bp_prescriptions = Blueprint("prescriptions", __name__)
 api = AmeliAPI()
+    
+
 
 @bp_prescriptions.route("/prescriptions")
-def afficher():
-    session = Session()
-    try:
-        # 1. Chargement des données pour alimenter les listes déroulantes
-        professions = session.query(ProfessionSante).order_by(ProfessionSante.libelle).all()
-        regions = session.query(Region).order_by(Region.libelle).all()
-        postes = session.query(TypePrescription).order_by(TypePrescription.libelle).all()
-        
-        # 2. Récupération des choix de l'utilisateur (via l'URL en GET)
-        profession_id = request.args.get("profession_id", type=int)
-        departement_id = request.args.get("departement_id", type=int)
-        annee = request.args.get("annee", type=int)
-        prescription_id = request.args.get("prescription_id", type=int)
-        
-        resultats = None
-        evolution = None
-        prof = None
-        dept = None
-        poste = None
+def accueil_prescription():
+    """Cette fonction ne sert qu'à rediriger vers la page des postes de prescription et les cartes des sous thème disponibles"""
+    return render_template("prescriptions/accueil_prescription.html")
 
-        # 3. Si le formulaire a été soumis avec tous les champs
-        if profession_id and departement_id and annee and prescription_id:
-            prof = session.get(ProfessionSante, profession_id)
-            dept = session.get(Departement, departement_id)
-            poste = session.get(TypePrescription, prescription_id)
-            
-            if prof and dept and poste:
-                # Appels à l'API Ameli
-                resultats = api.get_prescriptions(prof.libelle, dept.code, annee, poste.libelle)
-                evolution = api.get_evolution_prescriptions(prof.libelle, dept.code, poste.libelle)
+
+@bp_prescriptions.route("/prescriptions/disparite")
+def page_disparite():
+
+    session = Session()
+    print("\nprescription.py | page_disparite()")
+
+
+    try:
+        # Récupère les tables pour charger les listes déroulantes
+        regions = session.query(Region).order_by(Region.libelle).all()
+        departements = session.query(Departement).order_by(Departement.libelle).all()
+
+        # RÉCUPÉRATION DES CHOIX (Noms corrigés pour matcher le HTML)
+        region_list = request.args.getlist("regions") 
+        departement_list = request.args.getlist("departements")
         
+        annee_str = str(request.args.get("annee", default="2024"))
+        limit_ligne = request.args.get("ligne_max", default=19, type=int)
+
+        # ANALYSE DES CHOIX
+        is_region_tout = not region_list or "ALL" in region_list or "" in region_list
+        is_dept_tout = not departement_list or "ALL" in departement_list or "" in departement_list
+
+        # Nettoyage
+        regions_ids = [r for r in region_list if r != "ALL"]
+        departments_ids = [d for d in departement_list if d != "ALL"]
+
+        resultats = []
+        mode_maillage_regional = False
+
+
+
+        # APPELS API - Géstion des Scénarios
+        if not request.args.get('regions') and not request.args.get('departements'):
+            print("0 - Premier chargement de page, aucune sélection")
+            mode_maillage_regional = True
+            resultats = api.get_prescription_toutes_zones(
+                toutes_regions=True,
+                tous_départ=False,
+                annee=annee_str,
+                limite_ligne=limit_ligne
+            )
+
+        elif departments_ids or (is_dept_tout and regions_ids):
+            print("I - Affichage maillage Départemental (Filtré)")
+            resultats = api.get_departement_prescriptions(
+                region_list_id=regions_ids,
+                departement_list_id=departments_ids, 
+                annee=annee_str,
+                limite_ligne=limit_ligne
+            )
+
+        elif is_dept_tout and is_region_tout:
+            print("II - Sélection de tous les départements de France")
+            resultats = api.get_prescription_toutes_zones(
+                toutes_regions=True,
+                tous_départ=True,
+                annee=annee_str,
+                limite_ligne=limit_ligne
+            )  
+
+        elif regions_ids and not departments_ids:
+            print("III - Sélection de régions spécifiques")
+            mode_maillage_regional = True
+            resultats = api.get_region_prescription(
+                region_list_id=regions_ids, 
+                annee=annee_str,
+                limite_ligne=limit_ligne
+            )
+        
+        else:
+            print("IV - Maillage Régional National")
+            mode_maillage_regional = True
+            resultats = api.get_prescription_toutes_zones(
+                toutes_regions=True,
+                tous_départ=False,
+                annee=annee_str,
+                limite_ligne=limit_ligne
+            )
+
+
+        # PRÉPARATION DES DONNÉES POUR CHART.JS
+        labels_zones = []
+        valeurs_totales = []
+        valeurs_moyennes = []
+
+        if resultats:
+            for ligne in resultats:
+                nom_zone = ligne.get('libelle_departement') or ligne.get('libelle_region') or "Inconnu"
+                labels_zones.append(nom_zone) 
+                
+                # On utilise les noms exacts de tes colonnes 'select'
+                valeurs_totales.append(ligne.get('cout_total', 0))
+
+                moyenne_brute = ligne.get('cout_moyen', 0)
+                # S'il y a un chiffre, on l'arrondit à 2 décimales. Sinon, on met 0.
+                moyenne_arrondie = round(moyenne_brute, 2) if moyenne_brute else 0
+                valeurs_moyennes.append(moyenne_arrondie)
+
+
+
         return render_template(
-            "prescriptions/prescriptions_maquette.html",
-            professions=professions,
+            "prescriptions/page_disparite.html",
             regions=regions,
-            postes=postes,
-            prof=prof,
-            dept=dept,
-            poste=poste,
-            annee=annee,
+            departements=departements,
+            annee=annee_str,
+            limite_ligne=limit_ligne,
+            region_id=region_list,    
+            departement_id=departement_list,
             resultats=resultats,
-            evolution=evolution
+            mode_maillage_regional=mode_maillage_regional,
+            labels_zones=labels_zones,
+            valeurs_totales=valeurs_totales,
+            valeurs_moyennes=valeurs_moyennes
         )
+    
+    except Exception as e:
+        print(f"Erreur lors de la génération de la page disparité : {e}")
+        return "Une erreur serveur est survenue.", 500
+    
     finally:
         session.close()
+        
 
-@bp_prescriptions.route("/prescriptions/poste")
-def page_postes():
-    return render_template("prescriptions/poste_prescription.html")
 
-@bp_prescriptions.route("/prescriptions/finance")
-def page_finances():
-    return render_template("prescriptions/finance_prescription.html")
+@bp_prescriptions.route("/prescriptions/correlation_demographique")
+def page_correlation():
+    return render_template("prescriptions/page_correlation.html")
 
-@bp_prescriptions.route("/prescriptions/volume")
-def page_volumes():
-    return render_template("prescriptions/volume_prescription.html")
+
+@bp_prescriptions.route("/prescriptions/prescriptions_majeurs")
+def page_prescript_majeur():
+    return render_template("prescriptions/page_prescript_majeur.html")

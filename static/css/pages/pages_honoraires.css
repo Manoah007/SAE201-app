@@ -36,18 +36,28 @@
     gap: 18px;
 }
 
+.honoraires-filter-box .filter-label {
+    font-size: 15px;
+    font-weight: 800;
+    color: #333;
+    white-space: nowrap;
+}
+
 .honoraires-form {
-    display: flex;
-    gap: 18px;
+    display: grid;
+    /* Profession | Région | Département | Année | Bouton | Lien reset */
+    grid-template-columns: 1.4fr 1.4fr 1.2fr 0.7fr auto auto;
+    gap: 12px;
     align-items: center;
     width: 100%;
 }
 
 .honoraires-form select {
-    flex: 1;
+    width: 100%;
+    min-width: 0;
     border: none;
     background: white;
-    padding: 13px 22px;
+    padding: 13px 10px;
     border-radius: 20px;
     font-weight: bold;
     text-align: center;
@@ -57,10 +67,14 @@
     border: none;
     background: #41e46a;
     color: white;
-    padding: 13px 28px;
+    padding: 13px 22px;
     border-radius: 20px;
     font-weight: bold;
     cursor: pointer;
+    white-space: nowrap;
+}
+
+.honoraires-form .reset-link {
     white-space: nowrap;
 }
 

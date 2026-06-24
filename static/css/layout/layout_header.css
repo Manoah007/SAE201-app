@@ -17,6 +17,18 @@ header {
     display: flex;
     align-items: center;
     gap: 10px;
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Annule l'underline animé hérité de nav a::after */
+.logo::after {
+    display: none !important;
+}
+
+.logo:hover .logo-text {
+    text-shadow: 0 0 0.6px currentColor, 0 0 0.6px currentColor;
+    transition: text-shadow 0.2s ease;
 }
 
 .logo-img {
@@ -105,7 +117,7 @@ nav a.active {
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.15);
     z-index: 1000;
     border-radius: 5px;
-    top: 100%;
+    top: calc(100% + 8px);
     left: 0;
     overflow: hidden;
 }
@@ -121,6 +133,18 @@ nav a.active {
 /* On désactive la ligne de soulignement pour les sous-menus */
 nav .dropdown-content a::after {
     display: none; 
+}
+
+/* --- LE PONT INVISIBLE DE SÉCURITÉ --- */
+.dropdown::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 100%;
+    width: 100%;
+    height: 15px; /* Crée une zone de détection invisible vers le bas */
+    background: transparent; 
+    z-index: 1001; /* S'assure que le pont passe au-dessus du vide */
 }
 
 .dropdown-content a:hover,

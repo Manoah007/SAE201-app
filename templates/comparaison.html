@@ -10,7 +10,7 @@
             <h1>Comparaison des pathologies</h1>
             <p>Comparez les données de deux pathologies sur deux années différentes.</p>
         </div>
-        <button class="export-btn">Exporter (CSV/PDF)</button>
+        <button class="export-btn">Exporter (CSV/Excel)</button>
     </div>
 
     <section class="comparaison-filter-box">
@@ -107,7 +107,7 @@
                         datasets: [{
                             label: "Nombre de professionnels",
                             data: donnees.map(d => d.valeur),
-                            backgroundColor: ["#41e46a", "#111111"], 
+                            backgroundColor: ["#41e46a", "#2E74B5"], 
                             borderRadius: 6
                         }]
                     }

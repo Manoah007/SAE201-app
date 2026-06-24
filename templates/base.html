@@ -19,10 +19,10 @@
 <body>
 
     <header>
-        <div class="logo">
+        <a href="{{ url_for('accueil.index') }}" class="logo">
             <img src="{{ url_for('static', filename='images/activity.svg') }}" alt="Logo" class="logo-img">
             <span class="logo-text">Santé Data France</span>
-        </div>
+        </a>
         <nav>
             <div class="nav-center">
                 <a href="{{ url_for('accueil.index') }}" class="{% if request.endpoint == 'accueil.index' %}active{% endif %}">Accueil</a>
@@ -31,7 +31,7 @@
                 <div class="dropdown">
                     <a href="#" class="dropbtn">Données &#9662;</a>
                     <div class="dropdown-content">
-                        <a href="{{ url_for('prescriptions.afficher') }}" class="{% if request.endpoint == 'prescriptions.afficher' %}active{% endif %}">Prescriptions</a>
+                        <a href="{{ url_for('prescriptions.accueil_prescription') }}" class="{% if request.endpoint == 'prescriptions.accueil_prescription' %}active{% endif %}">Prescriptions</a>
                         <a href="{{ url_for('effectifs.afficher') }}" class="{% if request.endpoint == 'effectifs.afficher' %}active{% endif %}">Effectifs</a>
                         <a href="{{ url_for('honoraires.afficher') }}" class="{% if request.endpoint == 'honoraires.afficher' %}active{% endif %}">Honoraires</a>
                         <a href="{{ url_for('comparaison.afficher') }}" class="{% if request.endpoint == 'comparaison.afficher' %}active{% endif %}">Comparaison</a>
@@ -43,7 +43,7 @@
             </div>
 
             <div class="nav-right">
-                <a href="#">Documentation</a>
+                <a href="{{ url_for('documentation.afficher') }}" class="{% if request.endpoint == 'documentation.afficher' %}active{% endif %}">Documentation</a>
                 <a href="#">À propos</a>
 
                 <button id="theme-toggle" class="theme-toggle" aria-label="Passer au thème sombre" title="Thème sombre">
@@ -75,7 +75,7 @@
 
         <div class="footer-col">
             <h4>Données</h4>
-            <p><a href="{{ url_for('prescriptions.afficher') }}" class="{% if request.endpoint == 'prescriptions.afficher' %}active{% endif %}">Prescriptions</a></p>
+            <p><a href="{{ url_for('prescriptions.accueil_prescription') }}" class="{% if request.endpoint == 'prescriptions.accueil_prescription' %}active{% endif %}">Prescriptions</a></p>
             <p><a href="{{ url_for('effectifs.afficher') }}" class="{% if request.endpoint == 'effectifs.afficher' %}active{% endif %}">Effectifs</a></p>
             <p><a href="{{ url_for('honoraires.afficher') }}" class="{% if request.endpoint == 'honoraires.afficher' %}active{% endif %}">Honoraires</a></p>
             <p><a href="{{ url_for('comparaison.afficher') }}" class="{% if request.endpoint == 'comparaison.afficher' %}active{% endif %}">Comparaison</a></p>
@@ -84,12 +84,8 @@
 
         <div class="footer-col">
             <h4>Ressources</h4>
-                <p><a href="#">Documentation API</a></p>
-                <p><a href="#">Guides</a></p>
+                <p><a href="{{ url_for('documentation.afficher') }}">Documentation</a></p>
                 <p><a href="{{ url_for('faq') }}">FAQ</a></p>
-                <p><a href="#">Blog</a></p>
-                <p><a href="#">Communauté</a></p>
-                
         </div>
 
         <div class="footer-col">

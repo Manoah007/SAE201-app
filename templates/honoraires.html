@@ -11,9 +11,10 @@
             <h1>Analyse des honoraires</h1>
             <p>Consultez les honoraires des professionnels de santé selon une profession, un territoire et une année.</p>
         </div>
+        <button class="export-btn">Exporter (CSV/Excel)</button>
     </div>
 
-    <section class="filters-box">
+    <section class="honoraires-filter-box">
         <span class="filter-label">FILTRES :</span>
 
         <form action="{{ url_for('honoraires.afficher') }}" method="get" class="honoraires-form">
