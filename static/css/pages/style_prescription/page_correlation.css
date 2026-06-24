@@ -1,0 +1,454 @@
+/* ==========================================================================
+   PAGE DE CORRÉLATION DÉMOGRAPHIQUE (PRESCRIPTIONS & DÉSERTS MÉDICAUX)
+   ========================================================================== */
+
+/******************************************************************************/
+/** 1. EN-TÊTE GLOBAL                                                        **/
+/******************************************************************************/
+
+.contexte-correlation .prescriptions-header {
+    text-align: center; 
+    max-width: 850px;
+    margin: 0 auto 3rem auto; 
+    padding: 2rem 1rem 0.5rem;
+}
+
+.contexte-correlation .prescriptions-header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #111827; 
+    margin-bottom: 1rem;
+}
+
+.contexte-correlation .prescriptions-header p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #4b5563; 
+}
+
+/******************************************************************************/
+/** 2. BOÎTE DES FILTRES (STRUCTURE & FORMULAIRES)                          **/
+/******************************************************************************/
+
+.contexte-correlation .filters-box {
+    background-color: #ffffff;
+    border-radius: 16px; 
+    padding: 2rem;
+    max-width: 1100px;
+    margin: 0 auto 2.5rem auto;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03); 
+    border: 1px solid #f3f4f6;
+}
+
+.contexte-correlation .filter-label {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #374151;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+}
+
+.contexte-correlation .filter-label::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 18px;
+    background-color: #41e46a; 
+    border-radius: 2px;
+    margin-right: 10px;
+}
+
+.contexte-correlation .api-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Listes déroulantes personnalisées */
+.contexte-correlation .multi-select-container {
+    position: relative;
+    width: 100%;
+}
+
+.contexte-correlation .select-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 1.2rem;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.contexte-correlation .select-btn:hover {
+    border-color: #86efac;
+    background-color: #f9fafb;
+}
+
+.contexte-correlation .btnText {
+    font-size: 0.95rem;
+    color: #1f2937;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.contexte-correlation .arrow {
+    font-size: 0.75rem;
+    color: #6b7280;
+    transition: transform 0.2s ease;
+}
+
+/* Contenu déroulant au survol ou focus */
+.contexte-correlation .multi-select-container:hover .dropdown-content {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.contexte-correlation .dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    max-height: 250px;
+    overflow-y: auto;
+    margin-top: 5px;
+    padding: 0.5rem 0;
+}
+
+.contexte-correlation .dropdown-content label {
+    display: flex;
+    align-items: center;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    color: #4b5563;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.contexte-correlation .dropdown-content label:hover {
+    background-color: #f2fcf5;
+    color: #1a5c2d;
+}
+
+.contexte-correlation .dropdown-content input[type="radio"],
+.contexte-correlation .dropdown-content input[type="checkbox"] {
+    margin-right: 10px;
+    accent-color: #41e46a;
+}
+
+/* Boutons d'actions */
+.contexte-correlation #filtres-button {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1.2rem;
+    border-top: 1px solid #f3f4f6;
+    padding-top: 1.5rem;
+}
+
+.contexte-correlation .submit-btn {
+    background-color: #41e46a;
+    color: #ffffff;
+    border: none;
+    padding: 0.75rem 1.75rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px -1px rgba(65, 228, 106, 0.2);
+    transition: all 0.2s ease;
+}
+
+.contexte-correlation .submit-btn:hover {
+    background-color: #34c759;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px -1px rgba(65, 228, 106, 0.3);
+}
+
+.contexte-correlation .reset-link {
+    color: #6b7280;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.contexte-correlation .reset-link:hover {
+    color: #1f2937;
+}
+
+.contexte-correlation .export-btn {
+    background-color: #ffffff;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.contexte-correlation .export-btn:hover {
+    background-color: #f9fafb;
+    border-color: #9ca3af;
+}
+
+/******************************************************************************/
+/** 3. SYSTÈME D'ONGLETS (TABS CHANGER)                                      **/
+/******************************************************************************/
+
+.contexte-correlation .tabs-menu {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    background-color: #f3f4f6;
+    padding: 0.4rem;
+    border-radius: 10px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.contexte-correlation .tab-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #4b5563;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.contexte-correlation .tab-btn.active {
+    background-color: #ffffff;
+    color: #111827;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.contexte-correlation .tab-content {
+    display: none;
+    animation: fadeIn 0.4s ease;
+}
+
+.contexte-correlation .tab-content.active {
+    display: block;
+}
+
+/******************************************************************************/
+/** 4. BLOCS DES GRAPHIQUES ET CARTOGRAPHIE                                 **/
+/******************************************************************************/
+
+.contexte-correlation .prescriptions-results {
+    max-width: 1100px;
+    margin: 0 auto 4rem auto;
+    padding: 0 1rem;
+}
+
+.contexte-correlation .chart-box {
+    background-color: #ffffff;
+    border-radius: 14px;
+    border: 1px solid #f3f4f6;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+
+.contexte-correlation .chart-box h3 {
+    font-size: 1.25rem;
+    color: #1f2937;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+}
+
+/* Zone spécifique pour la carte Leaflet */
+.contexte-correlation #map-deserts {
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    z-index: 1;
+}
+
+/******************************************************************************/
+/** 5. TABLEAU COMPLEMENTAIRE ET ALERTES STYLE                              **/
+/******************************************************************************/
+
+.contexte-correlation .prescriptions-table-box {
+    background-color: #ffffff;
+    border-radius: 14px;
+    border: 1px solid #f3f4f6;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    overflow-x: auto;
+}
+
+.contexte-correlation .prescriptions-table-box table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    margin-top: 1rem;
+}
+
+.contexte-correlation .prescriptions-table-box th {
+    background-color: #f9fafb;
+    color: #4b5563;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 1rem 1.25rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.contexte-correlation .prescriptions-table-box td {
+    padding: 1rem 1.25rem;
+    font-size: 0.95rem;
+    color: #374151;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.contexte-correlation .prescriptions-table-box tr:hover td {
+    background-color: #f9fafb;
+}
+
+/* Gestion des alertes couleurs du tableau */
+.contexte-correlation .text-danger {
+    color: #dc2626 !important;
+    background-color: #fef2f2;
+    border-radius: 4px;
+    padding: 0.2rem 0.5rem;
+}
+
+.contexte-correlation .text-warning {
+    color: #d97706 !important;
+    background-color: #fffbeb;
+    border-radius: 4px;
+    padding: 0.2rem 0.5rem;
+}
+
+/* Zone vide / Message d'erreur */
+.contexte-correlation .empty-message {
+    text-align: center;
+    padding: 4rem 2rem;
+    background-color: #ffffff;
+    border-radius: 14px;
+    border: 1px dashed #d1d5db;
+    color: #6b7280;
+}
+
+/******************************************************************************/
+/** 6. MODE NUIT (THÈME SOMBRE CONFORME)                                    **/
+/******************************************************************************/
+
+[data-theme="dark"] .contexte-correlation .prescriptions-header h1,
+[data-theme="dark"] .contexte-correlation .chart-box h3,
+[data-theme="dark"] .contexte-correlation .filter-label {
+    color: #f0f0f0;
+}
+
+[data-theme="dark"] .contexte-correlation .prescriptions-header p,
+[data-theme="dark"] .contexte-correlation .reset-link {
+    color: #aaa;
+}
+
+[data-theme="dark"] .contexte-correlation .reset-link:hover {
+    color: #fff;
+}
+
+[data-theme="dark"] .contexte-correlation .filters-box,
+[data-theme="dark"] .contexte-correlation .chart-box,
+[data-theme="dark"] .contexte-correlation .prescriptions-table-box,
+[data-theme="dark"] .contexte-correlation .empty-message,
+[data-theme="dark"] .contexte-correlation .dropdown-content {
+    background-color: #1e1e1e;
+    border-color: #2a2a2a;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); 
+}
+
+[data-theme="dark"] .contexte-correlation .select-btn {
+    background-color: #2a2a2a;
+    border-color: #3a3a3a;
+}
+
+[data-theme="dark"] .contexte-correlation .btnText {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .contexte-correlation .dropdown-content label {
+    color: #bbb;
+}
+
+[data-theme="dark"] .contexte-correlation .dropdown-content label:hover {
+    background-color: #1e3a2a; 
+    color: #41e46a;
+}
+
+[data-theme="dark"] .contexte-correlation .tabs-menu {
+    background-color: #2a2a2a;
+}
+
+[data-theme="dark"] .contexte-correlation .tab-btn {
+    color: #aaa;
+}
+
+[data-theme="dark"] .contexte-correlation .tab-btn.active {
+    background-color: #1e1e1e;
+    color: #41e46a;
+}
+
+[data-theme="dark"] .contexte-correlation .export-btn {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    border-color: #444;
+}
+
+[data-theme="dark"] .contexte-correlation .export-btn:hover {
+    background-color: #333;
+}
+
+[data-theme="dark"] .contexte-correlation .prescriptions-table-box th {
+    background-color: #252525;
+    color: #aaa;
+    border-bottom-color: #3a3a3a;
+}
+
+[data-theme="dark"] .contexte-correlation .prescriptions-table-box td {
+    color: #ccc;
+    border-bottom-color: #252525;
+}
+
+[data-theme="dark"] .contexte-correlation .prescriptions-table-box tr:hover td {
+    background-color: #232323;
+}
+
+[data-theme="dark"] .contexte-correlation .text-danger {
+    background-color: rgba(220, 38, 38, 0.15);
+}
+
+[data-theme="dark"] .contexte-correlation .text-warning {
+    background-color: rgba(217, 119, 6, 0.15);
+}
+
+[data-theme="dark"] .contexte-correlation #map-deserts {
+    border-color: #3a3a3a;
+}

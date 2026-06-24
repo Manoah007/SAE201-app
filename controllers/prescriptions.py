@@ -1,11 +1,12 @@
 from flask import Blueprint, jsonify, render_template, request
 from models.db import Session
-from models.dimensions import Region, Departement
+from models.dimensions import Region, Departement, ProfessionSante
 from services.ameli_api import AmeliAPI
+from services.prescription_service import PrescriptionService
 
 bp_prescriptions = Blueprint("prescriptions", __name__)
 api = AmeliAPI()
-    
+prescription_service = PrescriptionService(api) 
 
 
 @bp_prescriptions.route("/prescriptions")
@@ -18,7 +19,7 @@ def accueil_prescription():
 def page_disparite():
 
     session = Session()
-    print("\nprescription.py | page_disparite()")
+    print("\nprescription.py | page_disparite() | ROUTE : /prescriptions/disparite")
 
 
     try:
@@ -50,16 +51,16 @@ def page_disparite():
         if not request.args.get('regions') and not request.args.get('departements'):
             print("0 - Premier chargement de page, aucune sélection")
             mode_maillage_regional = True
-            resultats = api.get_prescription_toutes_zones(
+            resultats = prescription_service.get_prescription_toutes_zones(
                 toutes_regions=True,
-                tous_départ=False,
+                tous_depart=False,
                 annee=annee_str,
                 limite_ligne=limit_ligne
             )
 
         elif departments_ids or (is_dept_tout and regions_ids):
             print("I - Affichage maillage Départemental (Filtré)")
-            resultats = api.get_departement_prescriptions(
+            resultats = prescription_service.get_departement_prescriptions(
                 region_list_id=regions_ids,
                 departement_list_id=departments_ids, 
                 annee=annee_str,
@@ -68,9 +69,9 @@ def page_disparite():
 
         elif is_dept_tout and is_region_tout:
             print("II - Sélection de tous les départements de France")
-            resultats = api.get_prescription_toutes_zones(
+            resultats = prescription_service.get_prescription_toutes_zones(
                 toutes_regions=True,
-                tous_départ=True,
+                tous_depart=True,
                 annee=annee_str,
                 limite_ligne=limit_ligne
             )  
@@ -78,7 +79,7 @@ def page_disparite():
         elif regions_ids and not departments_ids:
             print("III - Sélection de régions spécifiques")
             mode_maillage_regional = True
-            resultats = api.get_region_prescription(
+            resultats = prescription_service.get_region_prescription(
                 region_list_id=regions_ids, 
                 annee=annee_str,
                 limite_ligne=limit_ligne
@@ -87,9 +88,9 @@ def page_disparite():
         else:
             print("IV - Maillage Régional National")
             mode_maillage_regional = True
-            resultats = api.get_prescription_toutes_zones(
+            resultats = prescription_service.get_prescription_toutes_zones(
                 toutes_regions=True,
-                tous_départ=False,
+                tous_depart=False,
                 annee=annee_str,
                 limite_ligne=limit_ligne
             )
@@ -141,7 +142,58 @@ def page_disparite():
 
 @bp_prescriptions.route("/prescriptions/correlation_demographique")
 def page_correlation():
-    return render_template("prescriptions/page_correlation.html")
+    
+    session = Session()
+    print("\nprescription.py | page_correlation() | ROUTE : /prescriptions/correlation_demographique")
+
+    try:
+        departements = session.query(Departement).order_by(Departement.libelle).all()
+        professions = session.query(ProfessionSante).order_by(ProfessionSante.libelle).all()
+
+        profession = request.args.get("profession", "Ensemble des médecins") 
+        annee_str = str(request.args.get("annee", default="2024"))
+        departement_code = request.args.get("departement")
+
+
+        donnees_globales = prescription_service.get_correlation_age_depense(
+            profession=profession, 
+            annee=annee_str
+        )
+        
+        donnees_pyramide = prescription_service.get_donnees_pyramide_ages(
+            profession=profession, 
+            departement_code=departement_code, 
+            annee=annee_str
+        )
+        
+        donnees_tableau_deserts = prescription_service.get_tableau_top_deserts_medicaux(
+            profession=profession, 
+            annee=annee_str
+        )
+
+        return render_template(
+            "prescriptions/page_correlation.html",
+            # Listes pour construire les <select>
+            departements=departements,
+            professions=professions,
+            
+            # Choix actuels pour garder les options sélectionnées après rafraîchissement
+            profession_selectionnee=profession,
+            annee_selectionnee=annee_str,
+            departement_selectionne=departement_code,
+            
+            # Données JSON pour l'affichage (Graphiques et Tableaux)
+            donnees_globales=donnees_globales,
+            donnees_pyramide=donnees_pyramide,
+            donnees_tableau_deserts=donnees_tableau_deserts
+        )
+
+    except Exception as e:
+        print(f"Erreur lors de la génération de la page corrélation : {e}")
+        return "Une erreur serveur est survenue lors de la récupération des données.", 500
+        
+    finally:
+        session.close()
 
 
 @bp_prescriptions.route("/prescriptions/prescriptions_majeurs")

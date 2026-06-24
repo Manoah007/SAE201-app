@@ -2,190 +2,192 @@
 {% block titre %}Prescriptions selon le poste{% endblock %}
 
 {% block contenu %}
+    <div class="contexte-disparite">
 
-    <section class="prescriptions-header">
-        <h1>Disparités géographiques</h1>
-        <p>
-            Identifier les écarts de prescription entre deux ou plusieurs zones géographiques
-             afin de mesurer précisément l'impact des déserts médicaux sur les dépenses de santé de ville.
-        </p>
-    </section>
+        <section class="prescriptions-header">
+            <h1>Disparités géographiques</h1>
+            <p>
+                Identifier les écarts de prescription entre deux ou plusieurs zones géographiques
+                afin de mesurer précisément l'impact des déserts médicaux sur les dépenses de santé de ville.
+            </p>
+        </section>
 
 
 <!------------------------------------------->
 <!--        AFFICHAGE DES  FILTRAGE        -->
 <!------------------------------------------->
 
-    <section class="filters-box">
+        <section class="filters-box">
 
-        <form action="{{ url_for('prescriptions.page_disparite') }}" method="get"  id="form-filtres">
+            <form action="{{ url_for('prescriptions.page_disparite') }}" method="get"  id="form-filtres">
 
-            <section class="form-section"> 
+                <section class="form-section"> 
 
-                <h2 class="filter-label">FILTRES</h2>
-                <div class="api-form"> 
+                    <h2 class="filter-label">FILTRES</h2>
+                    <div class="api-form"> 
 
 
-                    <!-- FILTRES DE RÉGIONS -->
-                    <div class="multi-select-container">
-                        <div class="select-btn">
-                            <span class="btnText">RÉGIONS</span>
-                            <span class="arrow">▼</span>
-                        </div>
+                        <!-- FILTRES DE RÉGIONS -->
+                        <div class="multi-select-container">
+                            <div class="select-btn">
+                                <span class="btnText">RÉGIONS</span>
+                                <span class="arrow">▼</span>
+                            </div>
 
-                        <div class="dropdown-content">
-                            <label><input type="checkbox" name="regions" value="ALL" {% if 'ALL' in region_id %}checked{% endif %}>
-                                    Toutes régions 
-                            </label>
-                            {% for region in regions %}
-                                <label><input type="checkbox" name="regions" value="{{ region.code }}" {% if region.code|string in region_id %}checked{% endif %}>
-                                    {{ region.libelle }}
+                            <div class="dropdown-content">
+                                <label><input type="checkbox" name="regions" value="ALL" {% if 'ALL' in region_id %}checked{% endif %}>
+                                        Toutes régions 
                                 </label>
-                            {% endfor %}
-                        </div>
-                    </div>
-
-
-                    <!-- FILTRES DE DÉPARTEMENTS -->
-                    <div class="multi-select-container">
-                        <div class="select-btn">
-                            <span class="btnText">DÉPARTEMENT</span>
-                            <span class="arrow">▼</span>
+                                {% for region in regions %}
+                                    <label><input type="checkbox" name="regions" value="{{ region.code }}" {% if region.code|string in region_id %}checked{% endif %}>
+                                        {{ region.libelle }}
+                                    </label>
+                                {% endfor %}
+                            </div>
                         </div>
 
-                        <div class="dropdown-content">
-                            <label><input type="checkbox" name="departements" value="ALL" {% if 'ALL' in departement_id %}checked{% endif %}> 
-                                Tous départements 
-                            </label>
-                            {% for depart in departements %}
-                                <label><input type="checkbox" name="departements" value="{{ depart.code }}" data-region="{{ depart.region.code }}" {% if depart.code|string in departement_id %}checked{% endif %}> 
-                                    {{ depart.libelle }}
+
+                        <!-- FILTRES DE DÉPARTEMENTS -->
+                        <div class="multi-select-container">
+                            <div class="select-btn">
+                                <span class="btnText">DÉPARTEMENT</span>
+                                <span class="arrow">▼</span>
+                            </div>
+
+                            <div class="dropdown-content">
+                                <label><input type="checkbox" name="departements" value="ALL" {% if 'ALL' in departement_id %}checked{% endif %}> 
+                                    Tous départements 
                                 </label>
-                            {% endfor %}
+                                {% for depart in departements %}
+                                    <label><input type="checkbox" name="departements" value="{{ depart.code }}" data-region="{{ depart.region.code }}" {% if depart.code|string in departement_id %}checked{% endif %}> 
+                                        {{ depart.libelle }}
+                                    </label>
+                                {% endfor %}
+                            </div>
                         </div>
+
+
+                        <!-- FILTRES D'ANNÉES -->
+                        <div class="multi-select-container">
+                            <div class="select-btn">
+                                <span class="btnText">{% if annee %}{{ annee }}{% else %}2024{% endif %}</span>
+                                <span class="arrow">▼</span>
+                            </div>
+
+                            <div class="dropdown-content">
+                                {% for a in range(2024, 2013, -1) %}
+                                    <label>
+                                        <input type="radio" name="annee" value="{{ a }}" {% if a|string == annee|string %}checked{% endif %}>
+                                        {{ a }}
+                                    </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+
                     </div>
+                </section>
 
-
-                    <!-- FILTRES D'ANNÉES -->
-                    <div class="multi-select-container">
-                        <div class="select-btn">
-                            <span class="btnText">{% if annee %}{{ annee }}{% else %}2024{% endif %}</span>
-                            <span class="arrow">▼</span>
-                        </div>
-
-                        <div class="dropdown-content">
-                            {% for a in range(2024, 2013, -1) %}
-                                <label>
-                                    <input type="radio" name="annee" value="{{ a }}" {% if a|string == annee|string %}checked{% endif %}>
-                                    {{ a }}
-                                </label>
-                            {% endfor %}
-                        </div>
-                    </div>
-
-
-                </div>
-            </section>
-
-            <!-- BLOCS D'ACTIONS - BOUTON D'AFFICHAGE, DE RÉINITIALISER ET D'EXPORT CSV-->
-            <div id="filtres-button">
-                <button type="submit" class="submit-btn">Afficher</button>
+                <!-- BLOCS D'ACTIONS - BOUTON D'AFFICHAGE, DE RÉINITIALISER ET D'EXPORT CSV-->
+                <div id="filtres-button">
+                    <button type="submit" class="submit-btn">Afficher</button>
+                    
+                    <a href="{{ url_for('prescriptions.page_disparite') }}" class="reset-link">Réinitialiser</a>
+                    
+                    <button type="button" class="export-btn">Exporter (CSV)</button>
+                </div>    
                 
-                <a href="{{ url_for('prescriptions.page_disparite') }}" class="reset-link">Réinitialiser</a>
-                
-                <button type="button" class="export-btn">Exporter (CSV)</button>
-            </div>    
-            
-        </form>     
-    </section>
+            </form>     
+        </section>
 
 <!------------------------------------------->
 <!-- AFFICHAGE DES RÉSULTATS APRÈS FILTRAGE-->
 <!------------------------------------------->
 
-    {% if resultats is not none %}
+        {% if resultats is not none %}
 
-        <section class="prescriptions-results">
-            
-            {% if resultats|length > 0 %}
-                <div class="tabs-menu">
-                    <button class="tab-btn active" onclick="switchTab(event, 'tab-graphique')">Graphique</button>
-                    <button class="tab-btn" onclick="switchTab(event, 'tab-tableau')">Tableau des données</button>
-                </div>
-
-
-                <div id="tab-graphique" class="tab-content active">
-                    <div class="chart-box prescription-chart">
-                        <canvas id="histogram-total"></canvas>
+            <section class="prescriptions-results">
+                
+                {% if resultats|length > 0 %}
+                    <div class="tabs-menu">
+                        <button class="tab-btn active" onclick="switchTab(event, 'tab-graphique')">Graphique</button>
+                        <button class="tab-btn" onclick="switchTab(event, 'tab-tableau')">Tableau des données</button>
                     </div>
-                    <div class="chart-box prescription-chart">
-                        <canvas id="histogram-moyenne"></canvas>
-                    </div>
-                </div>
 
 
-                <div id="tab-tableau" class="tab-content">
-                    <div class="prescriptions-table-box">
-                        <h3>Tableau des données brutes</h3>
-
-
-                        <div class="multi-select-container">
-                            <div class="select-btn">
-                                <span class="btnText">{% if limite_ligne %}{{ limite_ligne }}{% else %}100{% endif %}</span>
-                                <span class="arrow">▼</span>
-                            </div>
-
-                            <div class="dropdown-content">
-                                <label><input type="radio" name="ligne_max" value="25" form="form-filtres" {% if not limite_ligne or limite_ligne|int == 25 %}checked{% endif %}>25</label>
-                                <label><input type="radio" name="ligne_max" value="50" form="form-filtres" {% if limite_ligne|int == 50 %}checked{% endif %}>50</label>
-                                <label><input type="radio" name="ligne_max" value="50" form="form-filtres" {% if limite_ligne|int == 75 %}checked{% endif %}>75</label>
-                                <label><input type="radio" name="ligne_max" value="100" form="form-filtres" {% if limite_ligne|int == 101 %}checked{% endif %}>101</label>
-                            </div>
+                    <div id="tab-graphique" class="tab-content active">
+                        <div class="chart-box prescription-chart">
+                            <canvas id="histogram-total"></canvas>
                         </div>
+                        <div class="chart-box prescription-chart">
+                            <canvas id="histogram-moyenne"></canvas>
+                        </div>
+                    </div>
 
 
-                        <table>
-                            <thead>
-                                <tr>
-                                    {% if mode_maillage_regional %}
-                                        <th>Région</th>
-                                    {% else %}
-                                        <th>Département</th>
-                                    {% endif %}
-                                    <th>Montant Total</th>
-                                    <th>Montant Moyen</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for ligne in resultats %}
+                    <div id="tab-tableau" class="tab-content">
+                        <div class="prescriptions-table-box">
+                            <h3>Tableau des données brutes</h3>
+
+
+                            <div class="multi-select-container">
+                                <div class="select-btn">
+                                    <span class="btnText">{% if limite_ligne %}{{ limite_ligne }}{% else %}100{% endif %}</span>
+                                    <span class="arrow">▼</span>
+                                </div>
+
+                                <div class="dropdown-content">
+                                    <label><input type="radio" name="ligne_max" value="25" form="form-filtres" {% if not limite_ligne or limite_ligne|int == 25 %}checked{% endif %}>25</label>
+                                    <label><input type="radio" name="ligne_max" value="50" form="form-filtres" {% if limite_ligne|int == 50 %}checked{% endif %}>50</label>
+                                    <label><input type="radio" name="ligne_max" value="50" form="form-filtres" {% if limite_ligne|int == 75 %}checked{% endif %}>75</label>
+                                    <label><input type="radio" name="ligne_max" value="100" form="form-filtres" {% if limite_ligne|int == 101 %}checked{% endif %}>101</label>
+                                </div>
+                            </div>
+
+
+                            <table>
+                                <thead>
                                     <tr>
                                         {% if mode_maillage_regional %}
-                                            <td>{{ ligne.libelle_region if ligne.libelle_region is defined else 'N/A' }}</td>
+                                            <th>Région</th>
                                         {% else %}
-                                            <td>{{ ligne.libelle_departement if ligne.libelle_departement is defined else 'N/A' }}</td>
+                                            <th>Département</th>
                                         {% endif %}
-                                        <td>{{ ligne.cout_total | round(2) }} €</td>
-                                        <td>{{ ligne.cout_moyen | round(2) }} €</td>
+                                        <th>Montant Total</th>
+                                        <th>Montant Moyen</th>
                                     </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {% for ligne in resultats %}
+                                        <tr>
+                                            {% if mode_maillage_regional %}
+                                                <td>{{ ligne.libelle_region if ligne.libelle_region is defined else 'N/A' }}</td>
+                                            {% else %}
+                                                <td>{{ ligne.libelle_departement if ligne.libelle_departement is defined else 'N/A' }}</td>
+                                            {% endif %}
+                                            <td>{{ ligne.cout_total | round(2) }} €</td>
+                                            <td>{{ ligne.cout_moyen | round(2) }} €</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
 
-            {% else %}
+                {% else %}
 
-                <div class="empty-message">
-                    <h3>Aucunes données</h3>
-                    <p>Les données n'ont pas pu être récupéré</p>
-                </div>
+                    <div class="empty-message">
+                        <h3>Aucunes données</h3>
+                        <p>Les données n'ont pas pu être récupéré</p>
+                    </div>
 
-            {% endif %}
+                {% endif %}
 
-        </section>
+            </section>
 
-    {% endif %}
-    
+        {% endif %}
+    </div>
+
     <!-- GESTION Js DES GRAPHIQUES ET DES FILTRES -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <div id="data-passerelle" 

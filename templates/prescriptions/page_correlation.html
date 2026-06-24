@@ -1,6 +1,201 @@
 {% extends "base.html" %}
-{% block titre %}Indicateurs financiers{% endblock %}
+{% block titre %}Corrélation Démographie et Dépenses{% endblock %}
 
 {% block contenu %}
+    <div class="contexte-correlation"> 
 
+        <section class="prescriptions-header">
+            <h1>Analyse de Corrélation Démographique</h1>
+            <p>
+                Croisez l'âge des professionnels de santé avec les volumes et coûts de prescription. 
+                Cet outil met en lumière l'impact direct du vieillissement médical (déserts médicaux) sur les dépenses de santé départementales.
+            </p>
+        </section>
+
+        <section class="filters-box">
+                
+            <form action="{{ url_for('prescriptions.page_correlation') }}" method="get" id="form-filtres">
+                    
+                <section class="form-section"> 
+                        
+                    <h2 class="filter-label">FILTRES D'ANALYSE</h2>
+                        
+                    <div class="api-form"> 
+
+                            
+                        <div class="multi-select-container">
+         
+                            <div class="select-btn">
+                                <span class="btnText">{{ profession_selectionnee if profession_selectionnee else "Ensemble des médecins" }}</span>
+                                <span class="arrow">▼</span>
+                            </div>
+                            <div class="dropdown-content">
+                                <label>
+                                    <input type="radio" name="profession" value="Ensemble des médecins" {% if profession_selectionnee == "Ensemble des médecins" %}checked{% endif %}>
+                                    Ensemble des médecins
+                                </label>
+                                <label>
+                                    <input type="radio" name="profession" value="Généralistes" {% if profession_selectionnee == "Généralistes" %}checked{% endif %}>
+                                    Médecins Généralistes
+                                </label>
+                                <label>
+                                    <input type="radio" name="profession" value="Masseurs-kinésithérapeutes" {% if profession_selectionnee == "Masseurs-kinésithérapeutes" %}checked{% endif %}>
+                                    Masseurs-kinésithérapeutes
+                                </label>
+                            </div>
+
+                        </div>
+
+
+                        <div class="multi-select-container">
+                            
+                            <div class="select-btn">
+                                
+                                <span class="btnText">
+                                    {% if departement_selectionne %}
+                                        Département : {{ departement_selectionne }}
+                                    {% else %}
+                                        Zoom Pyramide : France entière
+                                    {% endif %}
+                                </span>
+                                <span class="arrow">▼</span>
+                            </div>
+
+                            <div class="dropdown-content">
+                                <label>
+                                    <input type="radio" name="departement" value="" {% if not departement_selectionne %}checked{% endif %}> 
+                                    France entière
+                                </label>
+                                {% for depart in departements %}
+                                    <label>
+                                        <input type="radio" name="departement" value="{{ depart.code }}" {% if depart.code|string == departement_selectionne|string %}checked{% endif %}> 
+                                        {{ depart.code }} - {{ depart.libelle }}
+                                    </label>
+                                {% endfor %}
+                            </div>
+
+                        </div>
+
+
+                        <div class="multi-select-container">
+
+                            <div class="select-btn">
+                                <span class="btnText">Année : {% if annee_selectionnee %}{{ annee_selectionnee }}{% else %}2023{% endif %}</span>
+                                <span class="arrow">▼</span>
+                            </div>
+
+                            <div class="dropdown-content">
+                                {% for a in range(2024, 2013, -1) %}
+                                    <label>
+                                        <input type="radio" name="annee" value="{{ a }}" {% if a|string == annee_selectionnee|string %}checked{% endif %}>
+                                        {{ a }}
+                                    </label>
+                                {% endfor %}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <div id="filtres-button">
+                    <button type="submit" class="submit-btn">Analyser</button>
+                    <a href="{{ url_for('prescriptions.page_correlation') }}" class="reset-link">Réinitialiser</a>
+                    <button type="button" class="export-btn">Exporter (CSV)</button>
+                </div>
+
+            </form> 
+
+        </section>
+
+
+
+        {% if donnees_globales is not none %}
+            <section class="prescriptions-results">
+                
+                {% if donnees_globales|length > 0 %}
+                    
+                    <div class="tabs-menu">
+                        <button class="tab-btn active" onclick="switchTab(event, 'tab-analyse')">Nuage & Cartographie</button>
+                        <button class="tab-btn" onclick="switchTab(event, 'tab-pyramide')">Focus Pyramide des Âges</button>
+                        <button class="tab-btn" onclick="switchTab(event, 'tab-tableau')">Tableau Général</button>
+                    </div>
+
+                    <div id="tab-analyse" class="tab-content active">
+                        <div class="chart-box prescription-chart">
+                            <h3>Analyse Comparative Financière vs Vieillissement</h3>
+                            <canvas id="scatter-correlation"></canvas>
+                        </div>
+                        
+                        <div class="chart-box prescription-chart" style="height: 500px;">
+                            <h3>Régions à Risque (Part des praticiens de +60 ans)</h3>
+                            <div id="map-deserts" style="width: 100%; height: 100%;"></div>
+                        </div>
+                    </div>
+
+                    <div id="tab-pyramide" class="tab-content">
+                        <div class="chart-box prescription-chart">
+                            <h3>
+                                Structure par Âge et par Sexe 
+                                {% if departement_selectionne %}(Département {{ departement_selectionne }}){% else %}(France entière){% endif %}
+                            </h3>
+                            <canvas id="pyramide-ages"></canvas>
+                        </div>
+                    </div>
+
+                    <div id="tab-tableau" class="tab-content">
+                        <div class="prescriptions-table-box">
+                            <h3>Indicateurs Démographiques Détaillés par Département (Tri par Code)</h3>
+
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Département</th>
+                                        <th>Praticiens Actifs</th>
+                                        <th>dont +60 ans (Seniors)</th>
+                                        <th>Taux de Renouvellement (Alerte)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for ligne in donnees_tableau_deserts %}
+                                        <tr>
+                                            <td><strong>{{ ligne.code_dept }}</strong> - {{ ligne.nom_dept }}</td>
+                                            <td>{{ ligne.total }}</td>
+                                            <td>{{ ligne.seniors }}</td>
+                                            <td class="{% if ligne.pourcentage_seniors >= 50.0 %}text-danger{% elif ligne.pourcentage_seniors >= 40.0 %}text-warning{% endif %}">
+                                                <strong>{{ ligne.pourcentage_seniors }} %</strong>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                {% else %}
+                    <div class="empty-message">
+                        <h3>Aucune donnée disponible</h3>
+                        <p>L'API de l'Assurance Maladie n'a retourné aucun enregistrement pour cette combinaison de filtres.</p>
+                    </div>
+                {% endif %}
+
+            </section>
+        {% endif %}
+
+    </div> 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <div id="data-passerelle" 
+        data-globales='{{ donnees_globales | tojson | safe }}'
+        data-pyramide='{{ donnees_pyramide | tojson | safe }}'>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/correlation_onglet.js') }}"></script>
+
+    
 {% endblock %}
