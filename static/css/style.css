@@ -1,3 +1,4 @@
+cat > static/css/style.css <<'CSS'
 /* =========================================
    FICHIER PRINCIPAL : style.css
    ========================================= */
@@ -32,3 +33,4 @@
 
 /* 6. Correctifs globaux */
 @import url('pages/pages_global_fix.css');
+CSS

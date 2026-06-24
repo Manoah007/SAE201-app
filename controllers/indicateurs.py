@@ -37,8 +37,8 @@ def afficher():
                 data_pat = api.get_patientele(prof.libelle, dept_code, annee)
                 
                 # 2. Extraction sécurisée
-                effectif_val = data_eff[0].get("effectif", 0) if data_eff else 0
-                densite_val = data_eff[0].get("densite", 0) if data_eff else 0
+                effectif_val = (data_eff[0].get("effectif") or 0) if data_eff else 0
+                densite_val = (data_eff[0].get("densite") or 0) if data_eff else 0
                 
                 # 3. Calculs Data Science (Création de valeur)
                 
@@ -70,7 +70,14 @@ def afficher():
                     revenu_moyen = "Secret Statistique"
                 else:
                     secret_stat = "✅ Publiques"
-                    hon_brut = data_hon[0].get("honoraires_sans_depassement") if data_hon else None
+                    ligne_hon = data_hon[0] if data_hon else {}
+
+                    hon_brut = (
+                        ligne_hon.get("hono_sans_depassement_totaux")
+                        or ligne_hon.get("honoraires_sans_depassement")
+                        or ligne_hon.get("totaux_integer")
+                    )
+
                     honoraire_txt = f"{formater_nombre(hon_brut)} €" if hon_brut else "Non communiqué"
                     
                     pat_brut = data_pat[0].get("patientele") if data_pat else None

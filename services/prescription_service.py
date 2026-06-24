@@ -1,358 +1,293 @@
-# Ce fichier se sert du module ameli_api.py
-# Il ne contient que les fonctions de requêtes SQL pour les différetes pages en lien avec les prescriptions
-
 class PrescriptionService:
-    """Service gérant la logique métier et les requêtes des prescriptions."""
+    """Service gérant la logique métier des pages prescriptions."""
 
     def __init__(self, ameli_api):
-        # On injecte l'API pour pouvoir utiliser son moteur de requête
         self.api = ameli_api
 
+    # ==========================================================
+    # DISPARITÉS GÉOGRAPHIQUES
+    # ==========================================================
 
-#===============================================================================#
-#   FONCTIONS DE REQUËTES SQL POUR LA DISPARITÉ GÉOGRAPHIQUE (page_disparite()) #
-#===============================================================================#
-
-
-    def get_prescription_toutes_zones(self, toutes_regions=True, tous_depart=False, annee="2024", limite_ligne=30):
-        """Affiche soit tous les départements, soit toutes les régions"""
-
-        print("\nameli_api.py | get_prescription_toutes_zones()")
+    def get_prescription_toutes_zones(self, toutes_regions=True, tous_depart=False, annee="2024", limite_ligne=100):
+        """Retourne les prescriptions par région ou par département."""
 
         if toutes_regions and tous_depart:
-            print(f"Retourne tous les départements : toutes_regions={toutes_regions} et tous_départ={tous_depart}")
-            return self.api._requete("prescriptions",
-                                {
-                                "select" : "libelle_departement,SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen",
-                                "where" : f'year(annee)={annee}',
-                                "group_by" : "libelle_departement",
-                                "limit" : limite_ligne
-                                }
-                                )
-        
-        elif toutes_regions:
-            print(f"Retourne toutes les régions: toutes_regions={toutes_regions}")
-            return self.api._requete("prescriptions",
-                                {
-                                "select" : "libelle_region,SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen",
-                                "where" : f'year(annee)={annee}',
-                                "group_by" : "libelle_region",
-                                "limit" : limite_ligne
-                                }
-                                )
-        
+            return self.api._requete(
+                "prescriptions",
+                {
+                    "select": (
+                        "departement, libelle_departement, "
+                        "SUM(montant_total_prescription_integer) as cout_total, "
+                        "AVG(montant_moyen_prescription_integer) as cout_moyen"
+                    ),
+                    "where": f"year(annee)={annee}",
+                    "group_by": "departement, libelle_departement",
+                    "limit": limite_ligne
+                }
+            )
 
+        if toutes_regions:
+            return self.api._requete(
+                "prescriptions",
+                {
+                    "select": (
+                        "region, libelle_region, "
+                        "SUM(montant_total_prescription_integer) as cout_total, "
+                        "AVG(montant_moyen_prescription_integer) as cout_moyen"
+                    ),
+                    "where": f"year(annee)={annee}",
+                    "group_by": "region, libelle_region",
+                    "limit": limite_ligne
+                }
+            )
 
-    def get_region_prescription(self, region_list_id=None, annee="2024", limite_ligne=30):
-        """Filtre les montants totales et moyens selon la (ou les) région(s) pour une année donnée"""
+        return []
 
-        print("\nameli_api.py | get_region_prescription()")
-
-        where_clauses = [f"year(annee)={annee}"]
-
-        if region_list_id:
-            ids_reg = ",".join([f"'{r_id}'" for r_id in region_list_id]) # On s'assure que tous les IDs sont des chaînes ou des entiers propres
-            where_clauses.append(f"region IN ({ids_reg})") # Utilisation de l'opérateur IN pour gérer la liste
-
-        where = " AND ".join(where_clauses)
-
-        print(f"Création du filtre SQL : WHERE {where}")
-
-        return self.api._requete(
-            "prescriptions",
-            {
-                "select" : "libelle_region,SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen",
-                "where" : where,
-                "group_by" : "libelle_region",
-                "limit" : limite_ligne
-            }
-        )
-
-
-    def get_departement_prescriptions(self, region_list_id=None, departement_list_id=None, annee="2024", limite_ligne=100):
-        """Filtre les montants totales et moyens selon le (ou les) département(s) pour une année donnée"""
-        
-        print("\nameli_api.py | get_departement_prescriptionsr()")
+    def get_region_prescription(self, region_list_id=None, annee="2024", limite_ligne=100):
+        """Filtre les prescriptions selon une ou plusieurs régions."""
 
         where_clauses = [f"year(annee)={annee}"]
-        select_fields = "libelle_departement,SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen"
-        
-        if departement_list_id:
-            ids_dep = ",".join([f"'{d_id}'" for d_id in departement_list_id])
-            where_clauses.append(f"departement IN ({ids_dep})")
-            
+
         if region_list_id:
             ids_reg = ",".join([f"'{r_id}'" for r_id in region_list_id])
             where_clauses.append(f"region IN ({ids_reg})")
-        
-        else:
-            print(f"Les listes sont vides | region_list_id={region_list_id}, departement_list_id={departement_list_id}")
 
-
-        where_final = " AND ".join(where_clauses)
-        print(f"Filtre WHERE : {where_final}")
-
+        where = " AND ".join(where_clauses)
 
         return self.api._requete(
             "prescriptions",
             {
-                "select": select_fields,
-                "where": where_final,
-                "group_by" : "libelle_departement",
+                "select": (
+                    "region, libelle_region, "
+                    "SUM(montant_total_prescription_integer) as cout_total, "
+                    "AVG(montant_moyen_prescription_integer) as cout_moyen"
+                ),
+                "where": where,
+                "group_by": "region, libelle_region",
                 "limit": limite_ligne
             }
         )
 
-#========================================================================================================#
-#   FONCTIONS DE REQUËTES SQL POUR LA CORRÉLATION DÉMOGRAPHIQUES DES PROFESSIONNELS (page_correlation5°) #
-#========================================================================================================#
+    def get_departement_prescriptions(self, region_list_id=None, departement_list_id=None, annee="2024", limite_ligne=100):
+        """Filtre les prescriptions selon une ou plusieurs régions/départements."""
 
-    def get_donnees_pyramide_ages(self, profession, departement_code=None, annee="2024", limit_ligne=100):
-        """Retourne les effectifs groupés par sexe et par tranche d'âge"""
+        where_clauses = [f"year(annee)={annee}"]
 
-        print("\ndemographie_service.py | get_donnees_pyramide_ages()")
+        if departement_list_id:
+            ids_dep = ",".join([f"'{d_id}'" for d_id in departement_list_id])
+            where_clauses.append(f"departement IN ({ids_dep})")
 
+        if region_list_id:
+            ids_reg = ",".join([f"'{r_id}'" for r_id in region_list_id])
+            where_clauses.append(f"region IN ({ids_reg})")
 
-        where_clauses = [
-            f"year(annee)={annee}", 
-            "libelle_sexe != 'tout sexe'",
-            "libelle_classe_age != 'Tout âge'"
-        ]
+        where = " AND ".join(where_clauses)
 
-
-        if profession:
-            where_clauses.append(f"profession_sante = '{profession}'")
-
-        if departement_code:
-            where_clauses.append(f"departement = '{departement_code}'")
-
-
-        where_final = " AND ".join(where_clauses)
-        print(f"Filtre WHERE Pyramide : {where_final}")
-
-
-        donnees_brutes = self.api._requete(
-            "demographie-effectifs-et-les-densites",
+        return self.api._requete(
+            "prescriptions",
             {
-                "select": "libelle_sexe, libelle_classe_age, SUM(effectif) as total",
-                "where": where_final,
-                "group_by": "libelle_sexe, libelle_classe_age",
-                "limit": limit_ligne
+                "select": (
+                    "departement, libelle_departement, "
+                    "SUM(montant_total_prescription_integer) as cout_total, "
+                    "AVG(montant_moyen_prescription_integer) as cout_moyen"
+                ),
+                "where": where,
+                "group_by": "departement, libelle_departement",
+                "limit": limite_ligne
             }
         )
 
-        # On groupe par Tranche d'Âge
-        pyramide_formatee = {}
+    # ==========================================================
+    # CORRÉLATION DÉMOGRAPHIE / PRESCRIPTIONS
+    # ==========================================================
 
-        for ligne in donnees_brutes:
-            age = ligne.get('libelle_classe_age', '')
-            sexe = ligne.get('libelle_sexe', '').lower()
-            total = ligne.get('total', 0)
+    def get_donnees_pyramide_ages(self, profession, departement_code=None, annee="2024", limit_ligne=5000):
+        """Retourne les effectifs par sexe et par tranche d'âge."""
 
-            # Si la tranche d'âge n'existe pas encore, on la crée
-            if age not in pyramide_formatee:
-                pyramide_formatee[age] = {
-                    "age": age, 
-                    "hommes": 0, 
-                    "femmes": 0, 
-                    "total_tranche": 0
-                }
-
-            # On range les effectifs dans la bonne case
-            if "hommes" in sexe:
-                pyramide_formatee[age]["hommes"] += total
-            elif "femmes" in sexe:
-                pyramide_formatee[age]["femmes"] += total
-
-            # On calcule le total de la ligne au passage
-            pyramide_formatee[age]["total_tranche"] += total
-
-
-        resultats_finaux = list(pyramide_formatee.values())
-        resultats_finaux.sort(key=lambda x: x["age"])
-
-        return resultats_finaux
-    
-
-
-
-    def get_graphique_top_deserts_medicaux(self, profession, annee="2024", limite=15):
-        """Calcule la proportion de médecins de +60 ans par département"""
-
-        print("\ndemographie_service.py | get_graphique_top_deserts_medicaux()")
-
-        # LA REQUÊTE API : On récupère tous les âges pour tous les départements
         where_clauses = [
             f"year(annee)={annee}",
-            f"profession_sante='{profession}'",
-            "libelle_sexe = 'tout sexe'",       # On regroupe hommes et femmes ici !
-            "libelle_classe_age != 'Tout âge'", # Mais on garde le détail des tranches d'âge
-            "departement IS NOT NULL"           # On exclut les lignes de totaux nationaux
+            f'profession_sante="{profession}"',
+            'libelle_sexe!="tout sexe"',
+            'libelle_classe_age!="Tout âge"'
         ]
-        
-        where_final = " AND ".join(where_clauses)
-        
+
+        if departement_code:
+            where_clauses.append(f'departement="{departement_code}"')
+        else:
+            where_clauses.append("departement is not null")
+
+        where = " AND ".join(where_clauses)
 
         donnees_brutes = self.api._requete_paginee(
             "demographie-effectifs-et-les-densites",
             {
-                "select": "departement, libelle_classe_age, SUM(effectif) as effectif",
-                "where": where_final,
-                "group_by": "departement, libelle_classe_age"
-            }
+                "select": "libelle_sexe, libelle_classe_age, SUM(effectif) as total",
+                "where": where,
+                "group_by": "libelle_sexe, libelle_classe_age",
+                "limit": 100
+            },
+            limite_max=limit_ligne
         )
 
-        # LE CALCUL PYTHON
-
-        # Les libellés Ameli pour les seniors  :
-        mots_cles_seniors = ["de 60 à 64", "de 65 à 69", "70 ans et plus"] 
-        
-        stats_depts = {} # Dictionnaire qui va stocker nos calculs
+        pyramide = {}
 
         for ligne in donnees_brutes:
-            dept = ligne.get('departement')
-            age = ligne.get('libelle_classe_age', "")
-            effectif = ligne.get('effectif', 0)
-            
-            # Initialisation du département s'il n'existe pas encore dans le dictionnaire
-            if dept not in stats_depts:
-                stats_depts[dept] = {"total": 0, "seniors": 0}
-                
-            # On ajoute à la population totale du département
-            stats_depts[dept]["total"] += effectif
-            
-            # Si le libellé de l'âge contient l'un de nos mots clés, on l'ajoute aux seniors !
-            if any(mot in age for mot in mots_cles_seniors):
-                stats_depts[dept]["seniors"] += effectif
+            age = ligne.get("libelle_classe_age") or "Inconnu"
+            sexe = (ligne.get("libelle_sexe") or "").lower()
+            total = ligne.get("total") or 0
 
-        # LE CLASSEMENT : Calcul du % et création du Top
-        resultats_finaux = []
-        for dept, stats in stats_depts.items():
-            if stats["total"] > 0: # Évite la division par zéro
-                pourcentage = (stats["seniors"] / stats["total"]) * 100
-                resultats_finaux.append({
-                    "departement": dept,
-                    "total_praticiens": stats["total"],
-                    "praticiens_seniors": stats["seniors"],
-                    "pourcentage_seniors": round(pourcentage, 2) # Arrondi à 2 décimales
-                })
+            if age not in pyramide:
+                pyramide[age] = {
+                    "age": age,
+                    "hommes": 0,
+                    "femmes": 0,
+                    "total_tranche": 0
+                }
 
-        # On trie la liste du plus grand risque (plus fort %) au plus petit
-        resultats_finaux.sort(key=lambda x: x["pourcentage_seniors"], reverse=True)
+            if "homme" in sexe:
+                pyramide[age]["hommes"] += total
+            elif "femme" in sexe:
+                pyramide[age]["femmes"] += total
 
-        if limite:
-            return resultats_finaux[:limite] # Renvoie le Top 15
+            pyramide[age]["total_tranche"] += total
 
-        return resultats_finaux
+        resultats = list(pyramide.values())
+        resultats.sort(key=lambda x: x["age"])
 
+        return resultats
 
-    def get_tableau_top_deserts_medicaux(self, profession, annee="2024"):
-        """
-        Pivote les tranches d'âge en colonnes pour chaque département.
-        """
+    def get_graphique_top_deserts_medicaux(self, profession, annee="2024", limite=15):
+        """Calcule le pourcentage de praticiens de 60 ans et plus par département."""
 
-        print("\ndemographie_service.py | get_tableau_top_deserts_medicaux()")
-
-        where_clauses = [
+        where = " AND ".join([
             f"year(annee)={annee}",
-            f"profession_sante='{profession}'",
-            "libelle_sexe = 'tout sexe'",
-            "libelle_classe_age != 'Tout âge'",
-            "departement IS NOT NULL"
-        ]
-        
-        where_final = " AND ".join(where_clauses)
-        
+            f'profession_sante="{profession}"',
+            'libelle_sexe="tout sexe"',
+            'libelle_classe_age!="Tout âge"',
+            "departement is not null"
+        ])
+
         donnees_brutes = self.api._requete_paginee(
             "demographie-effectifs-et-les-densites",
             {
                 "select": "departement, libelle_departement, libelle_classe_age, SUM(effectif) as effectif",
-                "where": where_final,
-                "group_by": "departement, libelle_departement, libelle_classe_age"
-            }
+                "where": where,
+                "group_by": "departement, libelle_departement, libelle_classe_age",
+                "limit": 100
+            },
+            limite_max=5000
         )
 
-        tableau_depts = {}
+        mots_seniors = ["de 60 à 64", "de 65 à 69", "70 ans et plus"]
+        stats = {}
 
         for ligne in donnees_brutes:
-            code_dept = ligne.get('departement')
-            nom_dept = ligne.get('libelle_departement', '')
-            age = ligne.get('libelle_classe_age', "")
-            effectif = ligne.get('effectif', 0)
-            
-            # Initialisation de la ligne du département
-            if code_dept not in tableau_depts:
-                tableau_depts[code_dept] = {
-                    "code": code_dept,
-                    "nom": nom_dept,
+            code = ligne.get("departement")
+            nom = ligne.get("libelle_departement") or code
+            age = ligne.get("libelle_classe_age") or ""
+            effectif = ligne.get("effectif") or 0
+
+            if not code:
+                continue
+
+            if code not in stats:
+                stats[code] = {
+                    "code_dept": code,
+                    "nom_dept": nom,
                     "total": 0,
-                    "tranches": {}
+                    "seniors": 0
                 }
-                
-            tableau_depts[code_dept]["total"] += effectif
-            tableau_depts[code_dept]["tranches"][age] = effectif
 
-        
-        resultats_finaux = list(tableau_depts.values()) # Formatage pour le frontend
-        resultats_finaux.sort(key=lambda x: x["nom"]) # Tri alphabétique par nom de département
+            stats[code]["total"] += effectif
 
-        return resultats_finaux
+            if any(mot in age for mot in mots_seniors):
+                stats[code]["seniors"] += effectif
 
+        resultats = []
 
+        for code, ligne in stats.items():
+            total = ligne["total"]
+            seniors = ligne["seniors"]
+            pourcentage = round((seniors / total) * 100, 2) if total else 0
 
+            resultats.append({
+                "departement_code": code,
+                "code_dept": code,
+                "nom_dept": ligne["nom_dept"],
+                "total_praticiens": total,
+                "total": total,
+                "praticiens_seniors": seniors,
+                "seniors": seniors,
+                "pourcentage_seniors": pourcentage
+            })
+
+        resultats.sort(key=lambda x: x["pourcentage_seniors"], reverse=True)
+
+        if limite:
+            return resultats[:limite]
+
+        return resultats
+
+    def get_tableau_top_deserts_medicaux(self, profession, annee="2024"):
+        """Retourne le tableau détaillé des départements avec part des seniors."""
+
+        resultats = self.get_graphique_top_deserts_medicaux(
+            profession=profession,
+            annee=annee,
+            limite=None
+        )
+
+        resultats.sort(key=lambda x: x["code_dept"])
+        return resultats
 
     def get_correlation_age_depense(self, profession, annee="2024"):
-        """
-        Prépare les données pour le GRAPHIQUE 3 (Nuage) ET LE TABLEAU RÉCAPITULATIF.
-        Fusionne la démographie et les finances départementales.
-        """
+        """Fusionne les données démographiques et les dépenses de prescription."""
 
-        print("\ndemographie_service.py | get_correlation_age_depense()")
+        donnees_demo = self.get_graphique_top_deserts_medicaux(
+            profession=profession,
+            annee=annee,
+            limite=None
+        )
 
-
-        donnees_demo = self.get_top_deserts_medicaux(profession, annee=annee, limite=None)
         if not donnees_demo:
             return []
 
-
-        donnees_finance = self.prescription.get_prescription_toutes_zones(
+        donnees_finance = self.get_prescription_toutes_zones(
             toutes_regions=True,
             tous_depart=True,
             annee=annee,
-            limite_ligne=150
+            limite_ligne=5000
         )
 
+        finance_par_dept = {}
 
-        dict_finance = {}
         for ligne in donnees_finance:
-            # CORRECTION A : On utilise le CODE du département, pas son nom !
-            code_dept = ligne.get('departement', '').strip() 
-            
-            if code_dept:
-                # CORRECTION B : On utilise les vrais noms de colonnes "integer" !
-                dict_finance[code_dept] = {
-                    "cout_moyen": ligne.get('montant_moyen_prescription_integer', 0),
-                    "cout_total": ligne.get('montant_total_prescription_integer', 0)
-                }
+            code = ligne.get("departement")
+            if not code:
+                continue
 
+            finance_par_dept[code] = {
+                "cout_total": ligne.get("cout_total") or 0,
+                "cout_moyen": ligne.get("cout_moyen") or 0
+            }
 
-        resultats_fusionnes = []
-        for dept_demo in donnees_demo:
-            # cle_commune est maintenant le code "73", "19", etc.
-            cle_commune = dept_demo['departement'] 
-            
-            finances = dict_finance.get(cle_commune, {})
-            cout_moyen = finances.get("cout_moyen", 0)
-            cout_total = finances.get("cout_total", 0)
-            
-            if cout_moyen > 0: 
-                resultats_fusionnes.append({
-                    "departement_code": cle_commune, # On précise que c'est le code
-                    "total_medecins": dept_demo['total_praticiens'],
-                    "praticiens_seniors": dept_demo['praticiens_seniors'],
-                    "pourcentage_seniors": dept_demo['pourcentage_seniors'],
-                    "cout_total": cout_total,
-                    "cout_moyen": cout_moyen
-                })
+        resultats = []
 
-        return resultats_fusionnes
+        for ligne in donnees_demo:
+            code = ligne.get("departement_code")
+            finance = finance_par_dept.get(code, {})
+
+            cout_total = finance.get("cout_total", 0)
+            cout_moyen = finance.get("cout_moyen", 0)
+
+            resultats.append({
+                "departement_code": code,
+                "nom_dept": ligne.get("nom_dept"),
+                "total_medecins": ligne.get("total_praticiens", 0),
+                "praticiens_seniors": ligne.get("praticiens_seniors", 0),
+                "pourcentage_seniors": ligne.get("pourcentage_seniors", 0),
+                "cout_total": cout_total,
+                "cout_moyen": round(cout_moyen, 2) if cout_moyen else 0
+            })
+
+        return resultats

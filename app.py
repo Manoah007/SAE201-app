@@ -1,3 +1,4 @@
+cat > app.py <<'PY'
 import os
 from flask import Flask, render_template
 
@@ -60,3 +61,4 @@ def erreur_serveur(e):
 if __name__ == "__main__":
     print(app.url_map)
     app.run(debug=True, use_reloader=False)
+PY

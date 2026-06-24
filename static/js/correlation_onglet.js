@@ -1,168 +1,128 @@
-/**********************************************************************/
-/** 1. GESTION DE L'INTERFACE UTILISATEUR & FILTRES                  */
-/**********************************************************************/
+function switchTab(event, tabId) {
+    const parent = event.target.closest(".prescriptions-results");
 
-document.addEventListener('DOMContentLoaded', () => {
-    const containers = document.querySelectorAll('.multi-select-container');
-    const form = document.getElementById('form-filtres');
+    if (!parent) return;
 
-    containers.forEach(container => {
-        const btn = container.querySelector('.select-btn');
-        const dropdown = container.querySelector('.dropdown-content');
-        const btnText = container.querySelector('.btnText');
-        
-        // Configuration de la liste déroulante
-        btn.addEventListener('click', (event) => {
-            containers.forEach(c => {
-                if (c !== container) c.querySelector('.dropdown-content').classList.remove('show');
-            });
-            dropdown.classList.toggle('show');
+    parent.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.classList.remove("active");
+    });
+
+    parent.querySelectorAll(".tab-content").forEach(tab => {
+        tab.classList.remove("active");
+    });
+
+    event.target.classList.add("active");
+
+    const target = document.getElementById(tabId);
+    if (target) target.classList.add("active");
+
+    setTimeout(() => {
+        window.dispatchEvent(new Event("resize"));
+    }, 100);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Menus déroulants custom
+    document.querySelectorAll(".multi-select-container .select-btn").forEach((btn) => {
+        btn.addEventListener("click", (event) => {
             event.stopPropagation();
-        });
 
-        dropdown.addEventListener('click', (event) => {
-            event.stopPropagation(); 
-        });
+            const container = btn.closest(".multi-select-container");
+            const menu = container.querySelector(".dropdown-content");
 
-        // Comportement des boutons radio
-        const radios = dropdown.querySelectorAll('input[type="radio"]');
-        radios.forEach(radio => {
-            radio.addEventListener('change', () => {
-                if (radio.checked) {
-                    btnText.textContent = radio.parentElement.textContent.trim();
-                    dropdown.classList.remove('show');
-                    
-                    // Si on change de département ou d'année, on applique directement le filtre
-                    if (radio.name === 'departement' || radio.name === 'annee') {
-                        form.submit();
-                    }
-                }
+            document.querySelectorAll(".dropdown-content.show").forEach((openMenu) => {
+                if (openMenu !== menu) openMenu.classList.remove("show");
             });
-        });
 
-        // Initialisation du texte au chargement
-        const checkedRadio = dropdown.querySelector('input:checked');
-        if (checkedRadio) {
-            btnText.textContent = checkedRadio.parentElement.textContent.trim();
-        }
-    });
-
-    document.addEventListener('click', () => {
-        containers.forEach(container => {
-            container.querySelector('.dropdown-content').classList.remove('show');
+            if (menu) menu.classList.toggle("show");
         });
     });
 
-    /**********************************************************************/
-    /** 2. SÉCURISATION & PASSERELLE DE DONNÉES                           */
-    /**********************************************************************/
-    const passerelle = document.getElementById('data-passerelle');
+    document.addEventListener("click", () => {
+        document.querySelectorAll(".dropdown-content.show").forEach((menu) => {
+            menu.classList.remove("show");
+        });
+    });
+
+    const passerelle = document.getElementById("data-passerelle");
     if (!passerelle) return;
 
-    const donneesGlobales = JSON.parse(passerelle.dataset.globales || '[]');
-    const donneesPyramide = JSON.parse(passerelle.dataset.pyramide || '[]');
+    const donneesGlobales = JSON.parse(passerelle.dataset.globales || "[]");
+    const donneesPyramide = JSON.parse(passerelle.dataset.pyramide || "[]");
 
-    /**********************************************************************/
-    /** 3. CONSTRUIRE LE NUAGE DE POINTS (CHART.JS - SCATTER CHIPS)       */
-    /**********************************************************************/
-    const canvasScatter = document.getElementById('scatter-correlation');
-    if (canvasScatter && donneesGlobales.length > 0) {
-        
-        // Extraction des coordonnées (X: % Seniors, Y: Coût Moyen)
-        const scatterPoints = donneesGlobales.map(dept => ({
-            x: dept.pourcentage_seniors,
-            y: dept.cout_moyen,
-            label: dept.departement_code
-        }));
+    // Nuage de points
+    const scatterCanvas = document.getElementById("scatter-correlation");
 
-        new Chart(canvasScatter, {
-            type: 'scatter',
+    if (scatterCanvas && donneesGlobales.length > 0) {
+        new Chart(scatterCanvas, {
+            type: "scatter",
             data: {
                 datasets: [{
-                    label: 'Départements français',
-                    data: scatterPoints,
-                    backgroundColor: '#3b82f6',
-                    borderColor: '#1d4ed8',
-                    pointRadius: 6,
-                    pointHoverRadius: 9
+                    label: "Départements",
+                    data: donneesGlobales.map(d => ({
+                        x: Number(d.pourcentage_seniors) || 0,
+                        y: Number(d.cout_moyen) || 0,
+                        nom: d.nom_dept || d.departement_code
+                    })),
+                    backgroundColor: "#41e46a"
                 }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: {
-                        title: { display: true, text: 'Taux de praticiens seniors (+60 ans) en %', font: { weight: 'bold' } }
-                    },
-                    y: {
-                        title: { display: true, text: 'Montant moyen des prescriptions (€)', font: { weight: 'bold' } }
-                    }
-                },
                 plugins: {
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                const pt = context.raw;
-                                return `Dép. ${pt.label} : ${pt.x}% Seniors | Moy : ${pt.y} €`;
+                                const p = context.raw;
+                                return `${p.nom} : ${p.x}% seniors · ${p.y} € moyen`;
                             }
                         }
+                    }
+                },
+                scales: {
+                    x: {
+                        title: { display: true, text: "Part des praticiens de 60 ans et plus (%)" },
+                        beginAtZero: true
+                    },
+                    y: {
+                        title: { display: true, text: "Coût moyen de prescription (€)" },
+                        beginAtZero: true
                     }
                 }
             }
         });
     }
 
-    /**********************************************************************/
-    /** 4. CONSTRUIRE LA PYRAMIDE DES ÂGES (CHART.JS - HORIZONTAL BAR)    */
-    /**********************************************************************/
-    const canvasPyramide = document.getElementById('pyramide-ages');
-    if (canvasPyramide && donneesPyramide.length > 0) {
-        
-        const labelsAges = donneesPyramide.map(d => d.age);
-        // Inversion mathématique des données Hommes pour les projeter à gauche de la pyramide
-        const valeursHommes = donneesPyramide.map(d => -Math.abs(d.hommes));
-        const valeursFemmes = donneesPyramide.map(d => Math.abs(d.femmes));
+    // Pyramide des âges
+    const pyramideCanvas = document.getElementById("pyramide-ages");
 
-        new Chart(canvasPyramide, {
-            type: 'bar',
+    if (pyramideCanvas && donneesPyramide.length > 0) {
+        new Chart(pyramideCanvas, {
+            type: "bar",
             data: {
-                labels: labelsAges,
+                labels: donneesPyramide.map(d => d.age),
                 datasets: [
                     {
-                        label: 'Hommes',
-                        data: valeursHommes,
-                        backgroundColor: '#2563eb',
-                        borderRadius: 4
+                        label: "Hommes",
+                        data: donneesPyramide.map(d => -(Number(d.hommes) || 0)),
+                        backgroundColor: "#2E74B5",
+                        borderRadius: 6
                     },
                     {
-                        label: 'Femmes',
-                        data: valeursFemmes,
-                        backgroundColor: '#ec4899',
-                        borderRadius: 4
+                        label: "Femmes",
+                        data: donneesPyramide.map(d => Number(d.femmes) || 0),
+                        backgroundColor: "#41e46a",
+                        borderRadius: 6
                     }
                 ]
             },
             options: {
-                indexAxis: 'y', // Rotation des barres à l'horizontale
+                indexAxis: "y",
                 responsive: true,
-                maintainAspectRatio: false,
                 scales: {
                     x: {
-                        stacked: true,
                         ticks: {
-                            callback: function(value) {
-                                return Math.abs(value); // On masque le signe "-" mathématique à l'affichage
-                            }
-                        }
-                    },
-                    y: { stacked: true }
-                },
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return `${context.dataset.label} : ${Math.abs(context.raw)}`;
-                            }
+                            callback: value => Math.abs(value)
                         }
                     }
                 }
@@ -170,119 +130,68 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    /**********************************************************************/
-    /** 5. CARTOGRAPHIE CHOROPLÈTHE DYNAMIQUE (LEAFLET.JS)                */
-    /**********************************************************************/
-    const mapDiv = document.getElementById('map-deserts');
-    if (mapDiv && donneesGlobales.length > 0) {
-        
-        // Échelle relative : Détermination des extrêmes réels
-        const valeursPourcentages = donneesGlobales.map(d => d.pourcentage_seniors);
-        const minPct = Math.min(...valeursPourcentages);
-        const maxPct = Math.max(...valeursPourcentages);
-        const amplitude = maxPct - minPct;
+    // Carte Leaflet des départements à risque
+    const mapElement = document.getElementById("map-deserts");
 
-        // Fonction du thermomètre d'échelle relative adaptative
-        function associerCouleurRelative(pourcentage) {
-            if (pourcentage >= maxPct - (amplitude * 0.2)) return '#d73027'; // Risque Critique (Top 20%)
-            if (pourcentage >= maxPct - (amplitude * 0.4)) return '#fc8d59'; // Alerte Orange
-            if (pourcentage >= maxPct - (amplitude * 0.6)) return '#fee08b'; // Zone Modérée (Jaune)
-            if (pourcentage >= maxPct - (amplitude * 0.8)) return '#d9ef8b'; // Tranche Saine
-            return '#1a9850'; // Renouvellement optimal (Vert foncé)
-        }
+    if (mapElement && donneesGlobales.length > 0 && typeof L !== "undefined") {
+        const map = L.map("map-deserts").setView([46.5, 2.5], 6);
 
-        // Initialisation géographique de la carte centrée sur la France
-        const map = L.map('map-deserts').setView([46.2276, 2.2137], 5.5);
-
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: "© OpenStreetMap"
         }).addTo(map);
 
-        // Intégration du GeoJSON des départements français
-        // (En supposant que le fichier GeoJSON standard est hébergé localement)
-        fetch('/static/data/departements.geojson')
-            .then(response => response.json())
-            .then(geojsonData => {
-                L.geoJson(geojsonData, {
-                    style: function(feature) {
-                        const codeDeptGeo = feature.properties.code;
-                        // Recherche de la correspondance de données
-                        const matchDemo = donneesGlobales.find(d => d.departement_code === codeDeptGeo);
-                        const pct = matchDemo ? matchDemo.pourcentage_seniors : minPct;
+        const dataParDept = {};
+        donneesGlobales.forEach(d => {
+            dataParDept[d.departement_code] = d;
+        });
+
+        function couleur(pourcentage) {
+            if (pourcentage >= 50) return "#dc2626";
+            if (pourcentage >= 40) return "#f59e0b";
+            if (pourcentage >= 30) return "#41e46a";
+            return "#dfffe8";
+        }
+
+        fetch("https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/departements.geojson")
+            .then(r => r.json())
+            .then(geojson => {
+                const layer = L.geoJSON(geojson, {
+                    style: feature => {
+                        const code = feature.properties.code;
+                        const ligne = dataParDept[code];
+                        const taux = ligne ? ligne.pourcentage_seniors : 0;
 
                         return {
-                            fillColor: associerCouleurRelative(pct),
-                            weight: 1,
-                            opacity: 1,
-                            color: '#ffffff',
-                            fillOpacity: 0.75
+                            fillColor: ligne ? couleur(taux) : "#e5e7eb",
+                            fillOpacity: 0.85,
+                            color: "#ffffff",
+                            weight: 1
                         };
                     },
-                    onEachFeature: function(feature, layer) {
-                        const codeDeptGeo = feature.properties.code;
-                        const nomDeptGeo = feature.properties.nom;
-                        const matchDemo = donneesGlobales.find(d => d.departement_code === codeDeptGeo);
-                        
-                        let popupText = `<strong>${codeDeptGeo} - ${nomDeptGeo}</strong><br/>`;
-                        if (matchDemo) {
-                            popupText += `Taux de +60 ans : ${matchDemo.pourcentage_seniors}%<br/>`;
-                            popupText += `Médecins actifs : ${matchDemo.total_medecins}`;
-                        } else {
-                            popupText += `Aucune donnée répertoriée`;
-                        }
-                        layer.bindPopup(popupText);
+                    onEachFeature: (feature, layer) => {
+                        const code = feature.properties.code;
+                        const ligne = dataParDept[code];
+
+                        layer.bindPopup(
+                            ligne
+                                ? `<strong>${feature.properties.nom}</strong><br>
+                                   Seniors : ${ligne.pourcentage_seniors}%<br>
+                                   Coût moyen : ${ligne.cout_moyen} €`
+                                : `<strong>${feature.properties.nom}</strong><br>Aucune donnée`
+                        );
                     }
                 }).addTo(map);
-            }).catch(err => console.error("Impossible de tracer le GeoJSON : ", err));
-    }
 
-    /**********************************************************************/
-    /** 6. EXPORT DES DONNÉES EN CSV                                      */
-    /**********************************************************************/
-    const btnExport = document.querySelector('.export-btn');
-    if (btnExport) {
-        btnExport.addEventListener('click', () => {
-            const table = document.querySelector('.prescriptions-table-box table');
-            if (!table) return alert("Aucun jeu de données disponible pour l'export.");
+                const metropole = L.geoJSON({
+                    type: "FeatureCollection",
+                    features: geojson.features.filter(f => !f.properties.code.startsWith("97"))
+                });
 
-            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
-            const rows = table.querySelectorAll('tr');
+                map.fitBounds(metropole.getBounds(), { padding: [10, 10] });
 
-            rows.forEach(row => {
-                const cols = row.querySelectorAll('th, td');
-                const rowData = Array.from(cols).map(col => `"${col.innerText.trim().replace('%', '')}"`);
-                csvContent += rowData.join(";") + "\r\n";
+                setTimeout(() => {
+                    map.invalidateSize();
+                }, 300);
             });
-
-            const link = document.createElement("a");
-            link.setAttribute("href", encodeURI(csvContent));
-            link.setAttribute("download", `analye_correlation_demographie.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        });
-    }
-
-    /**********************************************************************/
-    /** 7. MÉMOIRE DE L'ONGLET ACTIF AU RECHARGEMENT                      */
-    /**********************************************************************/
-    const ongletSauvegarde = sessionStorage.getItem('ongletActif');
-    if (ongletSauvegarde && ongletSauvegarde !== 'tab-analyse') {
-        const boutonCorrespondant = document.querySelector(`button[onclick*="${ongletSauvegarde}"]`);
-        if (boutonCorrespondant) boutonCorrespondant.click();
     }
 });
-
-/**********************************************************************/
-/** 8. FONCTION COMMUTATRICE DES ONGLET (ACCESSIBLE DEPUIS L'HTML)     */
-/**********************************************************************/
-function switchTab(event, tabId) {
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-
-    const targetTab = document.getElementById(tabId);
-    if (targetTab) targetTab.classList.add('active');
-    event.currentTarget.classList.add('active');
-
-    sessionStorage.setItem('ongletActif', tabId);
-}
