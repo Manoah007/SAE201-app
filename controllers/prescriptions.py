@@ -171,6 +171,8 @@ def page_correlation():
             annee=annee_str
         )
 
+        print(f"DEBUG CONTROLEUR | donnees_globales contient : {len(donnees_globales)} lignes")
+        
         return render_template(
             "prescriptions/page_correlation.html",
             # Listes pour construire les <select>

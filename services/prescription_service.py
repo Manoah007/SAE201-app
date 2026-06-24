@@ -175,6 +175,58 @@ class PrescriptionService:
     
 
 
+    def get_tableau_top_deserts_medicaux(self, profession, annee="2024"):
+        """
+        Pivote les tranches d'âge en colonnes pour chaque département.
+        """
+
+        print("\nprescription_service.py | get_tableau_top_deserts_medicaux()")
+
+        where_clauses = [
+            f"year(annee)={annee}",
+            f"profession_sante='{profession}'",
+            "libelle_sexe = 'tout sexe'",
+            "libelle_classe_age != 'Tout âge'",
+            "departement IS NOT NULL"
+        ]
+        
+        where_final = " AND ".join(where_clauses)
+        
+        donnees_brutes = self.api._requete_paginee(
+            "demographie-effectifs-et-les-densites",
+            {
+                "select": "departement, libelle_departement, libelle_classe_age, SUM(effectif) as effectif",
+                "where": where_final,
+                "group_by": "departement, libelle_departement, libelle_classe_age"
+            }
+        )
+
+        tableau_depts = {}
+
+        for ligne in donnees_brutes:
+            code_dept = ligne.get('departement')
+            nom_dept = ligne.get('libelle_departement', '')
+            age = ligne.get('libelle_classe_age', "")
+            effectif = ligne.get('effectif', 0)
+            
+            # Initialisation de la ligne du département
+            if code_dept not in tableau_depts:
+                tableau_depts[code_dept] = {
+                    "code": code_dept,
+                    "nom": nom_dept,
+                    "total": 0,
+                    "tranches": {}
+                }
+                
+            tableau_depts[code_dept]["total"] += effectif
+            tableau_depts[code_dept]["tranches"][age] = effectif
+
+        
+        resultats_finaux = list(tableau_depts.values()) # Formatage pour le frontend
+        resultats_finaux.sort(key=lambda x: x["nom"]) # Tri alphabétique par nom de département
+
+        return resultats_finaux
+    
 
     def get_graphique_top_deserts_medicaux(self, profession, annee="2024", limite=15):
         """Calcule la proportion de médecins de +60 ans par département"""
@@ -246,57 +298,7 @@ class PrescriptionService:
         return resultats_finaux
 
 
-    def get_tableau_top_deserts_medicaux(self, profession, annee="2024"):
-        """
-        Pivote les tranches d'âge en colonnes pour chaque département.
-        """
-
-        print("\nprescription_service.py | get_tableau_top_deserts_medicaux()")
-
-        where_clauses = [
-            f"year(annee)={annee}",
-            f"profession_sante='{profession}'",
-            "libelle_sexe = 'tout sexe'",
-            "libelle_classe_age != 'Tout âge'",
-            "departement IS NOT NULL"
-        ]
-        
-        where_final = " AND ".join(where_clauses)
-        
-        donnees_brutes = self.api._requete_paginee(
-            "demographie-effectifs-et-les-densites",
-            {
-                "select": "departement, libelle_departement, libelle_classe_age, SUM(effectif) as effectif",
-                "where": where_final,
-                "group_by": "departement, libelle_departement, libelle_classe_age"
-            }
-        )
-
-        tableau_depts = {}
-
-        for ligne in donnees_brutes:
-            code_dept = ligne.get('departement')
-            nom_dept = ligne.get('libelle_departement', '')
-            age = ligne.get('libelle_classe_age', "")
-            effectif = ligne.get('effectif', 0)
-            
-            # Initialisation de la ligne du département
-            if code_dept not in tableau_depts:
-                tableau_depts[code_dept] = {
-                    "code": code_dept,
-                    "nom": nom_dept,
-                    "total": 0,
-                    "tranches": {}
-                }
-                
-            tableau_depts[code_dept]["total"] += effectif
-            tableau_depts[code_dept]["tranches"][age] = effectif
-
-        
-        resultats_finaux = list(tableau_depts.values()) # Formatage pour le frontend
-        resultats_finaux.sort(key=lambda x: x["nom"]) # Tri alphabétique par nom de département
-
-        return resultats_finaux
+    
 
 
 
@@ -310,14 +312,12 @@ class PrescriptionService:
         print("\nprescription_service.py | get_correlation_age_depense()")
 
 
-        donnees_demo = self.get_top_deserts_medicaux(profession, annee=annee, limite=None)
+        donnees_demo = self.get_graphique_top_deserts_medicaux(profession, annee=annee, limite=None)
         if not donnees_demo:
             return []
 
 
-        donnees_finance = self.prescription.get_prescription_toutes_zones(
-            toutes_regions=True,
-            tous_depart=True,
+        donnees_finance = self.get_finance(
             annee=annee,
             limite_ligne=150
         )
@@ -327,7 +327,9 @@ class PrescriptionService:
         for ligne in donnees_finance:
             # CORRECTION A : On utilise le CODE du département, pas son nom !
             code_dept = ligne.get('departement', '').strip() 
-            
+            print(f"\n--- [DEBUG CORRÉLATION] ---")
+            print(f"Détection | code_dept={repr(code_dept)} | Type: {type(code_dept)}")
+            print("-----------------------------\n")
             if code_dept:
                 # CORRECTION B : On utilise les vrais noms de colonnes "integer" !
                 dict_finance[code_dept] = {
@@ -337,9 +339,21 @@ class PrescriptionService:
 
 
         resultats_fusionnes = []
+        print(f"\n--- [DEBUG CORRÉLATION] ---")
+        print(f"Exemple ligne démo : {donnees_demo[0]}")
+        print(f"Clés disponibles dans la démo : {list(donnees_demo[0].keys())}")
+        print("-----------------------------\n")
+        print(f"Exemple ligne finance : {donnees_finance[0]}")
+        print(f"Exemple de clés dans le dictionnaire dict_finance : {list(dict_finance.keys())[:5]}")
+        print("-----------------------------\n")
         for dept_demo in donnees_demo:
-            # cle_commune est maintenant le code "73", "19", etc.
-            cle_commune = dept_demo['departement'] 
+           
+            cle_commune = dept_demo.get('departement') or dept_demo.get('code_dept')
+            
+            if not cle_commune:
+                continue
+                
+            cle_commune = str(cle_commune).strip() # Nettoyage des espaces
             
             finances = dict_finance.get(cle_commune, {})
             cout_moyen = finances.get("cout_moyen", 0)
@@ -356,3 +370,19 @@ class PrescriptionService:
                 })
 
         return resultats_fusionnes
+    
+
+    def get_finance(self, annee="2024", limite_ligne=30):
+        """Affiche soit tous les départements, soit toutes les régions"""
+
+        print("\nameli_api.py | get_finance()")
+
+
+        return self.api._requete("prescriptions",
+                            {
+                            "select" : "departement,libelle_departement, SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen",
+                            "where" : f'year(annee)={annee}',
+                            "group_by" : "departement, libelle_departement",
+                            "limit" : limite_ligne
+                            }
+                            )
