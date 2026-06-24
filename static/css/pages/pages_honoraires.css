@@ -36,6 +36,13 @@
     gap: 18px;
 }
 
+.honoraires-filter-box .filter-label {
+    font-size: 15px;
+    font-weight: 800;
+    color: #ffffff;
+    white-space: nowrap;
+}
+
 .honoraires-form {
     display: grid;
     /* Profession | Région | Département | Année | Bouton | Lien reset */

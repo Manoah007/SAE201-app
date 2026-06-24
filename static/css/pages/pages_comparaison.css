@@ -34,10 +34,16 @@
     gap: 15px;
 }
 
+.comparaison-filter-box .filter-label {
+    font-size: 15px;
+    font-weight: 800;
+    color: #333;
+    white-space: nowrap;
+}
+
 .comparaison-form {
     display: grid;
-    /* Crée 7 colonnes adaptées à la taille des éléments */
-    grid-template-columns: 1.5fr 1fr auto 1.5fr 1fr auto auto;
+    grid-template-columns: 1.2fr 1.5fr 1fr auto 1.5fr 1fr auto auto;
     gap: 12px;
     align-items: center;
     width: 100%;
@@ -45,6 +51,7 @@
 
 .comparaison-form select {
     width: 100%;
+    min-width: 0;
     border: none;
     background: white;
     padding: 13px 15px;

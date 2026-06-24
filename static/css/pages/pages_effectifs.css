@@ -34,6 +34,13 @@
     gap: 18px;
 }
 
+.effectifs-filter-box .filter-label {
+    font-size: 15px;
+    font-weight: 800;
+    color: #ffffff;
+    white-space: nowrap;
+}
+
 .effectifs-form {
     display: grid;
     /* Profession | Région | Département | Année | Bouton | Lien reset */

@@ -151,8 +151,13 @@
     .filters-box,
     .effectifs-filter-box,
     .honoraires-filter-box,
-    .comparaison-filter-box {
+    .comparaison-filter-box,
+    .carte-filter-box {
         background: #2a2a2a;
+    }
+
+    .filter-label {
+        color: #ccc !important;
     }
 
     .effectifs-form select,
