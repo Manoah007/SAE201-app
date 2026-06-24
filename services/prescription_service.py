@@ -17,11 +17,12 @@ class PrescriptionService:
                 {
                     "select": (
                         "departement, libelle_departement, "
-                        "SUM(montant_total_prescription_integer) as cout_total, "
-                        "AVG(montant_moyen_prescription_integer) as cout_moyen"
+                        "sum(montant_total_prescription_integer) as cout_total, "
+                        "avg(montant_moyen_prescription_integer) as cout_moyen"
                     ),
-                    "where": f"year(annee)={annee}",
+                    "where": f"year(annee)={annee} AND departement is not null",
                     "group_by": "departement, libelle_departement",
+                    "order_by": "cout_total DESC",
                     "limit": limite_ligne
                 }
             )
@@ -32,11 +33,12 @@ class PrescriptionService:
                 {
                     "select": (
                         "region, libelle_region, "
-                        "SUM(montant_total_prescription_integer) as cout_total, "
-                        "AVG(montant_moyen_prescription_integer) as cout_moyen"
+                        "sum(montant_total_prescription_integer) as cout_total, "
+                        "avg(montant_moyen_prescription_integer) as cout_moyen"
                     ),
-                    "where": f"year(annee)={annee}",
+                    "where": f"year(annee)={annee} AND region is not null",
                     "group_by": "region, libelle_region",
+                    "order_by": "cout_total DESC",
                     "limit": limite_ligne
                 }
             )
@@ -46,7 +48,10 @@ class PrescriptionService:
     def get_region_prescription(self, region_list_id=None, annee="2024", limite_ligne=100):
         """Filtre les prescriptions selon une ou plusieurs régions."""
 
-        where_clauses = [f"year(annee)={annee}"]
+        where_clauses = [
+            f"year(annee)={annee}",
+            "region is not null"
+        ]
 
         if region_list_id:
             ids_reg = ",".join([f"'{r_id}'" for r_id in region_list_id])
@@ -59,11 +64,12 @@ class PrescriptionService:
             {
                 "select": (
                     "region, libelle_region, "
-                    "SUM(montant_total_prescription_integer) as cout_total, "
-                    "AVG(montant_moyen_prescription_integer) as cout_moyen"
+                    "sum(montant_total_prescription_integer) as cout_total, "
+                    "avg(montant_moyen_prescription_integer) as cout_moyen"
                 ),
                 "where": where,
                 "group_by": "region, libelle_region",
+                "order_by": "cout_total DESC",
                 "limit": limite_ligne
             }
         )
@@ -71,13 +77,16 @@ class PrescriptionService:
     def get_departement_prescriptions(self, region_list_id=None, departement_list_id=None, annee="2024", limite_ligne=100):
         """Filtre les prescriptions selon une ou plusieurs régions/départements."""
 
-        where_clauses = [f"year(annee)={annee}"]
+        where_clauses = [
+            f"year(annee)={annee}",
+            "departement is not null"
+        ]
 
         if departement_list_id:
             ids_dep = ",".join([f"'{d_id}'" for d_id in departement_list_id])
             where_clauses.append(f"departement IN ({ids_dep})")
 
-        if region_list_id:
+        elif region_list_id:
             ids_reg = ",".join([f"'{r_id}'" for r_id in region_list_id])
             where_clauses.append(f"region IN ({ids_reg})")
 
@@ -88,11 +97,12 @@ class PrescriptionService:
             {
                 "select": (
                     "departement, libelle_departement, "
-                    "SUM(montant_total_prescription_integer) as cout_total, "
-                    "AVG(montant_moyen_prescription_integer) as cout_moyen"
+                    "sum(montant_total_prescription_integer) as cout_total, "
+                    "avg(montant_moyen_prescription_integer) as cout_moyen"
                 ),
                 "where": where,
                 "group_by": "departement, libelle_departement",
+                "order_by": "cout_total DESC",
                 "limit": limite_ligne
             }
         )
@@ -102,8 +112,6 @@ class PrescriptionService:
     # ==========================================================
 
     def get_donnees_pyramide_ages(self, profession, departement_code=None, annee="2024", limit_ligne=5000):
-        """Retourne les effectifs par sexe et par tranche d'âge."""
-
         where_clauses = [
             f"year(annee)={annee}",
             f'profession_sante="{profession}"',
@@ -121,7 +129,7 @@ class PrescriptionService:
         donnees_brutes = self.api._requete_paginee(
             "demographie-effectifs-et-les-densites",
             {
-                "select": "libelle_sexe, libelle_classe_age, SUM(effectif) as total",
+                "select": "libelle_sexe, libelle_classe_age, sum(effectif) as total",
                 "where": where,
                 "group_by": "libelle_sexe, libelle_classe_age",
                 "limit": 100
@@ -157,8 +165,6 @@ class PrescriptionService:
         return resultats
 
     def get_graphique_top_deserts_medicaux(self, profession, annee="2024", limite=15):
-        """Calcule le pourcentage de praticiens de 60 ans et plus par département."""
-
         where = " AND ".join([
             f"year(annee)={annee}",
             f'profession_sante="{profession}"',
@@ -170,7 +176,7 @@ class PrescriptionService:
         donnees_brutes = self.api._requete_paginee(
             "demographie-effectifs-et-les-densites",
             {
-                "select": "departement, libelle_departement, libelle_classe_age, SUM(effectif) as effectif",
+                "select": "departement, libelle_departement, libelle_classe_age, sum(effectif) as effectif",
                 "where": where,
                 "group_by": "departement, libelle_departement, libelle_classe_age",
                 "limit": 100
@@ -229,8 +235,6 @@ class PrescriptionService:
         return resultats
 
     def get_tableau_top_deserts_medicaux(self, profession, annee="2024"):
-        """Retourne le tableau détaillé des départements avec part des seniors."""
-
         resultats = self.get_graphique_top_deserts_medicaux(
             profession=profession,
             annee=annee,
@@ -241,8 +245,6 @@ class PrescriptionService:
         return resultats
 
     def get_correlation_age_depense(self, profession, annee="2024"):
-        """Fusionne les données démographiques et les dépenses de prescription."""
-
         donnees_demo = self.get_graphique_top_deserts_medicaux(
             profession=profession,
             annee=annee,
@@ -277,17 +279,14 @@ class PrescriptionService:
             code = ligne.get("departement_code")
             finance = finance_par_dept.get(code, {})
 
-            cout_total = finance.get("cout_total", 0)
-            cout_moyen = finance.get("cout_moyen", 0)
-
             resultats.append({
                 "departement_code": code,
                 "nom_dept": ligne.get("nom_dept"),
                 "total_medecins": ligne.get("total_praticiens", 0),
                 "praticiens_seniors": ligne.get("praticiens_seniors", 0),
                 "pourcentage_seniors": ligne.get("pourcentage_seniors", 0),
-                "cout_total": cout_total,
-                "cout_moyen": round(cout_moyen, 2) if cout_moyen else 0
+                "cout_total": finance.get("cout_total", 0),
+                "cout_moyen": round(finance.get("cout_moyen", 0), 2)
             })
 
         return resultats
