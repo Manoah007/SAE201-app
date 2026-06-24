@@ -50,7 +50,7 @@
 
                     <select name="annee_a" required>
                         <option value="">Année A</option>
-                        {% for a in range(2024, 2014, -1) %}
+                        {% for a in range(2024, 2009, -1) %}
                             <option value="{{ a }}" {% if request.args.get('annee_a')|int == a %}selected{% endif %}>
                                 {{ a }}
                             </option>
@@ -88,7 +88,7 @@
 
                     <select name="annee_b" required>
                         <option value="">Année B</option>
-                        {% for a in range(2024, 2014, -1) %}
+                        {% for a in range(2024, 2009, -1) %}
                             <option value="{{ a }}" {% if request.args.get('annee_b')|int == a %}selected{% endif %}>
                                 {{ a }}
                             </option>
