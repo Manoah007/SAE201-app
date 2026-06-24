@@ -11,6 +11,7 @@ from flask import Flask, render_template
 from controllers.indicateurs import bp_indicateurs
 from controllers.documentation import bp_documentation
 
+
 app = Flask(__name__)
 app.config.from_object(Config)
 
@@ -31,6 +32,10 @@ app.register_blueprint(bp_comparaison)
 app.register_blueprint(bp_carte)
 app.register_blueprint(bp_indicateurs)
 app.register_blueprint(bp_documentation)
+<<<<<<< HEAD
+
+=======
+>>>>>>> 347829ec83996c13cbb1a1d8b40b85462e29b665
 
 @app.errorhandler(404)
 def page_non_trouvee(e):
