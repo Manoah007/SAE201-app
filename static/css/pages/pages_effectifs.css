@@ -35,14 +35,17 @@
 }
 
 .effectifs-form {
-    display: flex;
+    display: grid;
+    /* Profession | Région | Département | Année | Bouton | Lien reset */
+    grid-template-columns: 2fr 1fr 1fr 0.7fr auto auto;
     gap: 18px;
     align-items: center;
     width: 100%;
 }
 
 .effectifs-form select {
-    flex: 1;
+    width: 100%;
+    min-width: 0;
     border: none;
     background: white;
     padding: 13px 22px;
@@ -60,4 +63,49 @@
     font-weight: bold;
     cursor: pointer;
     white-space: nowrap;
+}
+
+.effectifs-form .reset-link {
+    color: #23b84d;
+    font-weight: bold;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+/* EFFECTIFS - RÉSULTATS */
+.effectifs-results {
+    margin-top: 28px;
+}
+
+.effectifs-results .result-title {
+    background: white;
+    border-radius: 18px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+}
+
+.effectifs-results .result-title h2 {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.effectifs-results .result-title p {
+    color: #555;
+    font-weight: bold;
+}
+
+.effectifs-results .chart-box {
+    background: white;
+    border-radius: 18px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+}
+
+.effectifs-results .prescriptions-table-box {
+    background: white;
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
 }
