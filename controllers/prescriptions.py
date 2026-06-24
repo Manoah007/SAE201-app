@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, render_template, request
 from models.db import Session
-from models.dimensions import Region, Departement
+from models.dimensions import Region, Departement, ProfessionSante
 from services.ameli_api import AmeliAPI
 from services.prescription_service import PrescriptionService
 
@@ -19,7 +19,7 @@ def accueil_prescription():
 def page_disparite():
 
     session = Session()
-    print("\nprescription.py | page_disparite()")
+    print("\nprescription.py | page_disparite() | ROUTE : /prescriptions/disparite")
 
 
     try:
@@ -142,7 +142,58 @@ def page_disparite():
 
 @bp_prescriptions.route("/prescriptions/correlation_demographique")
 def page_correlation():
-    return render_template("prescriptions/page_correlation.html")
+    
+    session = Session()
+    print("\nprescription.py | page_correlation() | ROUTE : /prescriptions/correlation_demographique")
+
+    try:
+        departements = session.query(Departement).order_by(Departement.libelle).all()
+        professions = session.query(ProfessionSante).order_by(ProfessionSante.libelle).all()
+
+        profession = request.args.get("profession", "Ensemble des médecins") 
+        annee_str = str(request.args.get("annee", default="2024"))
+        departement_code = request.args.get("departement")
+
+
+        donnees_globales = prescription_service.get_correlation_age_depense(
+            profession=profession, 
+            annee=annee_str
+        )
+        
+        donnees_pyramide = prescription_service.get_donnees_pyramide_ages(
+            profession=profession, 
+            departement_code=departement_code, 
+            annee=annee_str
+        )
+        
+        donnees_tableau_deserts = prescription_service.get_tableau_top_deserts_medicaux(
+            profession=profession, 
+            annee=annee_str
+        )
+
+        return render_template(
+            "prescriptions/page_correlation.html",
+            # Listes pour construire les <select>
+            departements=departements,
+            professions=professions,
+            
+            # Choix actuels pour garder les options sélectionnées après rafraîchissement
+            profession_selectionnee=profession,
+            annee_selectionnee=annee_str,
+            departement_selectionne=departement_code,
+            
+            # Données JSON pour l'affichage (Graphiques et Tableaux)
+            donnees_globales=donnees_globales,
+            donnees_pyramide=donnees_pyramide,
+            donnees_tableau_deserts=donnees_tableau_deserts
+        )
+
+    except Exception as e:
+        print(f"Erreur lors de la génération de la page corrélation : {e}")
+        return "Une erreur serveur est survenue lors de la récupération des données.", 500
+        
+    finally:
+        session.close()
 
 
 @bp_prescriptions.route("/prescriptions/prescriptions_majeurs")
