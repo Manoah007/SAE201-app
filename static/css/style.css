@@ -5,7 +5,7 @@
 /* 1. Base */
 @import url('base/base_reset.css');
 
-/* 2. Layouts (Structure) */
+/* 2. Layouts */
 @import url('layout/layout_header.css');
 @import url('layout/layout_footer.css');
 
@@ -13,20 +13,22 @@
 @import url('components/components_tables.css');
 @import url('components/components_forms-results.css');
 
-/* 4. Pages spécifiques */
+/* 4. Pages principales */
 @import url('pages/pages_accueil.css');
+@import url('pages/pages_api-ameli.css');
 @import url('pages/pages_indicateurs.css');
 @import url('pages/pages_prescriptions.css');
-@import url('pages/pages_api-ameli.css');
-
-/*DANS LE DOSSIER STYLE PRESCRIPTIONS - STYLE DES PAGES PRSCRIPTIONS */
-@import url('pages/style_prescription/accueil_prescription.css');
-@import url('pages/style_prescription/page_disparite.css');
-@import url('pages/style_prescription/page_correlation.css');
-@import url('pages/style_prescription/page_prescript_majeur.css');
-
 @import url('pages/pages_faq.css');
 @import url('pages/pages_honoraires.css');
 @import url('pages/pages_effectifs.css');
 @import url('pages/pages_comparaison.css');
+@import url('pages/pages_carte.css');
 @import url('pages/pages_documentation.css');
+
+/* 5. Pages prescriptions spécifiques */
+@import url('pages/style_prescription/accueil_prescription.css');
+@import url('pages/style_prescription/page_disparite.css');
+@import url('pages/style_prescription/page_correlation.css');
+
+/* 6. Correctifs globaux */
+@import url('pages/pages_global_fix.css');
