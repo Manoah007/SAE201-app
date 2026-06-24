@@ -90,3 +90,63 @@
 .faq-content p:last-child {
     margin-bottom: 0;
 }
+
+/* ==========================================
+   FAQ - MODE SOMBRE CORRIGÉ
+   ========================================== */
+
+[data-theme="dark"] .faq-page {
+    background: #121212;
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .faq-header h2 {
+    color: #f0f0f0;
+}
+
+[data-theme="dark"] .faq-header p {
+    color: #aaa;
+}
+
+[data-theme="dark"] .faq-item {
+    background: #1e1e1e;
+    border: 1px solid #2a2a2a;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .faq-item:hover {
+    background: #232323;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="dark"] .faq-item summary {
+    color: #f0f0f0;
+}
+
+[data-theme="dark"] .faq-item summary::after {
+    color: #41e46a;
+}
+
+[data-theme="dark"] .faq-item[open] summary::after {
+    color: #41e46a;
+}
+
+[data-theme="dark"] .faq-content {
+    color: #aaa;
+    border-top: 1px solid #333;
+}
+
+[data-theme="dark"] .faq-content p {
+    color: #aaa;
+}
+
+[data-theme="dark"] .faq-content strong {
+    color: #41e46a;
+}
+
+[data-theme="dark"] .faq-content code {
+    background: #2a2a2a;
+    color: #41e46a;
+    padding: 3px 6px;
+    border-radius: 6px;
+}
