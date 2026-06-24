@@ -60,7 +60,7 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-const donneesParDept = {{ donnees_carte | tojson }};
+const donneesParDept = JSON.parse('{{ donnees_carte | tojson | safe }}');
 
 const PALETTE = [
     { seuil: 0,    couleur: '#f0fdf4' },
