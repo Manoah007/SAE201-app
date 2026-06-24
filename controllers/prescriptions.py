@@ -2,10 +2,11 @@ from flask import Blueprint, jsonify, render_template, request
 from models.db import Session
 from models.dimensions import Region, Departement
 from services.ameli_api import AmeliAPI
+from services.prescription_service import PrescriptionService
 
 bp_prescriptions = Blueprint("prescriptions", __name__)
 api = AmeliAPI()
-    
+prescription_service = PrescriptionService(api) 
 
 
 @bp_prescriptions.route("/prescriptions")
@@ -50,16 +51,16 @@ def page_disparite():
         if not request.args.get('regions') and not request.args.get('departements'):
             print("0 - Premier chargement de page, aucune sélection")
             mode_maillage_regional = True
-            resultats = api.get_prescription_toutes_zones(
+            resultats = prescription_service.get_prescription_toutes_zones(
                 toutes_regions=True,
-                tous_départ=False,
+                tous_depart=False,
                 annee=annee_str,
                 limite_ligne=limit_ligne
             )
 
         elif departments_ids or (is_dept_tout and regions_ids):
             print("I - Affichage maillage Départemental (Filtré)")
-            resultats = api.get_departement_prescriptions(
+            resultats = prescription_service.get_departement_prescriptions(
                 region_list_id=regions_ids,
                 departement_list_id=departments_ids, 
                 annee=annee_str,
@@ -68,9 +69,9 @@ def page_disparite():
 
         elif is_dept_tout and is_region_tout:
             print("II - Sélection de tous les départements de France")
-            resultats = api.get_prescription_toutes_zones(
+            resultats = prescription_service.get_prescription_toutes_zones(
                 toutes_regions=True,
-                tous_départ=True,
+                tous_depart=True,
                 annee=annee_str,
                 limite_ligne=limit_ligne
             )  
@@ -78,7 +79,7 @@ def page_disparite():
         elif regions_ids and not departments_ids:
             print("III - Sélection de régions spécifiques")
             mode_maillage_regional = True
-            resultats = api.get_region_prescription(
+            resultats = prescription_service.get_region_prescription(
                 region_list_id=regions_ids, 
                 annee=annee_str,
                 limite_ligne=limit_ligne
@@ -87,9 +88,9 @@ def page_disparite():
         else:
             print("IV - Maillage Régional National")
             mode_maillage_regional = True
-            resultats = api.get_prescription_toutes_zones(
+            resultats = prescription_service.get_prescription_toutes_zones(
                 toutes_regions=True,
-                tous_départ=False,
+                tous_depart=False,
                 annee=annee_str,
                 limite_ligne=limit_ligne
             )
