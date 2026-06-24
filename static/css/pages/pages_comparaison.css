@@ -5,7 +5,6 @@
 .comparaison-page {
     background: #f4f4f4;
     padding: 45px 50px;
-    width: 100%;
 }
 
 .comparaison-header {
@@ -81,6 +80,19 @@
 /* COMPARAISON - RÉSULTATS */
 .comparaison-results {
     margin-top: 35px;
+}
+
+.comparaison-results .result-title {
+    background: white;
+    border-radius: 18px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+}
+
+.comparaison-results .result-title h2 {
+    font-size: 28px;
+    margin-bottom: 8px;
 }
 
 .comparaison-chart {
