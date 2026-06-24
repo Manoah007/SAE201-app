@@ -12,6 +12,7 @@ from controllers.comparaison import bp_comparaison
 from controllers.carte import bp_carte
 from controllers.indicateurs import bp_indicateurs
 from controllers.documentation import bp_documentation
+from controllers.apropos import bp_apropos
 
 
 app = Flask(__name__)
@@ -34,6 +35,7 @@ app.register_blueprint(bp_comparaison)
 app.register_blueprint(bp_carte)
 app.register_blueprint(bp_indicateurs)
 app.register_blueprint(bp_documentation)
+app.register_blueprint(bp_apropos)
 
 
 @app.route("/faq")

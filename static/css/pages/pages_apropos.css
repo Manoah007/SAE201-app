@@ -1,0 +1,388 @@
+/* ==========================================
+   À PROPOS - PAGE
+   ========================================== */
+
+.apropos-page {
+    background: #f4f4f4;
+    padding: 45px 50px;
+}
+
+/* HERO */
+
+.apropos-hero {
+    max-width: 1350px;
+    margin: 0 auto 35px;
+    background: white;
+    border-radius: 22px;
+    padding: 45px 50px;
+    display: grid;
+    grid-template-columns: 1.4fr 0.7fr;
+    gap: 40px;
+    align-items: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+}
+
+.apropos-badge {
+    display: inline-block;
+    background: #dfffe8;
+    color: #0c8d35;
+    font-weight: 800;
+    padding: 7px 16px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+    font-size: 14px;
+}
+
+.apropos-hero h1 {
+    font-size: 44px;
+    line-height: 1.15;
+    margin-bottom: 18px;
+    font-weight: 800;
+    color: #111;
+}
+
+.apropos-hero p {
+    font-size: 18px;
+    color: #555;
+    line-height: 1.7;
+}
+
+.apropos-hero-card {
+    background: #f7f7f7;
+    border-radius: 18px;
+    padding: 30px;
+    border: 1px solid #eeeeee;
+}
+
+.apropos-hero-card h3 {
+    font-size: 20px;
+    margin-bottom: 12px;
+    color: #111;
+}
+
+.apropos-hero-card strong {
+    display: block;
+    font-size: 36px;
+    color: #41e46a;
+    margin-bottom: 10px;
+}
+
+/* TITRES */
+
+.section-title {
+    text-align: center;
+    max-width: 850px;
+    margin: 0 auto 30px;
+}
+
+.section-title span {
+    display: inline-block;
+    color: #23b84d;
+    font-weight: 800;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+}
+
+.section-title h2 {
+    font-size: 32px;
+    margin-bottom: 10px;
+    color: #111;
+}
+
+.section-title p {
+    color: #555;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* TEAM */
+
+.apropos-team {
+    max-width: 1350px;
+    margin: 0 auto 35px;
+    background: white;
+    border-radius: 22px;
+    padding: 38px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+}
+
+.team-card {
+    background: #f7f7f7;
+    border-radius: 18px;
+    padding: 25px 20px;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.team-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+}
+
+.team-avatar {
+    width: 62px;
+    height: 62px;
+    margin: 0 auto 16px;
+    background: #dfffe8;
+    color: #0c8d35;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 20px;
+}
+
+.team-card h3 {
+    font-size: 19px;
+    margin-bottom: 8px;
+    color: #111;
+}
+
+.team-card p {
+    color: #666;
+    font-size: 14px;
+}
+
+/* CARTES INFOS */
+
+.apropos-grid {
+    max-width: 1350px;
+    margin: 0 auto 35px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}
+
+.apropos-card {
+    background: white;
+    border-radius: 22px;
+    padding: 32px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+}
+
+.card-icon {
+    width: 52px;
+    height: 52px;
+    background: #dfffe8;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 18px;
+}
+
+.apropos-card h2 {
+    font-size: 26px;
+    margin-bottom: 14px;
+    color: #111;
+}
+
+.apropos-card p {
+    color: #555;
+    line-height: 1.7;
+    margin-bottom: 12px;
+}
+
+.apropos-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+
+.apropos-card li {
+    color: #555;
+    line-height: 1.5;
+}
+
+.apropos-card li::before {
+    content: "✓";
+    color: #23b84d;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+/* TECHNOLOGIES */
+
+.tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.tech-tags span {
+    background: #f1f1f1;
+    color: #111;
+    padding: 9px 15px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+/* ARCHITECTURE */
+
+.architecture-section {
+    max-width: 1350px;
+    margin: 0 auto 35px;
+    background: white;
+    border-radius: 22px;
+    padding: 38px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+}
+
+.architecture-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+}
+
+.architecture-card {
+    background: #f7f7f7;
+    border-radius: 18px;
+    padding: 25px;
+}
+
+.architecture-card span {
+    width: 38px;
+    height: 38px;
+    background: #41e46a;
+    color: white;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    margin-bottom: 16px;
+}
+
+.architecture-card h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #111;
+}
+
+.architecture-card p {
+    color: #555;
+    line-height: 1.6;
+    font-size: 15px;
+}
+
+/* FINAL */
+
+.apropos-final {
+    max-width: 1350px;
+    margin: 0 auto;
+    background: #111;
+    color: white;
+    border-radius: 22px;
+    padding: 38px 45px;
+    text-align: center;
+}
+
+.apropos-final h2 {
+    font-size: 30px;
+    margin-bottom: 14px;
+}
+
+.apropos-final p {
+    max-width: 900px;
+    margin: 0 auto;
+    color: #d8d8d8;
+    line-height: 1.7;
+    font-size: 17px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1100px) {
+    .apropos-hero,
+    .apropos-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .team-grid,
+    .architecture-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 700px) {
+    .apropos-page {
+        padding: 30px 20px;
+    }
+
+    .apropos-hero {
+        padding: 32px 25px;
+    }
+
+    .apropos-hero h1 {
+        font-size: 34px;
+    }
+
+    .team-grid,
+    .architecture-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* MODE SOMBRE */
+
+[data-theme="dark"] .apropos-page {
+    background: #121212;
+}
+
+[data-theme="dark"] .apropos-hero,
+[data-theme="dark"] .apropos-team,
+[data-theme="dark"] .apropos-card,
+[data-theme="dark"] .architecture-section {
+    background: #1e1e1e;
+    color: #e0e0e0;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .apropos-hero-card,
+[data-theme="dark"] .team-card,
+[data-theme="dark"] .architecture-card {
+    background: #2a2a2a;
+    border-color: #3a3a3a;
+}
+
+[data-theme="dark"] .apropos-hero h1,
+[data-theme="dark"] .section-title h2,
+[data-theme="dark"] .apropos-card h2,
+[data-theme="dark"] .team-card h3,
+[data-theme="dark"] .architecture-card h3,
+[data-theme="dark"] .apropos-hero-card h3 {
+    color: #f0f0f0;
+}
+
+[data-theme="dark"] .apropos-hero p,
+[data-theme="dark"] .section-title p,
+[data-theme="dark"] .apropos-card p,
+[data-theme="dark"] .apropos-card li,
+[data-theme="dark"] .team-card p,
+[data-theme="dark"] .architecture-card p {
+    color: #aaa;
+}
+
+[data-theme="dark"] .tech-tags span {
+    background: #2a2a2a;
+    color: #e0e0e0;
+    border: 1px solid #3a3a3a;
+}
+
+[data-theme="dark"] .apropos-final {
+    background: #1e1e1e;
+    border: 1px solid #2a2a2a;
+}
