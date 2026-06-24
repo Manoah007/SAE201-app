@@ -20,7 +20,6 @@
         </p>
 
         <div class="hero-buttons">
-            <a href="#" class="btn-primary">Découvrir les données</a>
             <a href="{{ url_for('documentation.afficher') }}" class="btn-secondary">Documentation</a>
         </div>
 
@@ -144,9 +143,9 @@
     new Chart(document.getElementById('chartRegions'), {
         type: 'bar',
         data: {
-            labels: {{ region_labels|tojson }},
+            labels: JSON.parse('{{ region_labels|tojson|safe }}'),
             datasets: [{
-                data: {{ region_values|tojson }},
+                data: JSON.parse('{{ region_values|tojson|safe }}'),
                 backgroundColor: dashGreenStrong,
                 borderRadius: 6,
                 barThickness: 14
@@ -163,8 +162,8 @@
     });
 
     /* ---- Répartition par sexe ---- */
-    const sexeLabels = {{ sexe_labels|tojson }};
-    const sexeValues = {{ sexe_values|tojson }};
+    const sexeLabels = JSON.parse('{{ sexe_labels|tojson|safe }}');
+    const sexeValues = JSON.parse('{{ sexe_values|tojson|safe }}');
     const sexeColors = [dashGreenStrong, dashGreenDark, dashGray, '#a3e9b8'];
 
     new Chart(document.getElementById('chartSexe'), {
@@ -198,9 +197,9 @@
     new Chart(document.getElementById('chartAge'), {
         type: 'bar',
         data: {
-            labels: {{ age_labels|tojson }},
+            labels: JSON.parse('{{ age_labels|tojson|safe }}'),
             datasets: [{
-                data: {{ age_values|tojson }},
+                data: JSON.parse('{{ age_values|tojson|safe }}'),
                 backgroundColor: dashGreenSoft,
                 hoverBackgroundColor: dashGreenStrong,
                 borderRadius: 6
