@@ -15,7 +15,7 @@
 
 /* 4. Pages spécifiques */
 @import url('pages/pages_accueil.css');
-@import url('pages/pages_api-ameli.css');
+@import url('pages/pages_indicateurs.css');
 @import url('pages/pages_prescriptions.css');
 @import url('pages/pages_faq.css');
 @import url('pages/pages_honoraires.css');

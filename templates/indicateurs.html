@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block titre %}Indicateurs Clés{% endblock %}
+
+{% block contenu %}
+<div class="page-indicateurs">
+
+<section class="filtres-pill-container">
+        <div class="filtres-label">FILTRER :</div>
+        
+        <form action="{{ url_for('indicateurs.afficher') }}" method="get" class="filtres-pill-form">
+            
+            <select name="profession" required class="pill-select">
+                <option value="">Profession</option>
+                {% for p in professions %}
+                    <option value="{{ p.id }}" {% if request.args.get('profession')|int == p.id %}selected{% endif %}>{{ p.libelle }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="departement" required class="pill-select">
+                <option value="">Département</option>
+                {% for d in departements %}
+                    <option value="{{ d.code }}" {% if request.args.get('departement') == d.code %}selected{% endif %}>{{ d.code }} - {{ d.libelle }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="annee" required class="pill-select">
+                <option value="">Année</option>
+                {% for a in range(2024, 2014, -1) %}
+                    <option value="{{ a }}" {% if request.args.get('annee')|int == a %}selected{% endif %}>{{ a }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" class="pill-btn-analyser">Analyser</button>
+            <a href="{{ url_for('indicateurs.afficher') }}" class="pill-btn-reset">Réinitialiser</a>
+        </form>
+    </section>
+
+    <section class="dashboard-kpi-grid">
+        {% for kpi in kpis %}
+            <div class="kpi-card-pro">
+                <div class="kpi-titre-pro">{{ kpi.titre }}</div>
+                
+                <div class="kpi-valeur-pro">{{ kpi.valeur }}</div>
+                
+                <div class="kpi-desc-pro">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                    {{ kpi.description }}
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+
+</div>
+{% endblock %}

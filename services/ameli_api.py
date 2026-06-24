@@ -277,3 +277,26 @@ class AmeliAPI:
         except requests.RequestException as e:
             print(f"[AmeliAPI] Erreur : {e}", flush=True)
             return []
+        
+
+    def get_pathologies(self, departement_code, annee):
+        """Récupère la pathologie la plus fréquente pour un département et une année."""
+        
+        # On filtre sur le département et l'année. 
+        where = (
+            f'departement="{departement_code}" AND '
+            f'year(annee)={annee}'
+        )
+
+        # "cartographie-des-pathologies" est le nom classique du dataset sur data.ameli.fr
+        # S'il n'est pas disponible, l'API renverra une liste vide sans faire planter ton site.
+        return self._requete(
+            "cartographie-des-pathologies",
+            {
+                # On demande le nom de la maladie, le nombre de patients et le coût
+                "select": "libelle_pathologie, effectif_patients, depenses",
+                "where": where,
+                "order_by": "effectif_patients DESC", # Trie pour avoir la plus fréquente en premier
+                "limit": 1 # On ne prend que la N°1 pour l'afficher sur ta carte
+            }
+        )
