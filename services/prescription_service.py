@@ -110,7 +110,7 @@ class PrescriptionService:
     def get_donnees_pyramide_ages(self, profession, departement_code=None, annee="2024", limit_ligne=100):
         """Retourne les effectifs groupés par sexe et par tranche d'âge"""
 
-        print("\ndemographie_service.py | get_donnees_pyramide_ages()")
+        print("\nprescription_service.py | get_donnees_pyramide_ages()")
 
 
         where_clauses = [
@@ -179,7 +179,7 @@ class PrescriptionService:
     def get_graphique_top_deserts_medicaux(self, profession, annee="2024", limite=15):
         """Calcule la proportion de médecins de +60 ans par département"""
 
-        print("\ndemographie_service.py | get_graphique_top_deserts_medicaux()")
+        print("\nprescription_service.py | get_graphique_top_deserts_medicaux()")
 
         # LA REQUÊTE API : On récupère tous les âges pour tous les départements
         where_clauses = [
@@ -251,7 +251,7 @@ class PrescriptionService:
         Pivote les tranches d'âge en colonnes pour chaque département.
         """
 
-        print("\ndemographie_service.py | get_tableau_top_deserts_medicaux()")
+        print("\nprescription_service.py | get_tableau_top_deserts_medicaux()")
 
         where_clauses = [
             f"year(annee)={annee}",
@@ -307,7 +307,7 @@ class PrescriptionService:
         Fusionne la démographie et les finances départementales.
         """
 
-        print("\ndemographie_service.py | get_correlation_age_depense()")
+        print("\nprescription_service.py | get_correlation_age_depense()")
 
 
         donnees_demo = self.get_top_deserts_medicaux(profession, annee=annee, limite=None)
