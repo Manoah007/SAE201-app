@@ -104,7 +104,7 @@
 .carte-titre-overlay {
     position: absolute;
     top: 14px;
-    left: 14px;
+    left: 72px;
     z-index: 500;
     background: white;
     border-radius: 10px;
@@ -219,4 +219,10 @@
 
 [data-theme="dark"] .legende-couleur {
     border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+[data-theme="dark"] .carte-titre-overlay {
+    background: #1e1e1e;
+    color: #f0f0f0;
+    border: 1px solid #2a2a2a;
 }
