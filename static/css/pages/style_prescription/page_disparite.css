@@ -490,3 +490,187 @@
 [data-theme="dark"] .contexte-disparite .empty-message h3 {
     color: #e0e0e0;
 }
+
+/* ==========================================
+   CORRECTION FILTRES - PAGE DISPARITÉ
+   ========================================== */
+
+.contexte-disparite .filters-box {
+    max-width: 1350px;
+    margin: 0 auto 35px;
+    background: #eeeeee;
+    border-radius: 18px;
+    padding: 18px 22px;
+    box-shadow: none;
+    border: none;
+}
+
+.contexte-disparite #form-filtres {
+    width: 100%;
+}
+
+.contexte-disparite .form-section {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.contexte-disparite .filter-label {
+    color: #777;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0;
+    margin: 0 0 14px 4px;
+    text-transform: uppercase;
+}
+
+/* Ligne des 3 filtres */
+.contexte-disparite .api-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 18px;
+    width: 100%;
+}
+
+/* Conteneur dropdown */
+.contexte-disparite .multi-select-container {
+    width: 100%;
+    min-width: 0;
+    position: relative;
+}
+
+/* Boutons dropdown */
+.contexte-disparite .select-btn {
+    height: 58px;
+    background: white;
+    border: none;
+    border-radius: 22px;
+    padding: 0 28px;
+    box-shadow: none;
+    color: #111;
+    font-weight: 800;
+    font-size: 15px;
+}
+
+.contexte-disparite .select-btn:hover {
+    background: #f8f8f8;
+    border: none;
+}
+
+.contexte-disparite .select-btn .arrow {
+    color: #23b84d;
+    font-size: 14px;
+}
+
+/* Menu déroulant */
+.contexte-disparite .dropdown-content {
+    top: calc(100% + 8px);
+    border-radius: 16px;
+    border: 1px solid #eeeeee;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+    z-index: 3000;
+}
+
+/* Bloc des boutons */
+.contexte-disparite #filtres-button {
+    margin-top: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+}
+
+/* Boutons simples comme le reste du site */
+.contexte-disparite #filtres-button .submit-btn,
+.contexte-disparite #filtres-button .reset-link,
+.contexte-disparite #filtres-button .export-btn {
+    height: 48px;
+    min-width: 150px;
+    border-radius: 24px;
+    padding: 0 26px;
+    font-weight: 800;
+    font-size: 15px;
+    box-shadow: none;
+    transform: none;
+}
+
+/* Bouton afficher */
+.contexte-disparite #filtres-button .submit-btn {
+    background: #41e46a;
+    color: white;
+}
+
+/* Bouton reset */
+.contexte-disparite #filtres-button .reset-link {
+    background: white;
+    color: #23b84d;
+    text-decoration: none;
+}
+
+/* Bouton exporter */
+.contexte-disparite #filtres-button .export-btn {
+    background: #111;
+    color: white;
+}
+
+/* Hover propre */
+.contexte-disparite #filtres-button .submit-btn:hover {
+    background: #35cf5e;
+    transform: translateY(-2px);
+}
+
+.contexte-disparite #filtres-button .reset-link:hover {
+    background: #dfffe8;
+    color: #0c8d35;
+    transform: translateY(-2px);
+}
+
+.contexte-disparite #filtres-button .export-btn:hover {
+    background: #222;
+    transform: translateY(-2px);
+}
+
+/* ==========================================
+   MODE SOMBRE - FILTRES DISPARITÉ
+   ========================================== */
+
+[data-theme="dark"] .contexte-disparite .filters-box {
+    background: #1e1e1e;
+    border: 1px solid #2a2a2a;
+}
+
+[data-theme="dark"] .contexte-disparite .filter-label {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .contexte-disparite .select-btn {
+    background: #2a2a2a;
+    color: #e0e0e0;
+    border: 1px solid #3a3a3a;
+}
+
+[data-theme="dark"] .contexte-disparite .select-btn:hover {
+    background: #333;
+    border-color: #41e46a;
+}
+
+[data-theme="dark"] .contexte-disparite .dropdown-content {
+    background: #1e1e1e;
+    border-color: #3a3a3a;
+}
+
+[data-theme="dark"] .contexte-disparite .dropdown-content label {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .contexte-disparite #filtres-button .reset-link {
+    background: #2a2a2a;
+    color: #41e46a;
+}
+
+[data-theme="dark"] .contexte-disparite #filtres-button .export-btn {
+    background: #2a2a2a;
+    color: #e0e0e0;
+}

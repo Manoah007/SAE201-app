@@ -36,6 +36,13 @@
     gap: 18px;
 }
 
+.honoraires-filter-box .filter-label {
+    font-size: 15px;
+    font-weight: 800;
+    color: #333;
+    white-space: nowrap;
+}
+
 .honoraires-form {
     display: grid;
     /* Profession | Région | Département | Année | Bouton | Lien reset */
@@ -160,4 +167,72 @@
 
 .honoraires-table-box h3 {
     margin-bottom: 15px;
+}
+
+/* ==========================================
+   CORRECTION AFFICHAGE RÉSULTATS HONORAIRES
+   ========================================== */
+
+.honoraires-results .result-title {
+    background: white;
+    border-radius: 18px;
+    padding: 25px 30px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+}
+
+.honoraires-results .result-title h2 {
+    font-size: 28px;
+    font-weight: 800;
+    margin: 0 0 8px 0;
+    color: #111;
+}
+
+.honoraires-results .result-title p {
+    margin: 0;
+    color: #555;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+/* Espace propre entre le titre et les cartes */
+.honoraires-summary {
+    margin-top: 0;
+}
+
+/* Cartes mieux alignées */
+.honoraires-summary .summary-box {
+    min-height: 170px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.honoraires-summary .summary-box strong {
+    font-size: 34px;
+    line-height: 1.1;
+}
+
+/* ==========================================
+   MODE SOMBRE - RÉSULTATS HONORAIRES
+   ========================================== */
+
+[data-theme="dark"] .honoraires-results .result-title {
+    background: #1e1e1e;
+    color: #e0e0e0;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .honoraires-results .result-title h2 {
+    color: #f0f0f0;
+}
+
+[data-theme="dark"] .honoraires-results .result-title p {
+    color: #aaa;
+}
+
+[data-theme="dark"] .honoraires-summary .summary-box {
+    background: #1e1e1e;
+    color: #e0e0e0;
 }

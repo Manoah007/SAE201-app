@@ -1,0 +1,179 @@
+/* ==========================================
+   PAGE INDICATEURS - CSS COMPLET
+   ========================================== */
+
+/* ------------------------------------------
+   1. LA BARRE DE FILTRES (STYLE PILULE)
+   ------------------------------------------ */
+.filtres-pill-container {
+    background: #f4f4f4;
+    border-radius: 50px;
+    padding: 12px 25px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 40px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+}
+
+.filtres-label {
+    font-weight: 700;
+    color: #333;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.filtres-pill-form {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+}
+
+.pill-select {
+    flex: 1;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+}
+
+.pill-btn-analyser {
+    background-color: #41e46a;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.pill-btn-analyser:hover {
+    transform: scale(1.02);
+    background-color: #38c95c;
+}
+
+.pill-btn-reset {
+    color: #555;
+    text-decoration: underline;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* ------------------------------------------
+   2. LA GRILLE (POUR LES 12 CARTES)
+   ------------------------------------------ */
+.dashboard-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 colonnes pour PC */
+    gap: 20px;
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+
+/* ------------------------------------------
+   3. LES CARTES PRO
+   ------------------------------------------ */
+.kpi-card-pro {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 24px 20px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.kpi-card-pro:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
+}
+
+.kpi-titre-pro {
+    color: #4b5563;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.kpi-valeur-pro {
+    color: #41e46a; /* Ton vert principal */
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.kpi-desc-pro {
+    color: #6b7280;
+    font-size: 12px;
+    line-height: 1.4;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 6px;
+    padding-top: 15px;
+    border-top: 1px solid #f3f4f6;
+}
+
+.kpi-desc-pro svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+/* ------------------------------------------
+   4. RESPONSIVE (Tablettes & Mobiles)
+   ------------------------------------------ */
+@media (max-width: 1100px) {
+    .dashboard-kpi-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 850px) {
+    .dashboard-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .filtres-pill-form { flex-wrap: wrap; }
+    .filtres-pill-container { flex-direction: column; align-items: stretch; border-radius: 20px; }
+}
+@media (max-width: 500px) {
+    .dashboard-kpi-grid { grid-template-columns: 1fr; }
+}
+
+/* ------------------------------------------
+   5. MODE SOMBRE (Spécifique à cette page)
+   ------------------------------------------ */
+[data-theme="dark"] .filtres-pill-container { background: #1e1e1e; border: 1px solid #333; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+[data-theme="dark"] .filtres-label { color: #e0e0e0; }
+[data-theme="dark"] .pill-select { background-color: #2d2d2d; color: #ffffff; border-color: #444; }
+[data-theme="dark"] .pill-btn-reset { color: #aaaaaa; }
+
+[data-theme="dark"] .kpi-card-pro { background: #1e1e1e; border-color: #333; }
+[data-theme="dark"] .kpi-titre-pro { color: #e0e0e0; }
+[data-theme="dark"] .kpi-desc-pro { color: #999; border-top-color: #333; }
+
+/* ==========================================
+   ESPACEMENT GLOBAL DE LA PAGE (Respiration)
+   ========================================== */
+/* ==========================================
+   ESPACEMENT GLOBAL DE LA PAGE (Respiration)
+   ========================================== */
+.page-indicateurs {
+    padding: 20px 30px; /* On passe de 60px à 30px (le juste milieu) */
+    max-width: 1500px; /* On autorise la page à s'étirer un peu plus */
+    margin: 0 auto; 
+}
+
+/* --- Pour que ça reste joli sur les petits écrans (Téléphones) --- */
+@media (max-width: 850px) {
+    .page-indicateurs {
+        padding: 15px 15px; /* Marges réduites sur mobile */
+    }
+}

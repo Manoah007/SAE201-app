@@ -4,6 +4,7 @@ from models.dimensions import Departement
 
 bp_api = Blueprint("api", __name__, url_prefix="/api")
 
+
 @bp_api.route("/departements/<int:region_id>")
 def departements(region_id):
     """Retourne les départements d'une région au format JSON."""

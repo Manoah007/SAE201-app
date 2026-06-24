@@ -137,10 +137,10 @@
                                 </div>
 
                                 <div class="dropdown-content">
-                                    <label><input type="radio" name="ligne_max" value="25" form="form-filtres" {% if not limite_ligne or limite_ligne|int == 25 %}checked{% endif %}>25</label>
+                                    <label><input type="radio" name="ligne_max" value="25" form="form-filtres" {% if limite_ligne|int == 25 %}checked{% endif %}>25</label>
                                     <label><input type="radio" name="ligne_max" value="50" form="form-filtres" {% if limite_ligne|int == 50 %}checked{% endif %}>50</label>
-                                    <label><input type="radio" name="ligne_max" value="50" form="form-filtres" {% if limite_ligne|int == 75 %}checked{% endif %}>75</label>
-                                    <label><input type="radio" name="ligne_max" value="100" form="form-filtres" {% if limite_ligne|int == 101 %}checked{% endif %}>101</label>
+                                    <label><input type="radio" name="ligne_max" value="75" form="form-filtres" {% if limite_ligne|int == 75 %}checked{% endif %}>75</label>
+                                    <label><input type="radio" name="ligne_max" value="100" form="form-filtres" {% if limite_ligne|int == 100 %}checked{% endif %}>100</label>
                                 </div>
                             </div>
 

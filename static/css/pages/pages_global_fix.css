@@ -1,0 +1,242 @@
+/* ==========================================
+   CORRECTIFS GLOBAUX APRÈS MERGE
+   ========================================== */
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Boutons */
+button,
+.export-btn,
+.btn-primary,
+.btn-secondary,
+.reset-link {
+    transition: all 0.2s ease;
+}
+
+button:hover,
+.export-btn:hover,
+.btn-primary:hover,
+.btn-secondary:hover {
+    transform: translateY(-2px);
+}
+
+/* Correction transition accueil */
+.stat-item {
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+/* Évite les pages collées au bord */
+.api-page,
+.effectifs-page,
+.honoraires-page,
+.comparaison-page,
+.carte-page,
+.documentation-page {
+    min-height: 70vh;
+}
+
+/* Uniformisation liens reset */
+.reset-link {
+    color: #23b84d;
+    font-weight: bold;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.reset-link:hover {
+    color: #0c8d35;
+}
+
+/* Formulaires plus solides */
+select,
+button,
+input {
+    font-family: inherit;
+}
+
+select:focus,
+button:focus,
+input:focus {
+    outline: 2px solid rgba(65, 228, 106, 0.35);
+}
+
+/* Correction cartes prescriptions */
+.prescription-card-link {
+    color: inherit;
+}
+
+/* Responsive formulaires */
+@media (max-width: 1200px) {
+    .api-form,
+    .effectifs-form,
+    .honoraires-form,
+    .comparaison-form {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .comparaison-form .vs-badge {
+        display: none;
+    }
+
+    .honoraires-cards,
+    .api-cards,
+    .prescriptions-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .carte-wrapper {
+        flex-direction: column;
+    }
+
+    .carte-legende {
+        width: 100%;
+    }
+}
+
+@media (max-width: 700px) {
+    .api-page,
+    .effectifs-page,
+    .honoraires-page,
+    .comparaison-page,
+    .carte-page,
+    .documentation-page {
+        padding: 30px 20px;
+    }
+
+    .api-form,
+    .effectifs-form,
+    .honoraires-form,
+    .comparaison-form,
+    .carte-form,
+    .filtres-pill-form {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filters-box,
+    .effectifs-filter-box,
+    .honoraires-filter-box,
+    .comparaison-filter-box,
+    .carte-filter-box,
+    .filtres-pill-container {
+        flex-direction: column;
+        align-items: stretch;
+        border-radius: 18px;
+    }
+
+    .honoraires-cards,
+    .api-cards,
+    .prescriptions-cards,
+    .honoraires-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .hero {
+        grid-template-columns: 1fr;
+        padding: 30px 25px;
+    }
+
+    .hero-image {
+        height: 260px;
+    }
+
+    .stats {
+        flex-direction: column;
+    }
+
+    .stat-item {
+        max-width: none;
+    }
+
+    header {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .nav-center {
+        position: static;
+        transform: none;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    nav {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+/* Dark mode : pages ajoutées après merge */
+[data-theme="dark"] .documentation-page,
+[data-theme="dark"] .page-indicateurs,
+[data-theme="dark"] .contexte-disparite,
+[data-theme="dark"] .contexte-correlation {
+    background: #121212;
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .doc-page-link,
+[data-theme="dark"] .doc-hero-card,
+[data-theme="dark"] .kpi-card-pro,
+[data-theme="dark"] .prescription-card {
+    background: #2a2a2a;
+    color: #e0e0e0;
+    border-color: #3a3a3a;
+}
+
+[data-theme="dark"] .prescription-card p,
+[data-theme="dark"] .kpi-desc-pro,
+[data-theme="dark"] .doc-page-link p {
+    color: #aaa;
+}
+
+/* ==========================================
+   BOUTON EXPORT CSV / EXCEL
+   ========================================== */
+
+.export-btn {
+    border: none;
+    background: #111;
+    color: white;
+    padding: 13px 24px;
+    border-radius: 24px;
+    font-weight: 800;
+    font-size: 15px;
+    cursor: pointer;
+    white-space: nowrap;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.export-btn::before {
+    content: "⬇ ";
+    font-size: 14px;
+}
+
+.export-btn:hover {
+    background: #23b84d;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(35, 184, 77, 0.25);
+}
+
+.export-btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Mode sombre */
+[data-theme="dark"] .export-btn {
+    background: #2a2a2a;
+    color: #e0e0e0;
+    border: 1px solid #3a3a3a;
+}
+
+[data-theme="dark"] .export-btn:hover {
+    background: #41e46a;
+    color: #111;
+    border-color: #41e46a;
+}

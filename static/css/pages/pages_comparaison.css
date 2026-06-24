@@ -5,7 +5,6 @@
 .comparaison-page {
     background: #f4f4f4;
     padding: 45px 50px;
-    width: 100%;
 }
 
 .comparaison-header {
@@ -35,10 +34,16 @@
     gap: 15px;
 }
 
+.comparaison-filter-box .filter-label {
+    font-size: 15px;
+    font-weight: 800;
+    color: #333;
+    white-space: nowrap;
+}
+
 .comparaison-form {
     display: grid;
-    /* Crée 7 colonnes adaptées à la taille des éléments */
-    grid-template-columns: 1.5fr 1fr auto 1.5fr 1fr auto auto;
+    grid-template-columns: 1.2fr 1.5fr 1fr auto 1.5fr 1fr auto auto;
     gap: 12px;
     align-items: center;
     width: 100%;
@@ -46,6 +51,7 @@
 
 .comparaison-form select {
     width: 100%;
+    min-width: 0;
     border: none;
     background: white;
     padding: 13px 15px;
@@ -81,6 +87,19 @@
 /* COMPARAISON - RÉSULTATS */
 .comparaison-results {
     margin-top: 35px;
+}
+
+.comparaison-results .result-title {
+    background: white;
+    border-radius: 18px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+}
+
+.comparaison-results .result-title h2 {
+    font-size: 28px;
+    margin-bottom: 8px;
 }
 
 .comparaison-chart {

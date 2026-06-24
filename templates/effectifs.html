@@ -4,9 +4,9 @@
 
 {% block contenu %}
 
-<section class="prescriptions-page">
+<section class="effectifs-page">
 
-    <div class="prescriptions-header">
+    <div class="effectifs-header">
         <div>
             <h1>Analyse des effectifs</h1>
             <p>Consultez les effectifs et la densité des professionnels de santé selon une profession, un territoire et une année.</p>
@@ -14,10 +14,10 @@
         <button class="export-btn">Exporter (CSV/Excel)</button>
     </div>
 
-    <section class="filters-box">
+    <section class="effectifs-filter-box">
         <span class="filter-label">FILTRES :</span>
 
-        <form action="{{ url_for('effectifs.afficher') }}" method="get" class="api-form">
+        <form action="{{ url_for('effectifs.afficher') }}" method="get" class="effectifs-form">
 
             <select name="profession_id" id="profession" required>
                 <option value="">Profession</option>
@@ -52,7 +52,7 @@
     </section>
 
     {% if prof and dept and annee %}
-        <section class="prescriptions-results">
+        <section class="effectifs-results">
 
             <div class="result-title">
                 <h2>Résultats de l’analyse</h2>
