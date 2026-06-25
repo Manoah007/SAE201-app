@@ -235,8 +235,8 @@ def afficher():
                 },
                 {
                     "titre": "Profondeur d'historique",
-                    "valeur": "10 ans",
-                    "description": "Données disponibles et analysables de 2014 à 2024."
+                    "valeur": "15 ans",
+                    "description": "Données disponibles et analysables de 2010 à 2024."
                 },
                 {
                     "titre": "Praticiens en France",

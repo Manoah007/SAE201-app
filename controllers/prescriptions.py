@@ -26,7 +26,7 @@ def page_disparite():
         departement_list = request.args.getlist("departements")
         
         annee_str = str(request.args.get("annee", default="2024"))
-        limit_ligne = request.args.get("ligne_max", default=19, type=int)
+        limit_ligne = request.args.get("ligne_max", default=100, type=int)
 
         # ANALYSE DES CHOIX
         is_region_tout = not region_list or "ALL" in region_list or "" in region_list
