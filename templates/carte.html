@@ -30,7 +30,7 @@
             </select>
 
             <select name="annee" id="annee">
-                {% for a in range(2024, 2014, -1) %}
+                {% for a in range(2024, 2009, -1) %}
                     <option value="{{ a }}" {% if annee == a %}selected{% endif %}>{{ a }}</option>
                 {% endfor %}
             </select>
@@ -60,7 +60,7 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-const donneesParDept = {{ donnees_carte | tojson }};
+const donneesParDept = JSON.parse('{{ donnees_carte | tojson | safe }}');
 
 const PALETTE = [
     { seuil: 0,    couleur: '#f0fdf4' },

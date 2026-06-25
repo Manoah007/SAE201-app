@@ -104,7 +104,7 @@
 .carte-titre-overlay {
     position: absolute;
     top: 14px;
-    left: 14px;
+    left: 72px;
     z-index: 500;
     background: white;
     border-radius: 10px;
@@ -191,4 +191,38 @@
     line-height: 1.6;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
     min-width: 160px;
+}
+
+/* ==========================================
+   CARTE DES DENSITÉS - MODE SOMBRE LÉGENDE
+   ========================================== */
+
+[data-theme="dark"] .carte-legende {
+    background: #1e1e1e;
+    color: #e0e0e0;
+    border: 1px solid #2a2a2a;
+}
+
+[data-theme="dark"] .carte-legende h4 {
+    color: #f0f0f0;
+}
+
+[data-theme="dark"] .legende-item {
+    color: #d6d6d6;
+    font-weight: 600;
+}
+
+[data-theme="dark"] .legende-note {
+    color: #cfcfcf;
+    border-top: 1px solid #3a3a3a;
+}
+
+[data-theme="dark"] .legende-couleur {
+    border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+[data-theme="dark"] .carte-titre-overlay {
+    background: #1e1e1e;
+    color: #f0f0f0;
+    border: 1px solid #2a2a2a;
 }

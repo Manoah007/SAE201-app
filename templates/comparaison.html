@@ -1,81 +1,117 @@
 {% extends "base.html" %}
-{% block titre %}Comparaison Pathologies{% endblock %}
+{% block titre %}Comparaison des effectifs{% endblock %}
 
 {% block contenu %}
-<section class="comparaison-page page-indicateurs">
+
+<section class="comparaison-page comparaison-page-v2">
 
     <div class="comparaison-header">
         <div>
             <h1>Comparaison des effectifs et territoires</h1>
-            <p>Comparez les données démographiques de deux professions sur deux départements et années différentes.</p>
+            <p>Comparez deux professions de santé selon un département et une année.</p>
         </div>
-        <button class="export-btn">Exporter (CSV/Excel)</button>
+
+        <button type="button" class="export-btn">Exporter CSV</button>
     </div>
 
-    <section class="filtres-pill-container" style="border-radius: 20px;">
-        <div class="filtres-label">COMPARER :</div>
+    <section class="comparaison-filter-card">
 
-        <form action="{{ url_for('comparaison.afficher') }}" method="get" class="filtres-pill-form" style="flex-wrap: wrap; justify-content: center; gap: 10px;">
-            
-            <select name="dept_a" required class="pill-select" style="flex: initial; min-width: 160px;">
-                <option value="">Département A</option>
-                {% for d in departements %}
-                    <option value="{{ d.code }}" {% if request.args.get('dept_a') == d.code %}selected{% endif %}>
-                        {{ d.code }} - {{ d.libelle }}
-                    </option>
-                {% endfor %}
-            </select>
+        <div class="comparaison-filter-title">
+            <span>Comparer</span>
+            <h2>Paramètres de comparaison</h2>
+        </div>
 
-            <select name="prof_a" required class="pill-select" style="flex: initial; min-width: 180px;">
-                <option value="">Profession A</option>
-                {% for p in professions %}
-                    <option value="{{ p.id }}" {% if request.args.get('prof_a')|int == p.id %}selected{% endif %}>{{ p.libelle }}</option>
-                {% endfor %}
-            </select>
-            
-            <select name="annee_a" required class="pill-select" style="flex: initial; min-width: 110px;">
-                <option value="">Année A</option>
-                {% for a in range(2024, 2014, -1) %}
-                    <option value="{{ a }}" {% if request.args.get('annee_a')|int == a %}selected{% endif %}>{{ a }}</option>
-                {% endfor %}
-            </select>
+        <form action="{{ url_for('comparaison.afficher') }}" method="get" class="comparaison-form-clean">
 
-            <div style="background: #111; color: white; padding: 8px 12px; border-radius: 50%; font-weight: 900; font-size: 12px; margin: 0 5px; display: flex; align-items: center; justify-content: center;">VS</div>
+            <div class="compare-block compare-block-a">
+                <div class="compare-block-header">
+                    <span>A</span>
+                    <h3>Premier élément</h3>
+                </div>
 
-            <select name="dept_b" required class="pill-select" style="flex: initial; min-width: 160px;">
-                <option value="">Département B</option>
-                {% for d in departements %}
-                    <option value="{{ d.code }}" {% if request.args.get('dept_b') == d.code %}selected{% endif %}>
-                        {{ d.code }} - {{ d.libelle }}
-                    </option>
-                {% endfor %}
-            </select>
+                <div class="compare-fields">
+                    <select name="dept_a" required>
+                        <option value="">Département A</option>
+                        {% for d in departements %}
+                            <option value="{{ d.code }}" {% if request.args.get('dept_a') == d.code %}selected{% endif %}>
+                                {{ d.code }} - {{ d.libelle }}
+                            </option>
+                        {% endfor %}
+                    </select>
 
-            <select name="prof_b" required class="pill-select" style="flex: initial; min-width: 180px;">
-                <option value="">Profession B</option>
-                {% for p in professions %}
-                    <option value="{{ p.id }}" {% if request.args.get('prof_b')|int == p.id %}selected{% endif %}>{{ p.libelle }}</option>
-                {% endfor %}
-            </select>
-            
-            <select name="annee_b" required class="pill-select" style="flex: initial; min-width: 110px;">
-                <option value="">Année B</option>
-                {% for a in range(2024, 2014, -1) %}
-                    <option value="{{ a }}" {% if request.args.get('annee_b')|int == a %}selected{% endif %}>{{ a }}</option>
-                {% endfor %}
-            </select>
+                    <select name="prof_a" required>
+                        <option value="">Profession A</option>
+                        {% for p in professions %}
+                            <option value="{{ p.id }}" {% if request.args.get('prof_a')|int == p.id %}selected{% endif %}>
+                                {{ p.libelle }}
+                            </option>
+                        {% endfor %}
+                    </select>
 
-            <button type="submit" class="pill-btn-analyser" style="margin-left: 10px;">Comparer</button>
-            <a href="{{ url_for('comparaison.afficher') }}" class="pill-btn-reset">Réinitialiser</a>
+                    <select name="annee_a" required>
+                        <option value="">Année A</option>
+                        {% for a in range(2024, 2009, -1) %}
+                            <option value="{{ a }}" {% if request.args.get('annee_a')|int == a %}selected{% endif %}>
+                                {{ a }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="compare-vs">VS</div>
+
+            <div class="compare-block compare-block-b">
+                <div class="compare-block-header">
+                    <span>B</span>
+                    <h3>Deuxième élément</h3>
+                </div>
+
+                <div class="compare-fields">
+                    <select name="dept_b" required>
+                        <option value="">Département B</option>
+                        {% for d in departements %}
+                            <option value="{{ d.code }}" {% if request.args.get('dept_b') == d.code %}selected{% endif %}>
+                                {{ d.code }} - {{ d.libelle }}
+                            </option>
+                        {% endfor %}
+                    </select>
+
+                    <select name="prof_b" required>
+                        <option value="">Profession B</option>
+                        {% for p in professions %}
+                            <option value="{{ p.id }}" {% if request.args.get('prof_b')|int == p.id %}selected{% endif %}>
+                                {{ p.libelle }}
+                            </option>
+                        {% endfor %}
+                    </select>
+
+                    <select name="annee_b" required>
+                        <option value="">Année B</option>
+                        {% for a in range(2024, 2009, -1) %}
+                            <option value="{{ a }}" {% if request.args.get('annee_b')|int == a %}selected{% endif %}>
+                                {{ a }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="compare-actions">
+                <button type="submit">Comparer</button>
+                <a href="{{ url_for('comparaison.afficher') }}">Réinitialiser</a>
+            </div>
+
         </form>
     </section>
 
     {% if resultats is not none %}
         <section class="comparaison-results">
-            
+
             {% if resultats|length > 0 %}
                 <div class="result-title">
                     <h2>Analyse comparative des effectifs</h2>
+                    <p>Visualisation des écarts entre les deux sélections.</p>
                 </div>
 
                 <div class="chart-box comparaison-chart">
@@ -84,20 +120,22 @@
 
                 <div class="comparaison-table-box">
                     <h3>Détail des données brutes</h3>
+
                     <table>
                         <thead>
                             <tr>
-                                <th>Profession & Territoire</th>
+                                <th>Profession & territoire</th>
                                 <th>Année</th>
                                 <th>Effectifs recensés</th>
                             </tr>
                         </thead>
+
                         <tbody>
                             {% for r in resultats %}
                                 <tr>
                                     <td>{{ r.libelle }}</td>
                                     <td>{{ r.annee }}</td>
-                                    <td class="positive" style="font-weight: bold; color: #41e46a;">{{ r.valeur }}</td>
+                                    <td class="positive">{{ r.valeur }}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -106,29 +144,43 @@
 
                 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                 <script>
-                    const donnees = {{ resultats | tojson | safe }};
-                    
+                    const donneesComparaison = JSON.parse('{{ resultats | tojson | safe }}');
+
                     new Chart(document.getElementById("graphique-comparaison"), {
                         type: "bar",
                         data: {
-                            labels: donnees.map(d => d.libelle + ' (' + d.annee + ')'),
+                            labels: donneesComparaison.map(d => d.libelle + " (" + d.annee + ")"),
                             datasets: [{
                                 label: "Nombre de professionnels",
-                                data: donnees.map(d => d.valeur),
-                                backgroundColor: ["#41e46a", "#2E74B5"], 
-                                borderRadius: 6
+                                data: donneesComparaison.map(d => Number(d.valeur) || 0),
+                                backgroundColor: ["#41e46a", "#2E74B5"],
+                                borderRadius: 8
                             }]
                         },
                         options: {
                             responsive: true,
                             plugins: {
                                 legend: { display: false }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
                             }
                         }
                     });
                 </script>
+
+            {% else %}
+                <div class="empty-message">
+                    <h3>Aucune donnée disponible</h3>
+                    <p>Aucune donnée n’a été trouvée pour cette comparaison.</p>
+                </div>
             {% endif %}
+
         </section>
     {% endif %}
+
 </section>
+
 {% endblock %}

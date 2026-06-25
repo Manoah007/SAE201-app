@@ -38,7 +38,7 @@
             </select>
 
             <select name="annee" id="annee" required>
-                {% for a in range(2024, 2014, -1) %}
+                {% for a in range(2024, 2009, -1) %}
                     <option value="{{ a }}">{{ a }}</option>
                 {% endfor %}
             </select>
@@ -89,7 +89,7 @@
 
                 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                 <script>
-                    const donnees = {{ evolution | tojson }};
+                    const donnees = JSON.parse('{{ evolution | tojson | safe }}');
 
                     new Chart(document.getElementById("graphique"), {
                         type: "line",

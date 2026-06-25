@@ -374,3 +374,38 @@
         grid-column: span 1;
     }
 }
+
+/* ==========================================
+   ACCUEIL - MODE SOMBRE : ICÔNES PLUS VISIBLES
+   ========================================== */
+
+[data-theme="dark"] .stat-icon {
+    background: #dfffe8;
+    box-shadow: 0 0 18px rgba(65, 228, 106, 0.25);
+}
+
+[data-theme="dark"] .stat-icon img {
+    filter: brightness(0) saturate(100%) invert(39%) sepia(94%) saturate(727%) hue-rotate(94deg) brightness(92%) contrast(90%);
+    opacity: 1;
+}
+
+/* Améliore aussi les cartes statistiques en mode sombre */
+[data-theme="dark"] .stat-item {
+    background: #1e1e1e;
+    border: 1px solid #2a2a2a;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .stat-item strong {
+    color: #f0f0f0;
+}
+
+[data-theme="dark"] .stat-item span {
+    color: #aaa;
+}
+
+/* Petit effet hover plus visible */
+[data-theme="dark"] .stat-item:hover {
+    background: #232323;
+    box-shadow: 0 12px 28px rgba(65, 228, 106, 0.12);
+}

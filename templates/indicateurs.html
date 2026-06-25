@@ -25,7 +25,7 @@
 
             <select name="annee" required class="pill-select">
                 <option value="">Année</option>
-                {% for a in range(2024, 2014, -1) %}
+                {% for a in range(2024, 2009, -1) %}
                     <option value="{{ a }}" {% if request.args.get('annee')|int == a %}selected{% endif %}>{{ a }}</option>
                 {% endfor %}
             </select>
