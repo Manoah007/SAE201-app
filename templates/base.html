@@ -75,7 +75,7 @@
 
         <div class="footer-col">
             <h4>Données</h4>
-            <p><a href="{{ url_for('prescriptions.accueil_prescription') }}" class="{% if request.endpoint == 'prescriptions.accueil_prescription' %}active{% endif %}">Prescriptions</a></p>
+            <p><a href="{{ url_for('prescriptions.page_disparite') }}" class="{% if request.endpoint == 'prescriptions.page_disparite' %}active{% endif %}">Prescriptions</a></p>
             <p><a href="{{ url_for('effectifs.afficher') }}" class="{% if request.endpoint == 'effectifs.afficher' %}active{% endif %}">Effectifs</a></p>
             <p><a href="{{ url_for('honoraires.afficher') }}" class="{% if request.endpoint == 'honoraires.afficher' %}active{% endif %}">Honoraires</a></p>
             <p><a href="{{ url_for('comparaison.afficher') }}" class="{% if request.endpoint == 'comparaison.afficher' %}active{% endif %}">Comparaison</a></p>

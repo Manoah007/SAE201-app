@@ -95,6 +95,8 @@ def page_disparite():
         valeurs_totales = []
         valeurs_moyennes = []
 
+        print(f"Résultat = {resultats}")
+
         if resultats:
             for ligne in resultats:
                 nom_zone = ligne.get('libelle_departement') or ligne.get('libelle_region') or "Inconnu"
@@ -111,7 +113,7 @@ def page_disparite():
 
 
         return render_template(
-            "prescriptions/page_disparite.html",
+            "page_disparite.html",
             regions=regions,
             departements=departements,
             annee=annee_str,

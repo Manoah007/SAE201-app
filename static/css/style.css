@@ -27,9 +27,7 @@
 @import url('pages/pages_apropos.css');
 
 /* 5. Pages prescriptions spécifiques */
-@import url('pages/style_prescription/accueil_prescription.css');
-@import url('pages/style_prescription/page_disparite.css');
-@import url('pages/style_prescription/page_correlation.css');
+@import url('pages/page_disparite.css');
 
 /* 6. Correctifs globaux */
 @import url('pages/pages_global_fix.css');
