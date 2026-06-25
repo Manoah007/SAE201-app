@@ -9,12 +9,6 @@ api = AmeliAPI()
 prescription_service = PrescriptionService(api) 
 
 
-@bp_prescriptions.route("/prescriptions")
-def accueil_prescription():
-    """Cette fonction ne sert qu'à rediriger vers la page des postes de prescription et les cartes des sous thème disponibles"""
-    return render_template("prescriptions/accueil_prescription.html")
-
-
 @bp_prescriptions.route("/prescriptions/disparite")
 def page_disparite():
 
@@ -137,44 +131,3 @@ def page_disparite():
     
     finally:
         session.close()
-        
-
-
-@bp_prescriptions.route("/prescriptions/correlation_demographique")
-def page_correlation():
-    
-    session = Session()
-    print("\nprescription.py | page_correlation() | ROUTE : /prescriptions/correlation_demographique")
-
-    try:
-        departements = session.query(Departement).order_by(Departement.libelle).all()
-        professions = session.query(ProfessionSante).order_by(ProfessionSante.libelle).all()
-
-        profession = request.args.get("profession", "Ensemble des médecins")
-        departement_code = request.args.get("departement", None)
-        annee_str = str(request.args.get("annee", default="2024"))
-
-
-        donnees_pyramide = prescription_service.get_donnees_pyramide_ages(
-            profession=profession, 
-            departement_code=departement_code, 
-            annee=annee_str
-        )
-        
-        
-        return render_template(
-            "prescriptions/page_correlation.html",
-            donnees_globales=donnees_pyramide
-        )
-
-    except Exception as e:
-        print(f"Erreur lors de la génération de la page corrélation : {e}")
-        return "Une erreur serveur est survenue lors de la récupération des données.", 500
-        
-    finally:
-        session.close()
-
-
-@bp_prescriptions.route("/prescriptions/prescriptions_majeurs")
-def page_prescript_majeur():
-    return render_template("prescriptions/page_prescript_majeur.html")

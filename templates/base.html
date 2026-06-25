@@ -31,7 +31,7 @@
                 <div class="dropdown">
                     <a href="#" class="dropbtn">Données &#9662;</a>
                     <div class="dropdown-content">
-                        <a href="{{ url_for('prescriptions.accueil_prescription') }}" class="{% if request.endpoint == 'prescriptions.accueil_prescription' %}active{% endif %}">Prescriptions</a>
+                        <a href="{{ url_for('prescriptions.page_disparite') }}" class="{% if request.endpoint == 'prescriptions.page_disparite' %}active{% endif %}">Prescriptions</a>
                         <a href="{{ url_for('effectifs.afficher') }}" class="{% if request.endpoint == 'effectifs.afficher' %}active{% endif %}">Effectifs</a>
                         <a href="{{ url_for('honoraires.afficher') }}" class="{% if request.endpoint == 'honoraires.afficher' %}active{% endif %}">Honoraires</a>
                         <a href="{{ url_for('comparaison.afficher') }}" class="{% if request.endpoint == 'comparaison.afficher' %}active{% endif %}">Comparaison</a>
