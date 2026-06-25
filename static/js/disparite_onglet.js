@@ -199,44 +199,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 100);
         }
     }
-    
-    // ---------------------------------------------------------
-    // EXPORTATION DES DONNÉES EN CSV (Bouton Exporter)
-    // ---------------------------------------------------------
-    const btnExport = document.querySelector('.export-btn');
-
-    if (btnExport) {
-        btnExport.addEventListener('click', () => {
-            const table = document.querySelector('.prescriptions-table-box table');
-            if (!table) {
-                alert("Aucune donnée à exporter.");
-                return;
-            }
-
-            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
-
-            const rows = table.querySelectorAll('tr');
-            rows.forEach(row => {
-                const cols = row.querySelectorAll('th, td');
-                const rowData = Array.from(cols).map(col => {
-                    let text = col.innerText.trim();
-                    text = text.replace('€', '').trim();
-                    return `"${text}"`;
-                });
-                
-                csvContent += rowData.join(";") + "\r\n";
-            });
-
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "export_prescriptions_ameli.csv");
-            
-            document.body.appendChild(link); 
-            link.click();
-            document.body.removeChild(link); 
-        });
-    }
 });
 
 

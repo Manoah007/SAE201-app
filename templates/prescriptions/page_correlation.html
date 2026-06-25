@@ -19,7 +19,8 @@
                 <section class="form-section"> 
                         
                     <h2 class="filter-label">FILTRES D'ANALYSE</h2>
-                        
+                    
+                    <!-- 
                     <div class="api-form"> 
 
                             
@@ -98,6 +99,7 @@
                     </div>
 
                 </section>
+            --> 
 
                 <div id="filtres-button">
                     <button type="submit" class="submit-btn">Analyser</button>
@@ -148,28 +150,11 @@
                         <div class="prescriptions-table-box">
                             <h3>Indicateurs Démographiques Détaillés par Département</h3>
 
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Département</th>
-                                        <th>Praticiens Actifs</th>
-                                        <th>dont +60 ans (Seniors)</th>
-                                        <th>Taux de Renouvellement (Alerte)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for ligne in donnees_tableau_deserts %}
-                                        <tr>
-                                            <td><strong>{{ ligne.code_dept }}</strong> - {{ ligne.nom_dept }}</td>
-                                            <td>{{ ligne.total }}</td>
-                                            <td>{{ ligne.seniors }}</td>
-                                            <td class="{% if ligne.pourcentage_seniors >= 50.0 %}text-danger{% elif ligne.pourcentage_seniors >= 40.0 %}text-warning{% endif %}">
-                                                <strong>{{ ligne.pourcentage_seniors }} %</strong>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                            <ul>
+                                {% for tranche in donnees_globales %}
+                                    <li>{{ tranche }}</li>
+                                {% endfor %}
+                            </ul>
                         </div>
                     </div>
 

@@ -150,44 +150,21 @@ def page_correlation():
         departements = session.query(Departement).order_by(Departement.libelle).all()
         professions = session.query(ProfessionSante).order_by(ProfessionSante.libelle).all()
 
-        profession = request.args.get("profession", "Ensemble des médecins") 
+        profession = request.args.get("profession", "Ensemble des médecins")
+        departement_code = request.args.get("departement", None)
         annee_str = str(request.args.get("annee", default="2024"))
-        departement_code = request.args.get("departement")
 
 
-        donnees_globales = prescription_service.get_correlation_age_depense(
-            profession=profession, 
-            annee=annee_str
-        )
-        
         donnees_pyramide = prescription_service.get_donnees_pyramide_ages(
             profession=profession, 
             departement_code=departement_code, 
             annee=annee_str
         )
         
-        donnees_tableau_deserts = prescription_service.get_tableau_top_deserts_medicaux(
-            profession=profession, 
-            annee=annee_str
-        )
-
-        print(f"DEBUG CONTROLEUR | donnees_globales contient : {len(donnees_globales)} lignes")
         
         return render_template(
             "prescriptions/page_correlation.html",
-            # Listes pour construire les <select>
-            departements=departements,
-            professions=professions,
-            
-            # Choix actuels pour garder les options sélectionnées après rafraîchissement
-            profession_selectionnee=profession,
-            annee_selectionnee=annee_str,
-            departement_selectionne=departement_code,
-            
-            # Données JSON pour l'affichage (Graphiques et Tableaux)
-            donnees_globales=donnees_globales,
-            donnees_pyramide=donnees_pyramide,
-            donnees_tableau_deserts=donnees_tableau_deserts
+            donnees_globales=donnees_pyramide
         )
 
     except Exception as e:

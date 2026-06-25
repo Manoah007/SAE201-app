@@ -237,33 +237,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**********************************************************************/
-    /** 6. EXPORT DES DONNÉES EN CSV                                      */
-    /**********************************************************************/
-    const btnExport = document.querySelector('.export-btn');
-    if (btnExport) {
-        btnExport.addEventListener('click', () => {
-            const table = document.querySelector('.prescriptions-table-box table');
-            if (!table) return alert("Aucun jeu de données disponible pour l'export.");
-
-            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
-            const rows = table.querySelectorAll('tr');
-
-            rows.forEach(row => {
-                const cols = row.querySelectorAll('th, td');
-                const rowData = Array.from(cols).map(col => `"${col.innerText.trim().replace('%', '')}"`);
-                csvContent += rowData.join(";") + "\r\n";
-            });
-
-            const link = document.createElement("a");
-            link.setAttribute("href", encodeURI(csvContent));
-            link.setAttribute("download", `analye_correlation_demographie.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        });
-    }
-
-    /**********************************************************************/
     /** 7. MÉMOIRE DE L'ONGLET ACTIF AU RECHARGEMENT                      */
     /**********************************************************************/
     const ongletSauvegarde = sessionStorage.getItem('ongletActif');

@@ -111,7 +111,7 @@ class PrescriptionService:
     # CORRÉLATION DÉMOGRAPHIE / PRESCRIPTIONS
     # ==========================================================
 
-    def get_donnees_pyramide_ages(self, profession, departement_code=None, annee="2024", limit_ligne=100):
+    def get_donnees_pyramide_ages(self, profession, departement_code=None, annee="2024"):
         """Retourne les effectifs groupés par sexe et par tranche d'âge"""
 
         print("\nprescription_service.py | get_donnees_pyramide_ages()")
@@ -137,9 +137,8 @@ class PrescriptionService:
                 "select": "libelle_sexe, libelle_classe_age, sum(effectif) as total",
                 "where": where,
                 "group_by": "libelle_sexe, libelle_classe_age",
-                "limit": 100
+                "limit": 10
             },
-            limite_max=limit_ligne
         )
 
         pyramide = {}
@@ -309,66 +308,54 @@ class PrescriptionService:
         Prépare les données pour le GRAPHIQUE 3 (Nuage) ET LE TABLEAU RÉCAPITULATIF.
         Fusionne la démographie et les finances départementales.
         """
-
         print("\nprescription_service.py | get_correlation_age_depense()")
-
 
         donnees_demo = self.get_graphique_top_deserts_medicaux(profession, annee=annee, limite=None)
         if not donnees_demo:
             return []
 
+        donnees_finance = self.get_finance(annee=annee, limite_ligne=5000)
 
-        donnees_finance = self.get_finance(
-            annee=annee,
-            limite_ligne=5000
-        )
-
+        # 1. Remplissage avec les VRAIES clés financières ('cout_moyen' / 'cout_total')
         dict_finance = {}
         for ligne in donnees_finance:
-            # CORRECTION A : On utilise le CODE du département, pas son nom !
             code_dept = ligne.get('departement', '').strip() 
-            print(f"\n--- [DEBUG CORRÉLATION] ---")
-            print(f"Détection | code_dept={repr(code_dept)} | Type: {type(code_dept)}")
-            print("-----------------------------\n")
+            
             if code_dept:
-                # CORRECTION B : On utilise les vrais noms de colonnes "integer" !
+                # CORRECTION : On utilise les clés réelles constatées dans ton log
                 dict_finance[code_dept] = {
-                    "cout_moyen": ligne.get('montant_moyen_prescription_integer', 0),
-                    "cout_total": ligne.get('montant_total_prescription_integer', 0)
+                    "cout_moyen": ligne.get('cout_moyen', 0),
+                    "cout_total": ligne.get('cout_total', 0)
                 }
 
-
+        # 2. Fusion avec les VRAIES clés démo ('code_dept' / 'departement_code')
         resultats_fusionnes = []
-        print(f"\n--- [DEBUG CORRÉLATION] ---")
-        print(f"Exemple ligne démo : {donnees_demo[0]}")
-        print(f"Clés disponibles dans la démo : {list(donnees_demo[0].keys())}")
-        print("-----------------------------\n")
-        print(f"Exemple ligne finance : {donnees_finance[0]}")
-        print(f"Exemple de clés dans le dictionnaire dict_finance : {list(dict_finance.keys())[:5]}")
-        print("-----------------------------\n")
         for dept_demo in donnees_demo:
-           
-            cle_commune = dept_demo.get('departement') or dept_demo.get('code_dept')
+            
+            # CORRECTION : Extraction basée sur le modèle réel de ta démo
+            cle_commune = dept_demo.get('code_dept') or dept_demo.get('departement_code') or dept_demo.get('departement')
             
             if not cle_commune:
                 continue
                 
-            cle_commune = str(cle_commune).strip() # Nettoyage des espaces
+            cle_commune = str(cle_commune).strip()
             
             finances = dict_finance.get(cle_commune, {})
             cout_moyen = finances.get("cout_moyen", 0)
             cout_total = finances.get("cout_total", 0)
             
+            # Si la correspondance financière existe et possède un montant valide
             if cout_moyen > 0: 
                 resultats_fusionnes.append({
-                    "departement_code": cle_commune, # On précise que c'est le code
-                    "total_medecins": dept_demo['total_praticiens'],
-                    "praticiens_seniors": dept_demo['praticiens_seniors'],
-                    "pourcentage_seniors": dept_demo['pourcentage_seniors'],
+                    "departement_code": cle_commune,
+                    "total_medecins": dept_demo.get('total_praticiens') or dept_demo.get('total', 0),
+                    "praticiens_seniors": dept_demo.get('praticiens_seniors') or dept_demo.get('seniors', 0),
+                    "pourcentage_seniors": dept_demo.get('pourcentage_seniors', 0),
                     "cout_total": cout_total,
                     "cout_moyen": cout_moyen
                 })
 
+        print(f"DEBUG SUCCÈS | Fusion finale : {len(resultats_fusionnes)} départements croisés.")
         return resultats_fusionnes
     
 
@@ -380,9 +367,9 @@ class PrescriptionService:
 
         return self.api._requete("prescriptions",
                             {
-                            "select" : "departement,libelle_departement, SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen",
+                            "select" : "departement, SUM(montant_total_prescription_integer) as cout_total, AVG(montant_moyen_prescription_integer) as cout_moyen",
                             "where" : f'year(annee)={annee}',
-                            "group_by" : "departement, libelle_departement",
+                            "group_by" : "departement",
                             "limit" : limite_ligne
                             }
                             )
