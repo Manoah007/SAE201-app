@@ -674,3 +674,77 @@
     background: #2a2a2a;
     color: #e0e0e0;
 }
+
+/* ==========================================
+   PRESCRIPTIONS - MISE EN PAGE GLOBALE
+   ========================================== */
+
+.contexte-disparite {
+    background: #f4f4f4;
+    padding: 45px 50px;
+    min-height: 70vh;
+}
+
+/* En-tête de la page */
+.contexte-disparite .prescriptions-header {
+    max-width: 1350px;
+    margin: 0 auto 30px;
+    padding: 8px 0 0;
+}
+
+.contexte-disparite .prescriptions-header h1 {
+    font-size: 42px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: #111;
+}
+
+.contexte-disparite .prescriptions-header p {
+    max-width: 1200px;
+    font-size: 19px;
+    line-height: 1.6;
+    color: #555;
+}
+
+/* Bloc filtres plus respirant */
+.contexte-disparite .filters-box {
+    max-width: 1350px;
+    margin: 0 auto 38px;
+    padding: 26px 28px;
+    border-radius: 24px;
+}
+
+/* Résultats alignés avec le reste de la page */
+.contexte-disparite .prescriptions-results {
+    max-width: 1350px;
+    margin: 0 auto 35px;
+    border-radius: 22px;
+}
+
+/* Mode sombre */
+[data-theme="dark"] .contexte-disparite {
+    background: #121212;
+}
+
+[data-theme="dark"] .contexte-disparite .prescriptions-header h1 {
+    color: #f0f0f0;
+}
+
+[data-theme="dark"] .contexte-disparite .prescriptions-header p {
+    color: #aaa;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+    .contexte-disparite {
+        padding: 30px 20px;
+    }
+
+    .contexte-disparite .prescriptions-header h1 {
+        font-size: 32px;
+    }
+
+    .contexte-disparite .prescriptions-header p {
+        font-size: 16px;
+    }
+}
